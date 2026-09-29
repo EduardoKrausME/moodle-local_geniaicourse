@@ -1,0 +1,71 @@
+<div class="geniaicourse-shell">
+    <div class="geniaicourse-hero">
+        <h2>{{#str}}reviewtitle, local_geniaicourse{{/str}}</h2>
+        <p>{{#str}}reviewsubtitle, local_geniaicourse{{/str}}</p>
+    </div>
+
+    <form action="{{config.wwwroot}}/local/geniaicourse/create.php" method="post" id="geniaicourse-create-form">
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        <input type="hidden" name="projectid" value="{{projectid}}">
+
+        {{#sources}}
+            <section class="geniaicourse-sourcecard">
+                <div class="geniaicourse-sourceheader">
+                    <div>
+                        <h3>{{filename}}</h3>
+                        <div class="text-muted small">{{mimetype}}</div>
+                    </div>
+                </div>
+
+                {{#instruction}}
+                    <div class="geniaicourse-instruction"><strong>{{#str}}instruction, local_geniaicourse{{/str}}:</strong> {{instruction}}</div>
+                {{/instruction}}
+
+                {{#haswarnings}}
+                    {{#warnings}}<div class="alert alert-warning py-2">{{text}}</div>{{/warnings}}
+                {{/haswarnings}}
+
+                {{#haspreview}}
+                    <details class="mb-3">
+                        <summary>{{#str}}preview, local_geniaicourse{{/str}}</summary>
+                        <pre class="geniaicourse-preview">{{preview}}</pre>
+                    </details>
+                {{/haspreview}}
+
+                <div class="alert alert-info py-2 geniaicourse-multihint">{{#str}}multipleselectionhint, local_geniaicourse{{/str}}</div>
+                <div class="geniaicourse-options">
+                    {{#activities}}
+                        <label class="geniaicourse-option {{#match}}is-match{{/match}} {{#error}}is-error{{/error}}">
+                            <input type="checkbox" name="choice[{{sourceid}}_{{pluginname}}]" value="1" {{#checked}}checked{{/checked}} {{#error}}disabled{{/error}}>
+                            <span class="geniaicourse-optionbody">
+                                <span class="geniaicourse-optiontop">
+                                    <strong>{{activityname}}</strong>
+                                    <span class="badge {{#match}}badge-success{{/match}}{{^match}}badge-secondary{{/match}}">
+                                        {{#match}}{{#str}}suggested, local_geniaicourse{{/str}}{{/match}}
+                                        {{^match}}{{#str}}notsuggested, local_geniaicourse{{/str}}{{/match}}
+                                    </span>
+                                    <span class="badge badge-light">{{confidence}}%</span>
+                                </span>
+                                <span class="small text-muted d-block">{{description}}</span>
+                                <span class="d-block mt-2"><strong>{{#str}}suggestedtitle, local_geniaicourse{{/str}}:</strong> {{title}}</span>
+                                <span class="d-block"><strong>{{#str}}reason, local_geniaicourse{{/str}}:</strong> {{reason}}</span>
+                                {{#summary}}<span class="d-block"><strong>{{#str}}summary, local_geniaicourse{{/str}}:</strong> {{summary}}</span>{{/summary}}
+                            </span>
+                        </label>
+                    {{/activities}}
+                </div>
+
+                <div class="form-group mt-3">
+                    <label for="section-{{id}}"><strong>{{#str}}section, local_geniaicourse{{/str}}</strong></label>
+                    <select class="form-control" id="section-{{id}}" name="section[{{id}}]">
+                        {{#sections}}<option value="{{num}}">{{name}}</option>{{/sections}}
+                    </select>
+                </div>
+            </section>
+        {{/sources}}
+
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary btn-lg" id="geniaicourse-create-submit" data-creating="{{#str}}creating, local_geniaicourse{{/str}}">{{#str}}create, local_geniaicourse{{/str}}</button>
+        </div>
+    </form>
+</div>
