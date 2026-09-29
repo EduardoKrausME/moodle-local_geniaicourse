@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * GeniAI Course activity subplugin.
+ *
+ * @package geniaicourseactivity_h5pinteractivevideo
+ * @copyright 2026 Eduardo Kraus
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace geniaicourseactivity_h5pinteractivevideo;
 
 use local_geniaicourse\local\activity\activity_interface;
@@ -11,18 +34,30 @@ use geniaicourseactivity_h5pinteractivevideo\runtime as h5p_runtime;
 
 /** H5P Interactive Video creator. */
 class activity implements activity_interface, composable_content_interface, source_extension_interface, source_processor_interface {
+    /**
+     * Get composable family.
+     */
     public static function get_composable_family(): string {
         return 'h5p';
     }
 
+    /**
+     * Get source extensions.
+     */
     public static function get_source_extensions(): array {
         return video_helper::VIDEO_EXTENSIONS;
     }
 
+    /**
+     * Supports source extension.
+     */
     public static function supports_source_extension(string $extension): bool {
         return in_array(strtolower($extension), video_helper::VIDEO_EXTENSIONS, true);
     }
 
+    /**
+     * Process source.
+     */
     public static function process_source(stored_file $file, string $extension): ?array {
         if (!self::supports_source_extension($extension)) {
             return null;
@@ -37,14 +72,23 @@ class activity implements activity_interface, composable_content_interface, sour
         ];
     }
 
+    /**
+     * Get name.
+     */
     public static function get_name(): string {
         return get_string('pluginname', 'geniaicourseactivity_h5pinteractivevideo');
     }
 
+    /**
+     * Get description.
+     */
     public static function get_description(): string {
         return get_string('description', 'geniaicourseactivity_h5pinteractivevideo');
     }
 
+    /**
+     * Analyse.
+     */
     public static function analyse(\stdClass $project, \stdClass $source): array {
         if (!h5p_runtime::has_library('H5P.InteractiveVideo', true)) {
             return [
@@ -96,6 +140,9 @@ PROMPT;
         return $result;
     }
 
+    /**
+     * Build composable content.
+     */
     public static function build_composable_content(\stdClass $course, \stdClass $source, array $analysis): array {
         $video = video_helper::source($course, $source, $analysis);
         if ($video === null) {
@@ -184,6 +231,9 @@ PROMPT;
         ];
     }
 
+    /**
+     * Create.
+     */
     public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
         $content = self::build_composable_content($course, $source, $analysis);
         return h5p_runtime::create_activity(
@@ -196,6 +246,9 @@ PROMPT;
         );
     }
 
+    /**
+     * Normalize interactions.
+     */
     private static function normalize_interactions(mixed $interactions): array {
         if (!is_array($interactions)) {
             return [];
@@ -228,6 +281,9 @@ PROMPT;
         return $out;
     }
 
+    /**
+     * Normalize bookmarks.
+     */
     private static function normalize_bookmarks(mixed $bookmarks): array {
         if (!is_array($bookmarks)) {
             return [];

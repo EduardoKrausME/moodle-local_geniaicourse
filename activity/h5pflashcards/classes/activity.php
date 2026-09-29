@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * GeniAI Course activity subplugin.
+ *
+ * @package geniaicourseactivity_h5pflashcards
+ * @copyright 2026 Eduardo Kraus
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace geniaicourseactivity_h5pflashcards;
 
 use local_geniaicourse\local\activity\activity_interface;
@@ -8,18 +31,30 @@ use geniaicourseactivity_h5pflashcards\runtime as h5p_runtime;
 
 /** H5P Flashcards creator. */
 class activity implements activity_interface, composable_content_interface {
+    /**
+     * Get composable family.
+     */
     public static function get_composable_family(): string {
         return 'h5p';
     }
 
+    /**
+     * Get name.
+     */
     public static function get_name(): string {
         return get_string('pluginname', 'geniaicourseactivity_h5pflashcards');
     }
 
+    /**
+     * Get description.
+     */
     public static function get_description(): string {
         return get_string('description', 'geniaicourseactivity_h5pflashcards');
     }
 
+    /**
+     * Analyse.
+     */
     public static function analyse(\stdClass $project, \stdClass $source): array {
         if (!h5p_runtime::has_library('H5P.Flashcards', true)) {
             return [
@@ -58,6 +93,9 @@ PROMPT;
         return $result;
     }
 
+    /**
+     * Build composable content.
+     */
     public static function build_composable_content(\stdClass $course, \stdClass $source, array $analysis): array {
         $cards = self::normalize_cards($analysis['cards'] ?? []);
         if (count($cards) < 2) {
@@ -113,6 +151,9 @@ PROMPT;
         ];
     }
 
+    /**
+     * Create.
+     */
     public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
         $content = self::build_composable_content($course, $source, $analysis);
         return h5p_runtime::create_activity(
@@ -125,6 +166,9 @@ PROMPT;
         );
     }
 
+    /**
+     * Normalize cards.
+     */
     private static function normalize_cards(mixed $cards): array {
         if (!is_array($cards)) {
             return [];

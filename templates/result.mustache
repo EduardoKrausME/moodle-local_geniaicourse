@@ -7,7 +7,7 @@
         {{#success}}
             <div class="alert alert-success">
                 <strong>{{#str}}created, local_geniaicourse{{/str}}:</strong>
-                {{#url}}<a href="{{url}}">{{name}}</a>{{/url}}{{^url}}{{name}}{{/url}}
+                {{#url}}<a href="{{{url}}}">{{name}}</a>{{/url}}{{^url}}{{name}}{{/url}}
                 {{#haswarning}}<div class="mt-2 text-dark">{{warning}}</div>{{/haswarning}}
             </div>
         {{/success}}
@@ -17,7 +17,7 @@
     {{/results}}
 
     <div class="d-flex gap-2">
-        <a class="btn btn-primary mr-2" href="{{courseurl}}">{{#str}}backtocourse, local_geniaicourse{{/str}}</a>
-        <a class="btn btn-secondary" href="{{newurl}}">{{#str}}newanalysis, local_geniaicourse{{/str}}</a>
+        <a class="btn btn-primary mr-2" href="{{{courseurl}}}">{{#str}}backtocourse, local_geniaicourse{{/str}}</a>
+        <a class="btn btn-secondary" href="{{{newurl}}}">{{#str}}newanalysis, local_geniaicourse{{/str}}</a>
     </div>
 </div>

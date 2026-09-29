@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * GeniAI Course activity subplugin.
+ *
+ * @package geniaicourseactivity_questions
+ * @copyright 2026 Eduardo Kraus
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace geniaicourseactivity_questions;
 
 use local_geniaicourse\local\activity\activity_interface;
@@ -10,14 +33,23 @@ use local_geniaicourse\local\ai;
  * @package geniaicourseactivity_questions
  */
 class activity implements activity_interface {
+    /**
+     * Get name.
+     */
     public static function get_name(): string {
         return get_string('pluginname', 'geniaicourseactivity_questions');
     }
 
+    /**
+     * Get description.
+     */
     public static function get_description(): string {
         return get_string('description', 'geniaicourseactivity_questions');
     }
 
+    /**
+     * Analyse.
+     */
     public static function analyse(\stdClass $project, \stdClass $source): array {
         $system = <<<'PROMPT'
 You are the analyzer for a Moodle Question Bank subplugin.
@@ -66,6 +98,9 @@ PROMPT;
         return $result;
     }
 
+    /**
+     * Create.
+     */
     public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
         unset($sectionnum);
         $questions = question_builder::normalize((array) ($analysis['questions'] ?? []));
@@ -96,6 +131,9 @@ PROMPT;
         ];
     }
 
+    /**
+     * Source prompt.
+     */
     private static function source_prompt(\stdClass $project, \stdClass $source): string {
         $text = trim((string) $source->extractedtext);
         return "Global teacher prompt:\n" . trim((string) $project->prompt) .

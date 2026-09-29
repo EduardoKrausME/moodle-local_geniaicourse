@@ -15,16 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * GeniAI Course activity subplugin.
+ * Plugin information for GeniAI Course activity subplugins.
  *
- * @package geniaicourseactivity_h5pflashcards
+ * @package local_geniaicourse
  * @copyright 2026 Eduardo Kraus
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['description'] = 'Creates a native Moodle H5P Flashcards recall activity.';
-$string['h5pcontentcreatefailed'] = 'Moodle could not build the H5P content. {$a}';
-$string['h5pexportmissing'] = 'The H5P editor did not generate an export package for the activity.';
-$string['h5pinvalidcontent'] = 'The generated content is not sufficient to create {$a}.';
-$string['h5plibrarymissing'] = 'The required H5P library is not installed or enabled in Moodle: {$a}';
-$string['pluginname'] = 'H5P Flashcards';
+namespace local_geniaicourse\plugininfo;
+
+/**
+ * Plugin information class for the geniaicourseactivity subplugin type.
+ *
+ * @package local_geniaicourse
+ * @copyright 2026 Eduardo Kraus
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class geniaicourseactivity extends \core\plugininfo\base {
+}

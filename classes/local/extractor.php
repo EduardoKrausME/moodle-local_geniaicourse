@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * GeniAI Course Builder.
+ *
+ * @package local_geniaicourse
+ * @copyright 2026 Eduardo Kraus
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_geniaicourse\local;
 
 use core_text;
@@ -12,6 +35,8 @@ use ZipArchive;
  */
 class extractor {
     /**
+ * Extract.
+ *
      * @param stored_file $file
      * @param string $extension
      * @return array{text:string,metadata:array}
@@ -96,6 +121,12 @@ class extractor {
         return ['text' => $text, 'metadata' => $metadata];
     }
 
+    /**
+     * Temp path.
+     *
+     * @param stored_file $file Parameter value.
+     * @return string
+     */
     private static function temp_path(stored_file $file): string {
         $dir = make_request_directory();
         $path = $dir . '/' . clean_param($file->get_filename(), PARAM_FILE);
@@ -103,6 +134,13 @@ class extractor {
         return $path;
     }
 
+    /**
+     * Extract zip xml document.
+     *
+     * @param stored_file $file Parameter value.
+     * @param string $extension Parameter value.
+     * @return string
+     */
     private static function extract_zip_xml_document(stored_file $file, string $extension): string {
         $path = self::temp_path($file);
         $zip = new ZipArchive();
@@ -134,6 +172,13 @@ class extractor {
         return self::normalize_text(implode("\n", $parts));
     }
 
+    /**
+     * Extract presentation.
+     *
+     * @param stored_file $file Parameter value.
+     * @param string $extension Parameter value.
+     * @return string
+     */
     private static function extract_presentation(stored_file $file, string $extension): string {
         $path = self::temp_path($file);
         $zip = new ZipArchive();
@@ -171,6 +216,13 @@ class extractor {
         return self::normalize_text(implode("\n\n", $out));
     }
 
+    /**
+     * Extract spreadsheet.
+     *
+     * @param stored_file $file Parameter value.
+     * @param string $extension Parameter value.
+     * @return string
+     */
     private static function extract_spreadsheet(stored_file $file, string $extension): string {
         $path = self::temp_path($file);
         $zip = new ZipArchive();
@@ -244,6 +296,14 @@ class extractor {
     }
 
     /** @return array{0:string,1:string} */
+ * Extract pdf.
+ *
+    /**
+     * Extract pdf.
+     *
+     * @param stored_file $file Parameter value.
+     * @return array
+     */
     private static function extract_pdf(stored_file $file): array {
         $path = self::temp_path($file);
         $tool = trim((string) get_config('local_geniaicourse', 'pdftotextpath'));
@@ -268,6 +328,12 @@ class extractor {
         return [$text, $warning];
     }
 
+    /**
+     * Extract pdf internal.
+     *
+     * @param string $data Parameter value.
+     * @return string
+     */
     private static function extract_pdf_internal(string $data): string {
         $chunks = [];
         if (preg_match_all('/stream\r?\n(.*?)\r?\nendstream/s', $data, $streams, PREG_SET_ORDER)) {
@@ -302,6 +368,12 @@ class extractor {
         return self::normalize_text(implode("\n", $chunks));
     }
 
+    /**
+     * Extract binary strings.
+     *
+     * @param string $content Parameter value.
+     * @return string
+     */
     private static function extract_binary_strings(string $content): string {
         $parts = [];
         if (preg_match_all('/[\x20-\x7E]{4,}/', $content, $ascii)) {
@@ -317,12 +389,24 @@ class extractor {
         return self::normalize_text(implode("\n", $parts));
     }
 
+    /**
+     * Xml to text.
+     *
+     * @param string $xml Parameter value.
+     * @return string
+     */
     private static function xml_to_text(string $xml): string {
         $xml = preg_replace('#</(?:w:p|text:p|text:h|table:table-row|a:p)>#', "\n", $xml);
         $xml = preg_replace('#</(?:w:tc|table:table-cell)>#', "\t", $xml);
         return self::normalize_text(html_entity_decode(strip_tags($xml), ENT_QUOTES | ENT_XML1, 'UTF-8'));
     }
 
+    /**
+     * Normalize text.
+     *
+     * @param string $text Parameter value.
+     * @return string
+     */
     private static function normalize_text(string $text): string {
         if (function_exists('mb_check_encoding') && !mb_check_encoding($text, 'UTF-8')) {
             $text = mb_convert_encoding($text, 'UTF-8', 'Windows-1252');
@@ -333,6 +417,12 @@ class extractor {
         return trim($text);
     }
 
+    /**
+     * Can execute.
+     *
+     * @param string $path Parameter value.
+     * @return bool
+     */
     private static function can_execute(string $path): bool {
         if (!function_exists('exec') || !is_executable($path)) {
             return false;

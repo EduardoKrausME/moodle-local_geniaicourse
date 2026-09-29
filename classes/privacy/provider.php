@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * GeniAI Course Builder.
+ *
+ * @package local_geniaicourse
+ * @copyright 2026 Eduardo Kraus
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_geniaicourse\privacy;
 
 use context;
@@ -19,6 +42,12 @@ class provider implements
         \core_privacy\local\metadata\provider,
         \core_privacy\local\request\core_user_data_provider {
 
+    /**
+     * Get metadata.
+     *
+     * @param collection $collection Parameter value.
+     * @return collection
+     */
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table('local_geniaicourse_project', [
             'userid' => 'privacy:metadata:project:userid',
@@ -40,6 +69,12 @@ class provider implements
         return $collection;
     }
 
+    /**
+     * Get contexts for userid.
+     *
+     * @param int $userid Parameter value.
+     * @return contextlist
+     */
     public static function get_contexts_for_userid(int $userid): contextlist {
         global $DB;
         $contextlist = new contextlist();
@@ -56,6 +91,12 @@ class provider implements
         return $contextlist;
     }
 
+    /**
+     * Export user data.
+     *
+     * @param approved_contextlist $contextlist Parameter value.
+     * @return void
+     */
     public static function export_user_data(approved_contextlist $contextlist): void {
         global $DB;
         $userid = $contextlist->get_user()->id;
@@ -104,6 +145,12 @@ class provider implements
         }
     }
 
+    /**
+     * Delete data for all users in context.
+     *
+     * @param context $context Parameter value.
+     * @return void
+     */
     public static function delete_data_for_all_users_in_context(context $context): void {
         global $DB;
         if ($context instanceof context_course) {
@@ -118,6 +165,12 @@ class provider implements
         }
     }
 
+    /**
+     * Delete data for user.
+     *
+     * @param approved_contextlist $contextlist Parameter value.
+     * @return void
+     */
     public static function delete_data_for_user(approved_contextlist $contextlist): void {
         global $DB;
         $userid = $contextlist->get_user()->id;

@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * GeniAI Course Builder.
+ *
+ * @package local_geniaicourse
+ * @copyright 2026 Eduardo Kraus
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_geniaicourse\local;
 
 use core_component;
@@ -15,6 +38,13 @@ use moodle_exception;
  */
 class plugin_manager {
     /** @return array<string, class-string<activity_interface>> */
+ * Get plugins.
+ *
+    /**
+     * Get plugins.
+     *
+     * @return array
+     */
     public static function get_plugins(): array {
         $plugins = [];
         foreach (core_component::get_plugin_list('geniaicourseactivity') as $name => $path) {
@@ -28,6 +58,13 @@ class plugin_manager {
     }
 
     /** Return additional upload extensions declared by installed subplugins. */
+ * Get source extensions.
+ *
+    /**
+     * Get source extensions.
+     *
+     * @return array
+     */
     public static function get_source_extensions(): array {
         $extensions = [];
         foreach (self::get_plugins() as $class) {
@@ -45,6 +82,15 @@ class plugin_manager {
     }
 
     /** Let an installed subplugin preprocess a file extension it owns. */
+ * Process source.
+ *
+    /**
+     * Process source.
+     *
+     * @param \stored_file $file Parameter value.
+     * @param string $extension Parameter value.
+     * @return ?array
+     */
     public static function process_source(\stored_file $file, string $extension): ?array {
         foreach (self::get_plugins() as $class) {
             if (!is_subclass_of($class, source_processor_interface::class) ||
@@ -60,6 +106,15 @@ class plugin_manager {
     }
 
     /** Analyse a source with every installed subplugin. */
+ * Analyse source.
+ *
+    /**
+     * Analyse source.
+     *
+     * @param \stdClass $project Parameter value.
+     * @param \stdClass $source Parameter value.
+     * @return array
+     */
     public static function analyse_source(\stdClass $project, \stdClass $source): array {
         $result = [];
         foreach (self::get_plugins() as $name => $class) {
@@ -120,6 +175,18 @@ class plugin_manager {
     }
 
     /** Create an activity using one subplugin. */
+ * Create.
+ *
+    /**
+     * Create.
+     *
+     * @param string $pluginname Parameter value.
+     * @param \stdClass $course Parameter value.
+     * @param int $sectionnum Parameter value.
+     * @param \stdClass $source Parameter value.
+     * @param array $analysis Parameter value.
+     * @return array
+     */
     public static function create(string $pluginname, \stdClass $course, int $sectionnum,
             \stdClass $source, array $analysis): array {
         $plugins = self::get_plugins();
@@ -129,6 +196,13 @@ class plugin_manager {
         return $plugins[$pluginname]::create($course, $sectionnum, $source, $analysis);
     }
 
+    /**
+     * Normalize.
+     *
+     * @param string $class Parameter value.
+     * @param array $analysis Parameter value.
+     * @return array
+     */
     private static function normalize(string $class, array $analysis): array {
         $match = $analysis['match'] ?? false;
         if (is_string($match)) {

@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * GeniAI Course Builder.
+ *
+ * @package local_geniaicourse
+ * @copyright 2026 Eduardo Kraus
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_geniaicourse\local;
 
 use local_geniai\gpt\chatgpt;
@@ -59,9 +82,17 @@ class ai {
     }
 
     /** Extract the first JSON object from a response, including fenced responses. */
+ * Extract json.
+ *
+    /**
+     * Extract json.
+     *
+     * @param string $text Parameter value.
+     * @return ?array
+     */
     private static function extract_json(string $text): ?array {
-        $text = preg_replace('/^```(?:json)?\s*/i', '', trim($text));
-        $text = preg_replace('/\s*```$/', '', trim($text));
+        $text = preg_replace('/^(?:json)?\s*/i', '', trim($text));
+        $text = preg_replace('/\s*$/', '', trim($text));
 
         $decoded = json_decode($text, true);
         if (is_array($decoded)) {

@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * GeniAI Course Builder.
+ *
+ * @package local_geniaicourse
+ * @copyright 2026 Eduardo Kraus
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_geniaicourse\local;
 
 use context_user;
@@ -10,6 +33,9 @@ use stored_file;
  * @package local_geniaicourse
  */
 class source_manager {
+    /**
+     * BASE ALLOWED EXTENSIONS.
+     */
     private const BASE_ALLOWED_EXTENSIONS = [
         'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx',
         'txt', 'md', 'csv', 'html', 'htm',
@@ -18,6 +44,13 @@ class source_manager {
     ];
 
     /** Extensions accepted by core extraction plus extensions contributed by subplugins. */
+ * Allowed extensions.
+ *
+    /**
+     * Allowed extensions.
+     *
+     * @return array
+     */
     public static function allowed_extensions(): array {
         return array_values(array_unique(array_merge(
             self::BASE_ALLOWED_EXTENSIONS,
@@ -25,6 +58,13 @@ class source_manager {
         )));
     }
 
+    /**
+     * Create text.
+     *
+     * @param int $projectid Parameter value.
+     * @param string $text Parameter value.
+     * @return \stdClass
+     */
     public static function create_text(int $projectid, string $text): \stdClass {
         global $DB;
         $record = (object) [
@@ -43,6 +83,15 @@ class source_manager {
         return $record;
     }
 
+    /**
+     * Create upload.
+     *
+     * @param int $projectid Parameter value.
+     * @param int $userid Parameter value.
+     * @param array $upload Parameter value.
+     * @param string $instruction Parameter value.
+     * @return \stdClass
+     */
     public static function create_upload(int $projectid, int $userid, array $upload, string $instruction): \stdClass {
         global $DB;
 
@@ -90,6 +139,13 @@ class source_manager {
         return $record;
     }
 
+    /**
+     * Get stored file.
+     *
+     * @param \stdClass $source Parameter value.
+     * @param ?int $userid Parameter value.
+     * @return ?stored_file
+     */
     public static function get_stored_file(\stdClass $source, ?int $userid = null): ?stored_file {
         global $DB;
 
@@ -109,6 +165,13 @@ class source_manager {
         return $fs->get_file($context->id, 'local_geniaicourse', 'source', $source->id, '/', $source->filename) ?: null;
     }
 
+    /**
+     * Save analysis.
+     *
+     * @param \stdClass $source Parameter value.
+     * @param array $analysis Parameter value.
+     * @return void
+     */
     public static function save_analysis(\stdClass $source, array $analysis): void {
         global $DB;
         $DB->set_field(
