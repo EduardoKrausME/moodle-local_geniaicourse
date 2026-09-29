@@ -1,0 +1,23 @@
+<div class="geniaicourse-shell">
+    <div class="geniaicourse-hero">
+        <h2>{{#str}}createdtitle, local_geniaicourse{{/str}}</h2>
+    </div>
+
+    {{#results}}
+        {{#success}}
+            <div class="alert alert-success">
+                <strong>{{#str}}created, local_geniaicourse{{/str}}:</strong>
+                {{#url}}<a href="{{url}}">{{name}}</a>{{/url}}{{^url}}{{name}}{{/url}}
+                {{#haswarning}}<div class="mt-2 text-dark">{{warning}}</div>{{/haswarning}}
+            </div>
+        {{/success}}
+        {{^success}}
+            <div class="alert alert-danger"><strong>{{#str}}failed, local_geniaicourse{{/str}}:</strong> {{name}} — {{error}}</div>
+        {{/success}}
+    {{/results}}
+
+    <div class="d-flex gap-2">
+        <a class="btn btn-primary mr-2" href="{{courseurl}}">{{#str}}backtocourse, local_geniaicourse{{/str}}</a>
+        <a class="btn btn-secondary" href="{{newurl}}">{{#str}}newanalysis, local_geniaicourse{{/str}}</a>
+    </div>
+</div>

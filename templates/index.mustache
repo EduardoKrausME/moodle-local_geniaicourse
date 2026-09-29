@@ -1,0 +1,38 @@
+<div class="geniaicourse-shell">
+    <div class="geniaicourse-hero">
+        <h2>{{#str}}title, local_geniaicourse{{/str}}</h2>
+        <p>{{#str}}subtitle, local_geniaicourse{{/str}}</p>
+    </div>
+
+    {{#noapikey}}
+        <div class="alert alert-warning">{{#str}}noapikey, local_geniaicourse{{/str}}</div>
+    {{/noapikey}}
+
+    <form action="{{config.wwwroot}}/local/geniaicourse/analyze.php" method="post" enctype="multipart/form-data" id="geniaicourse-form">
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        <input type="hidden" name="courseid" value="{{courseid}}">
+
+        <div class="geniaicourse-composer">
+            <label for="geniaicourse-prompt" class="form-label"><strong>{{#str}}prompt, local_geniaicourse{{/str}}</strong></label>
+            <textarea id="geniaicourse-prompt" name="prompt" class="form-control" rows="9"
+                placeholder="{{#str}}prompt_help, local_geniaicourse{{/str}}"></textarea>
+
+            <div class="geniaicourse-uploadbar">
+                <div>
+                    <label for="geniaicourse-files" class="btn btn-outline-secondary mb-0">
+                        {{#str}}files, local_geniaicourse{{/str}}
+                    </label>
+                    <input id="geniaicourse-files" type="file" name="files[]" multiple hidden
+                        data-instructionplaceholder="{{#str}}fileinstructionplaceholder, local_geniaicourse{{/str}}"
+                        accept="{{fileaccept}}">
+                    <small class="text-muted ml-2">{{maxupload}}</small>
+                </div>
+                <button type="submit" class="btn btn-primary" id="geniaicourse-submit" data-analyzing="{{#str}}analyzing, local_geniaicourse{{/str}}" {{#noapikey}}disabled{{/noapikey}}>
+                    {{#str}}analyze, local_geniaicourse{{/str}}
+                </button>
+            </div>
+        </div>
+
+        <div id="geniaicourse-fileinstructions" class="geniaicourse-fileinstructions"></div>
+    </form>
+</div>
