@@ -1,8 +1,0 @@
-{
-  "plugintypes": {
-    "geniaicourseactivity": "local/geniaicourse/activity"
-  },
-  "subplugintypes": {
-    "geniaicourseactivity": "activity"
-  }
-}
