@@ -74,7 +74,8 @@ Return ONLY valid JSON with this exact shape:
   "wordlimit": 0
 }
 Use match=false when Assignment is not appropriate. confidence is 0-100.
-submission_mode describes how the student should submit. Use file for uploaded deliverables, online for text entered in Moodle, or both.
+submission_mode describes how the student should submit.
+Use file for uploaded deliverables, online for text entered in Moodle, or both.
 maxfiles must be 1-20. wordlimit is 0 when no explicit reasonable limit can be derived; do not invent a deadline or word limit.
 Do not invent facts not present in the source.
 PROMPT;

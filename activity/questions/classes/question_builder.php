@@ -128,7 +128,10 @@ class question_builder {
                     continue;
                 }
             } else if ($type === 'essay') {
-                $normalized['graderinfo'] = clean_text((string) ($question['graderinfo'] ?? $question['rubric'] ?? ''), FORMAT_HTML);
+                $normalized['graderinfo'] = clean_text(
+                    (string) ($question['graderinfo'] ?? $question['rubric'] ?? ''),
+                    FORMAT_HTML
+                );
             }
 
             $result[] = $normalized;

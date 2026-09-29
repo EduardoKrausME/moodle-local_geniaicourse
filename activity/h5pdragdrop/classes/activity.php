@@ -83,7 +83,8 @@ Return ONLY valid JSON with exactly this shape:
     {"item": "draggable text", "target": "correct drop zone label", "tip": "optional hint"}
   ]
 }
-confidence is 0-100. Generate 2 to 6 clear mappings grounded in the source. Keep draggable text and target labels concise. Do not invent unsupported facts.
+confidence is 0-100. Generate 2 to 6 clear mappings grounded in the source.
+Keep draggable text and target labels concise. Do not invent unsupported facts.
 PROMPT;
         $result = ai::json($system, h5p_runtime::source_prompt($project, $source));
         $result['pairs'] = self::normalize_pairs($result['pairs'] ?? []);

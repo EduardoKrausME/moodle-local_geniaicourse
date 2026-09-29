@@ -358,7 +358,11 @@ class extractor {
                         foreach ($strings[0] ?? [] as $literal) {
                             $literal = substr($literal, 1, -1);
                             $literal = preg_replace_callback('/\\([0-7]{1,3})/', static fn($m) => chr(octdec($m[1])), $literal);
-                            $literal = str_replace(['\\n', '\\r', '\\t', '\\(', '\\)', '\\\\'], ["\n", "\r", "\t", '(', ')', '\\'], $literal);
+                            $literal = str_replace(
+                                ['\\n', '\\r', '\\t', '\\(', '\\)', '\\\\'],
+                                ["\n", "\r", "\t", '(', ')', '\\'],
+                                $literal
+                            );
                             $chunks[] = $literal;
                         }
                     }

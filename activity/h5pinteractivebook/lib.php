@@ -26,7 +26,15 @@
 /**
  * Serve generated course-scoped assets owned by this subplugin.
  */
-function geniaicourseactivity_h5pinteractivebook_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
+function geniaicourseactivity_h5pinteractivebook_pluginfile(
+    $course,
+    $cm,
+    $context,
+    $filearea,
+    $args,
+    $forcedownload,
+    array $options = []
+) {
     if ($context->contextlevel !== CONTEXT_COURSE || $filearea !== 'generated') {
         return false;
     }

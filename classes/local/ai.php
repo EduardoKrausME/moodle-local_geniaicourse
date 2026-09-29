@@ -71,12 +71,22 @@ class ai {
 
         $text = trim((string) ($response['choices'][0]['message']['content'] ?? ''));
         if ($text === '') {
-            throw new moodle_exception('analysiserror', 'local_geniaicourse', '', get_string('emptyairesponse', 'local_geniaicourse'));
+            throw new moodle_exception(
+                'analysiserror',
+                'local_geniaicourse',
+                '',
+                get_string('emptyairesponse', 'local_geniaicourse')
+            );
         }
 
         $json = self::extract_json($text);
         if ($json === null) {
-            throw new moodle_exception('analysiserror', 'local_geniaicourse', '', get_string('invalidjsonresponse', 'local_geniaicourse'));
+            throw new moodle_exception(
+                'analysiserror',
+                'local_geniaicourse',
+                '',
+                get_string('invalidjsonresponse', 'local_geniaicourse')
+            );
         }
         return $json;
     }
