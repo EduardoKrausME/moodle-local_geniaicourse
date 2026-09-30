@@ -25,7 +25,7 @@
 namespace geniaicourseactivity_h5pinteractivevideo;
 
 use context_course;
-use local_geniaicourse\local\source_manager;
+use local_geniaicourse\source_manager;
 use moodle_url;
 
 /** Interactive Video source handling owned by this subplugin. */

@@ -24,9 +24,9 @@
 
 namespace geniaicourseactivity_assignment;
 
-use local_geniaicourse\local\activity\activity_interface;
-use local_geniaicourse\local\ai;
-use local_geniaicourse\local\module_helper;
+use local_geniaicourse\activity\activity_interface;
+use local_geniaicourse\ai;
+use local_geniaicourse\module_helper;
 use moodle_url;
 
 /**

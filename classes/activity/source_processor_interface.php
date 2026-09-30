@@ -22,28 +22,28 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_geniaicourse\local\activity;
+namespace local_geniaicourse\activity;
 
-/** Optional contract for subplugins that expose content reusable by another subplugin. */
- * Composable content interface.
- *
+use stored_file;
+
 /**
- * Composable content interface.
+ * Optional contract for subplugins that own extraction/metadata handling for extra source formats.
  */
-interface composable_content_interface {
-    /** Family identifier used by compatible consumer subplugins, for example 'h5p'. */
- * Get composable family.
- *
+interface source_processor_interface {
     /**
-     * Get composable family.
+     * Supports source extension.
      *
-     * @return string
+     * @param string $extension Parameter value.
+     * @return bool
      */
-    public static function get_composable_family(): string;
+    public static function supports_source_extension(string $extension): bool;
 
     /**
-     * Build a reusable content definition without creating the final Moodle activity.
-     * The structure is owned by the implementing/consuming subplugins.
+     * Process source.
+     *
+     * @param stored_file $file Parameter value.
+     * @param string $extension Parameter value.
+     * @return ?array
      */
-    public static function build_composable_content(\stdClass $course, \stdClass $source, array $analysis): array;
+    public static function process_source(stored_file $file, string $extension): ?array;
 }

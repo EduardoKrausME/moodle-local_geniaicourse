@@ -25,7 +25,7 @@
 namespace geniaicourseactivity_h5pcrossword;
 
 use context_user;
-use local_geniaicourse\local\module_helper;
+use local_geniaicourse\module_helper;
 use core_h5p\editor;
 use core_h5p\factory;
 use core_h5p\helper;

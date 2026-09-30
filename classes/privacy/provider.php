@@ -31,7 +31,7 @@ use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\writer;
-use local_geniaicourse\local\project_manager;
+use local_geniaicourse\project_manager;
 
 /**
  * Privacy API provider.

@@ -22,22 +22,22 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_geniaicourse\local\activity;
+namespace local_geniaicourse\activity;
 
-/** Optional contract for subplugins that introduce extra upload extensions. */
- * Source extension interface.
- *
 /**
- * Source extension interface.
+ * Optional contract for subplugins that expose content reusable by another subplugin.
  */
-interface source_extension_interface {
-    /** @return string[] Lowercase extensions without the leading dot. */
- * Get source extensions.
- *
+interface composable_content_interface {
     /**
-     * Get source extensions.
+     * Family identifier used by compatible consumer subplugins, for example 'h5p'.
      *
-     * @return array
+     * @return string
      */
-    public static function get_source_extensions(): array;
+    public static function get_composable_family(): string;
+
+    /**
+     * Build a reusable content definition without creating the final Moodle activity.
+     * The structure is owned by the implementing/consuming subplugins.
+     */
+    public static function build_composable_content(\stdClass $course, \stdClass $source, array $analysis): array;
 }

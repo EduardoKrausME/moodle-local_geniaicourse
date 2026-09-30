@@ -22,7 +22,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_geniaicourse\local\activity;
+namespace local_geniaicourse\activity;
 
 /**
  * Contract implemented by activity subplugins.
@@ -30,21 +30,15 @@ namespace local_geniaicourse\local\activity;
  * @package local_geniaicourse
  */
 interface activity_interface {
-    /** Friendly name shown to teachers. */
- * Get name.
- *
     /**
-     * Get name.
+     * Friendly name shown to teachers.
      *
      * @return string
      */
     public static function get_name(): string;
 
-    /** Short description shown in review. */
- * Get description.
- *
     /**
-     * Get description.
+     * Short description shown in review.
      *
      * @return string
      */

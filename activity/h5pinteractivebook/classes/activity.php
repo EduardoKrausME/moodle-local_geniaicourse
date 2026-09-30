@@ -24,12 +24,12 @@
 
 namespace geniaicourseactivity_h5pinteractivebook;
 
-use local_geniaicourse\local\activity\activity_interface;
-use local_geniaicourse\local\activity\composable_content_interface;
-use local_geniaicourse\local\activity\selection_consumer_interface;
-use local_geniaicourse\local\ai;
+use local_geniaicourse\activity\activity_interface;
+use local_geniaicourse\activity\composable_content_interface;
+use local_geniaicourse\activity\selection_consumer_interface;
+use local_geniaicourse\ai;
 use geniaicourseactivity_h5pinteractivebook\runtime as h5p_runtime;
-use local_geniaicourse\local\plugin_manager;
+use local_geniaicourse\plugin_manager;
 
 /** H5P Interactive Book creator and H5P child orchestrator. */
 class activity implements activity_interface, selection_consumer_interface {

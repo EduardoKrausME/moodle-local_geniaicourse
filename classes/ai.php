@@ -22,7 +22,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_geniaicourse\local;
+namespace local_geniaicourse;
 
 use local_geniai\gpt\chatgpt;
 use moodle_exception;
@@ -91,11 +91,8 @@ class ai {
         return $json;
     }
 
-    /** Extract the first JSON object from a response, including fenced responses. */
- * Extract json.
- *
     /**
-     * Extract json.
+     * Extract the first JSON object from a response, including fenced responses.
      *
      * @param string $text Parameter value.
      * @return ?array

@@ -22,13 +22,13 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_geniaicourse\local;
+namespace local_geniaicourse;
 
 use core_component;
-use local_geniaicourse\local\activity\activity_interface;
-use local_geniaicourse\local\activity\selection_consumer_interface;
-use local_geniaicourse\local\activity\source_extension_interface;
-use local_geniaicourse\local\activity\source_processor_interface;
+use local_geniaicourse\activity\activity_interface;
+use local_geniaicourse\activity\selection_consumer_interface;
+use local_geniaicourse\activity\source_extension_interface;
+use local_geniaicourse\activity\source_processor_interface;
 use moodle_exception;
 
 /**

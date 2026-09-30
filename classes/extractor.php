@@ -22,7 +22,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_geniaicourse\local;
+namespace local_geniaicourse;
 
 use core_text;
 use stored_file;
@@ -295,9 +295,6 @@ class extractor {
         return self::normalize_text(implode("\n", $out));
     }
 
-    /** @return array{0:string,1:string} */
- * Extract pdf.
- *
     /**
      * Extract pdf.
      *

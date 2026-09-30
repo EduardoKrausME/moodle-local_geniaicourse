@@ -24,12 +24,12 @@
 
 namespace geniaicourseactivity_h5pinteractivevideo;
 
-use local_geniaicourse\local\activity\activity_interface;
-use local_geniaicourse\local\activity\composable_content_interface;
-use local_geniaicourse\local\activity\source_extension_interface;
-use local_geniaicourse\local\activity\source_processor_interface;
+use local_geniaicourse\activity\activity_interface;
+use local_geniaicourse\activity\composable_content_interface;
+use local_geniaicourse\activity\source_extension_interface;
+use local_geniaicourse\activity\source_processor_interface;
 use stored_file;
-use local_geniaicourse\local\ai;
+use local_geniaicourse\ai;
 use geniaicourseactivity_h5pinteractivevideo\runtime as h5p_runtime;
 
 /** H5P Interactive Video creator. */

@@ -24,7 +24,7 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-use local_geniaicourse\local\project_manager;
+use local_geniaicourse\project_manager;
 
 $projectid = required_param('projectid', PARAM_INT);
 require_login();

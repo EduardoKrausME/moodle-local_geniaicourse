@@ -24,9 +24,9 @@
 
 namespace geniaicourseactivity_h5pdragdrop;
 
-use local_geniaicourse\local\activity\activity_interface;
-use local_geniaicourse\local\activity\composable_content_interface;
-use local_geniaicourse\local\ai;
+use local_geniaicourse\activity\activity_interface;
+use local_geniaicourse\activity\composable_content_interface;
+use local_geniaicourse\ai;
 use geniaicourseactivity_h5pdragdrop\runtime as h5p_runtime;
 
 /** H5P Drag and Drop creator. */

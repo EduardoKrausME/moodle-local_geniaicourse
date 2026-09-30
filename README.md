@@ -30,7 +30,7 @@ The plugin does **not** contain a second OpenAI client. All AI requests go throu
 
 Question Bank and Quiz currently generate native `multichoice`, `truefalse`, `shortanswer`, and `essay` questions through Moodle's own GIFT importer.
 
-Subplugins are discovered through `db/subplugins.json`. Normal activity plugins implement `\local_geniaicourse\local\activity\activity_interface`. Reusable generators implement `\local_geniaicourse\local\activity\composable_content_interface`. Each implementation declares a composable family; the bundled H5P generators declare `h5p`, so container plugins such as Interactive Book can reuse exactly the same generated H5P content without treating unrelated future composable subplugins as H5P.
+Subplugins are discovered through `db/subplugins.json`. Normal activity plugins implement `\local_geniaicourse\activity\activity_interface`. Reusable generators implement `\local_geniaicourse\activity\composable_content_interface`. Each implementation declares a composable family; the bundled H5P generators declare `h5p`, so container plugins such as Interactive Book can reuse exactly the same generated H5P content without treating unrelated future composable subplugins as H5P.
 
 ## Flow
 

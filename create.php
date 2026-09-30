@@ -25,8 +25,8 @@
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 
-use local_geniaicourse\local\plugin_manager;
-use local_geniaicourse\local\project_manager;
+use local_geniaicourse\plugin_manager;
+use local_geniaicourse\project_manager;
 
 $projectid = required_param('projectid', PARAM_INT);
 $choiceflags = optional_param_array('choice', [], PARAM_BOOL);

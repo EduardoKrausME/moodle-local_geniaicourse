@@ -24,8 +24,8 @@
 
 namespace geniaicourseactivity_questions;
 
-use local_geniaicourse\local\activity\activity_interface;
-use local_geniaicourse\local\ai;
+use local_geniaicourse\activity\activity_interface;
+use local_geniaicourse\ai;
 
 /**
  * Question bank generator.

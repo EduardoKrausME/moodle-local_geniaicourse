@@ -24,8 +24,8 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-use local_geniaicourse\local\ai;
-use local_geniaicourse\local\source_manager;
+use local_geniaicourse\ai;
+use local_geniaicourse\source_manager;
 
 $courseid = required_param('courseid', PARAM_INT);
 $course = get_course($courseid);

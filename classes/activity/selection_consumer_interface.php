@@ -22,7 +22,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_geniaicourse\local\activity;
+namespace local_geniaicourse\activity;
 
 /**
  * Optional contract for subplugins that consume other selected subplugins.
@@ -34,11 +34,8 @@ namespace local_geniaicourse\local\activity;
  * @package local_geniaicourse
  */
 interface selection_consumer_interface {
-    /** Enrich this subplugin analysis with the current selection context. */
- * Prepare selection.
- *
     /**
-     * Prepare selection.
+     * Enrich this subplugin analysis with the current selection context.
      *
      * @param array $analysis Parameter value.
      * @param array $selectedplugins Parameter value.
@@ -47,11 +44,8 @@ interface selection_consumer_interface {
      */
     public static function prepare_selection(array $analysis, array $selectedplugins, array $allanalysis): array;
 
-    /** Return selected plugin names consumed by this subplugin. */
- * Consumed plugins.
- *
     /**
-     * Consumed plugins.
+     * Return selected plugin names consumed by this subplugin.
      *
      * @param array $selectedplugins Parameter value.
      * @param array $allanalysis Parameter value.

@@ -26,9 +26,9 @@ namespace geniaicourseactivity_lesson;
 
 use context_module;
 use core_text;
-use local_geniaicourse\local\activity\activity_interface;
-use local_geniaicourse\local\ai;
-use local_geniaicourse\local\module_helper;
+use local_geniaicourse\activity\activity_interface;
+use local_geniaicourse\ai;
+use local_geniaicourse\module_helper;
 use moodle_url;
 
 /**

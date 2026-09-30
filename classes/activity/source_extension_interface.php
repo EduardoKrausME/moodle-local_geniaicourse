@@ -22,36 +22,16 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_geniaicourse\task;
-
-use local_geniaicourse\project_manager;
+namespace local_geniaicourse\activity;
 
 /**
- * Remove stale source projects and their uploaded files.
- *
- * @package local_geniaicourse
+ * Optional contract for subplugins that introduce extra upload extensions.
  */
-class cleanup extends \core\task\scheduled_task {
+interface source_extension_interface {
     /**
-     * Get name.
+     * Get source extensions.
      *
-     * @return string
+     * @return array
      */
-    public function get_name(): string {
-        return get_string('taskcleanup', 'local_geniaicourse');
-    }
-
-    /**
-     * Execute.
-     *
-     * @return void
-     */
-    public function execute(): void {
-        global $DB;
-        $cutoff = time() - (30 * DAYSECS);
-        $projects = $DB->get_records_select('local_geniaicourse_project', 'timemodified < :cutoff', ['cutoff' => $cutoff]);
-        foreach ($projects as $project) {
-            project_manager::delete_project($project);
-        }
-    }
+    public static function get_source_extensions(): array;
 }
