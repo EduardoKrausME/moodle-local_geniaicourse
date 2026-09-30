@@ -37,9 +37,6 @@ use moodle_exception;
  * @package local_geniaicourse
  */
 class plugin_manager {
-    /** @return array<string, class-string<activity_interface>> */
- * Get plugins.
- *
     /**
      * Get plugins.
      *
@@ -57,12 +54,9 @@ class plugin_manager {
         return $plugins;
     }
 
-    /** Return additional upload extensions declared by installed subplugins. */
- * Get source extensions.
- *
     /**
-     * Get source extensions.
-     *
+* Get source extensions.
+*
      * @return array
      */
     public static function get_source_extensions(): array {
@@ -72,7 +66,7 @@ class plugin_manager {
                 continue;
             }
             foreach ($class::get_source_extensions() as $extension) {
-                $extension = strtolower(ltrim(trim((string) $extension), '.'));
+                $extension = strtolower(ltrim(trim((string)$extension), '.'));
                 if ($extension !== '' && preg_match('/^[a-z0-9]+$/', $extension)) {
                     $extensions[] = $extension;
                 }
@@ -81,9 +75,6 @@ class plugin_manager {
         return array_values(array_unique($extensions));
     }
 
-    /** Let an installed subplugin preprocess a file extension it owns. */
- * Process source.
- *
     /**
      * Process source.
      *
@@ -94,7 +85,7 @@ class plugin_manager {
     public static function process_source(\stored_file $file, string $extension): ?array {
         foreach (self::get_plugins() as $class) {
             if (!is_subclass_of($class, source_processor_interface::class) ||
-                    !$class::supports_source_extension($extension)) {
+                !$class::supports_source_extension($extension)) {
                 continue;
             }
             $result = $class::process_source($file, $extension);
@@ -105,9 +96,6 @@ class plugin_manager {
         return null;
     }
 
-    /** Analyse a source with every installed subplugin. */
- * Analyse source.
- *
     /**
      * Analyse source.
      *
@@ -174,9 +162,6 @@ class plugin_manager {
         ];
     }
 
-    /** Create an activity using one subplugin. */
- * Create.
- *
     /**
      * Create.
      *
@@ -187,8 +172,8 @@ class plugin_manager {
      * @param array $analysis Parameter value.
      * @return array
      */
-    public static function create(string $pluginname, \stdClass $course, int $sectionnum,
-            \stdClass $source, array $analysis): array {
+    public static function create(string    $pluginname, \stdClass $course, int $sectionnum,
+                                  \stdClass $source, array $analysis): array {
         $plugins = self::get_plugins();
         if (!isset($plugins[$pluginname])) {
             throw new moodle_exception('invalidplugin', 'error', '', $pluginname);
@@ -209,12 +194,12 @@ class plugin_manager {
             $parsedmatch = filter_var($match, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
             $analysis['match'] = $parsedmatch ?? false;
         } else {
-            $analysis['match'] = (bool) $match;
+            $analysis['match'] = (bool)$match;
         }
-        $analysis['confidence'] = max(0, min(100, (int) ($analysis['confidence'] ?? 0)));
-        $analysis['title'] = trim((string) ($analysis['title'] ?? ''));
-        $analysis['summary'] = trim((string) ($analysis['summary'] ?? ''));
-        $analysis['reason'] = trim((string) ($analysis['reason'] ?? ''));
+        $analysis['confidence'] = max(0, min(100, (int)($analysis['confidence'] ?? 0)));
+        $analysis['title'] = trim((string)($analysis['title'] ?? ''));
+        $analysis['summary'] = trim((string)($analysis['summary'] ?? ''));
+        $analysis['reason'] = trim((string)($analysis['reason'] ?? ''));
         $analysis['activityname'] = $class::get_name();
         $analysis['description'] = $class::get_description();
         return $analysis;

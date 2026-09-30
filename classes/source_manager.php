@@ -24,8 +24,14 @@
 
 namespace local_geniaicourse;
 
+use coding_exception;
 use context_user;
+use core\exception\moodle_exception;
+use dml_exception;
+use file_exception;
+use stdClass;
 use stored_file;
+use stored_file_creation_exception;
 
 /**
  * Creates source records and stores uploads.
@@ -43,9 +49,6 @@ class source_manager {
         'odt', 'ods', 'odp',
     ];
 
-    /** Extensions accepted by core extraction plus extensions contributed by subplugins. */
- * Allowed extensions.
- *
     /**
      * Allowed extensions.
      *
@@ -63,9 +66,11 @@ class source_manager {
      *
      * @param int $projectid Parameter value.
      * @param string $text Parameter value.
-     * @return \stdClass
+     * @return stdClass
+     * @throws coding_exception
+     * @throws dml_exception
      */
-    public static function create_text(int $projectid, string $text): \stdClass {
+    public static function create_text(int $projectid, string $text): stdClass {
         global $DB;
         $record = (object) [
             'projectid' => $projectid,
@@ -90,18 +95,23 @@ class source_manager {
      * @param int $userid Parameter value.
      * @param array $upload Parameter value.
      * @param string $instruction Parameter value.
-     * @return \stdClass
+     * @return stdClass
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws file_exception
+     * @throws stored_file_creation_exception
+     * @throws moodle_exception
      */
-    public static function create_upload(int $projectid, int $userid, array $upload, string $instruction): \stdClass {
+    public static function create_upload(int $projectid, int $userid, array $upload, string $instruction): stdClass {
         global $DB;
 
         $filename = clean_param(basename($upload['name']), PARAM_FILE);
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         if (!in_array($extension, self::allowed_extensions(), true)) {
-            throw new \moodle_exception('unsupportedfile', 'local_geniaicourse', '', $filename);
+            throw new moodle_exception('unsupportedfile', 'local_geniaicourse', '', $filename);
         }
         if (($upload['error'] ?? UPLOAD_ERR_OK) !== UPLOAD_ERR_OK || empty($upload['tmp_name'])) {
-            throw new \moodle_exception('uploaderror', 'local_geniaicourse', '', $filename);
+            throw new moodle_exception('uploaderror', 'local_geniaicourse', '', $filename);
         }
 
         $mimetype = (string) mimeinfo('type', $filename);
@@ -142,11 +152,12 @@ class source_manager {
     /**
      * Get stored file.
      *
-     * @param \stdClass $source Parameter value.
+     * @param stdClass $source Parameter value.
      * @param ?int $userid Parameter value.
      * @return ?stored_file
+     * @throws dml_exception
      */
-    public static function get_stored_file(\stdClass $source, ?int $userid = null): ?stored_file {
+    public static function get_stored_file(stdClass $source, ?int $userid = null): ?stored_file {
         global $DB;
 
         if ($source->sourcetype !== 'file') {
@@ -168,11 +179,12 @@ class source_manager {
     /**
      * Save analysis.
      *
-     * @param \stdClass $source Parameter value.
+     * @param stdClass $source Parameter value.
      * @param array $analysis Parameter value.
      * @return void
+     * @throws dml_exception
      */
-    public static function save_analysis(\stdClass $source, array $analysis): void {
+    public static function save_analysis(stdClass $source, array $analysis): void {
         global $DB;
         $DB->set_field(
             'local_geniaicourse_source',
