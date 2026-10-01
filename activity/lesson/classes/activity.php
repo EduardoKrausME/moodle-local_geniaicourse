@@ -173,7 +173,7 @@ PROMPT;
         }
 
         $context = context_module::instance($cmid);
-        // lesson_page::create() uses $PAGE->course while saving answer editor files.
+        // Lesson_page::create() uses $PAGE->course while saving answer editor files.
         $PAGE->set_context($context);
         $PAGE->set_course($course);
 
