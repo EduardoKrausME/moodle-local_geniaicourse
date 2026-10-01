@@ -130,8 +130,17 @@ class runtime {
     /**
      * Build a valid H5P export file with Moodle's H5P editor.
      */
-    public static function create_h5p_file(int $contextid, string $component, string $filearea, int $itemid,
-                                           string $filename, string $machinename, array $params, string $title, ?int $userid = null): stored_file {
+    public static function create_h5p_file(
+        int $contextid,
+        string $component,
+        string $filearea,
+        int $itemid,
+        string $filename,
+        string $machinename,
+        array $params,
+        string $title,
+        ?int $userid = null
+    ): stored_file {
         global $USER;
 
         $userid = $userid ?? $USER->id;
