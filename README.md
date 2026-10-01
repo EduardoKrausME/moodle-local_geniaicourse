@@ -14,7 +14,7 @@ creates native Moodle activities.
 - `geniaicourseactivity_lesson`: creates a native Moodle Lesson with an ordered sequence of content pages.
 - `geniaicourseactivity_assignment`: creates a native Moodle Assignment and enables online text/file submission
   according to the analysis.
-- `geniaicourseactivity_h5pinteractivevideo`: creates H5P Interactive Video from an uploaded video or explicit supported
+- `geniaicourseactivity_h5pinteractivevideo`: creates H5P Interactive Video from an uploaded video or explicit accepted
   video URL.
 - `geniaicourseactivity_h5pfindwords`: creates H5P Find the Words from source vocabulary.
 - `geniaicourseactivity_h5pcrossword`: creates H5P Crossword from source-grounded clues and answers.
@@ -60,7 +60,7 @@ PDF:
 
 - Uses `pdftotext` when configured and executable.
 - Falls back to an internal best-effort parser for text-based PDFs.
-- Scanned/image-only PDFs need OCR outside this the plugin.
+- Scanned or image-only PDFs need OCR before they are supplied to the plugin.
 
 Legacy Office:
 
@@ -77,7 +77,7 @@ Videos:
 - MP4, WebM, OGV and M4V are accepted as source files.
 - Video bytes are not sent to the AI service. The Interactive Video analyzer uses filename/type, teacher instructions
   and any supplied transcript/timestamps.
-- Interactive Video also accepts an explicit YouTube URL or direct supported video-file URL.
+- Interactive Video also accepts an explicit YouTube URL or accepted direct video-file URL.
 
 ## Office to PDF conversion
 
@@ -109,8 +109,8 @@ those H5P generators, those selections are consumed by the book and are not crea
 activities. If the teacher selects only Interactive Book, the book automatically uses compatible sibling H5P analyses
 that returned `match=true`.
 
-The book uses `H5P.Column` pages. The builder resolves the exact `H5P.Column` major/minor version required by the
-installed Interactive Book and validates child libraries against that exact Column semantics before nesting them
+The book uses `H5P.Column` pages. The builder resolves the exact `H5P.Column` library level expected by the
+installed Interactive Book and validates child libraries against that Column semantics before nesting them
 directly. Types not accepted by Column are generated with Moodle's `core_h5p\editor`, stored in a course-scoped plugin
 filearea and embedded through `H5P.IFrameEmbed`; these iframe children remain functional but their own score is not
 rolled up into the Interactive Book summary.
