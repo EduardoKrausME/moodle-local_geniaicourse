@@ -36,8 +36,8 @@ use local_geniaicourse\ai;
 use geniaicourseactivity_h5pinteractivevideo\runtime as h5p_runtime;
 
 /**
-     * H5P Interactive Video creator.
-     */
+ * H5P Interactive Video creator.
+ */
 class activity implements activity_interface, composable_content_interface, source_extension_interface, source_processor_interface {
     /**
      * Get composable family.

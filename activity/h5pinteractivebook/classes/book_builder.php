@@ -31,8 +31,8 @@ use moodle_url;
 use stdClass;
 
 /**
-     * Interactive Book composition logic owned by this subplugin.
-     */
+ * Interactive Book composition logic owned by this subplugin.
+ */
 class book_builder {
     /**
      * Convert a reusable H5P definition into one H5P.Column block.

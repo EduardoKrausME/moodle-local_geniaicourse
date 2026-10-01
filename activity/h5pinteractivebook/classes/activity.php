@@ -35,8 +35,8 @@ use stdClass;
 use Throwable;
 
 /**
-     * H5P Interactive Book creator and H5P child orchestrator.
-     */
+ * H5P Interactive Book creator and H5P child orchestrator.
+ */
 class activity implements activity_interface, selection_consumer_interface {
     /**
      * Get name.
