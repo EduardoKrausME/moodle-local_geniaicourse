@@ -31,7 +31,9 @@ use geniaicourseactivity_h5pflashcards\runtime as h5p_runtime;
 use moodle_exception;
 use stdClass;
 
-/** H5P Flashcards creator. */
+/**
+     * H5P Flashcards creator.
+     */
 class activity implements activity_interface, composable_content_interface {
     /**
      * Get composable family.

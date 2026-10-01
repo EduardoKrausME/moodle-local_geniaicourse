@@ -32,7 +32,9 @@ use geniaicourseactivity_h5pcrossword\runtime as h5p_runtime;
 use moodle_exception;
 use stdClass;
 
-/** H5P Crossword creator. */
+/**
+ * H5P Crossword creator.
+ */
 class activity implements activity_interface, composable_content_interface {
     /**
      * Get composable family.

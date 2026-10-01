@@ -254,7 +254,6 @@ class question_builder {
         return new moodle_url('/question/edit.php', ['courseid' => $courseid]);
     }
 
-    /** @return array */
     private static function normalize_multichoice_answers(array $question): array {
         $input = $question['answers'] ?? $question['options'] ?? [];
         $answers = [];
@@ -298,7 +297,9 @@ class question_builder {
         return $answers;
     }
 
-    /** Convert normalized structures to Moodle GIFT. */
+    /**
+     * Convert normalized structures to Moodle GIFT.
+     */
     private static function to_gift(array $questions): string {
         $blocks = [];
         foreach ($questions as $question) {
@@ -337,7 +338,9 @@ class question_builder {
         return implode("\n\n", $blocks) . "\n";
     }
 
-    /** Escape text according to GIFT control characters. */
+    /**
+     * Escape text according to GIFT control characters.
+     */
     private static function gift_escape(string $text): string {
         $text = str_replace(["\r\n", "\r"], "\n", $text);
         $text = str_replace('\\', '\\\\', $text);

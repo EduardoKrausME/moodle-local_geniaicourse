@@ -29,11 +29,15 @@ use local_geniaicourse\source_manager;
 use moodle_url;
 use stdClass;
 
-/** Interactive Video source handling owned by this subplugin. */
+/**
+     * Interactive Video source handling owned by this subplugin.
+     */
 class video_helper {
     public const VIDEO_EXTENSIONS = ['mp4', 'webm', 'ogv', 'm4v'];
 
-    /** Resolve an uploaded or explicit external video source. */
+    /**
+     * Resolve an uploaded or explicit external video source.
+     */
     public static function source(stdClass $course, stdClass $source, array $analysis): ?array {
         $url = trim((string)($analysis['video_url'] ?? ''));
         if ($url !== '') {

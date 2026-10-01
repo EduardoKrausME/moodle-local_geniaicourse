@@ -31,7 +31,9 @@ use geniaicourseactivity_h5pdragdrop\runtime as h5p_runtime;
 use moodle_exception;
 use stdClass;
 
-/** H5P Drag and Drop creator. */
+/**
+     * H5P Drag and Drop creator.
+     */
 class activity implements activity_interface, composable_content_interface {
     /**
      * Get composable family.

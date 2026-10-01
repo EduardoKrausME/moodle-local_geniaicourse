@@ -211,7 +211,6 @@ PROMPT;
         ];
     }
 
-    /** @return array */
     private static function normalize_pages(array $pages): array {
         $result = [];
         foreach (array_slice($pages, 0, 20) as $index => $page) {

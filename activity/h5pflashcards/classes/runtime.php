@@ -45,7 +45,9 @@ use Throwable;
  * @package geniaicourseactivity_h5pflashcards
  */
 class runtime {
-    /** Resolve the newest installed version of one H5P library. */
+    /**
+     * Resolve the newest installed version of one H5P library.
+     */
     public static function library(string $machinename, bool $requireenabled = true): stdClass {
         global $DB;
 
@@ -71,13 +73,17 @@ class runtime {
         return reset($records);
     }
 
-    /** Return the H5P editor library string for an installed library. */
+    /**
+     * Return the H5P editor library string for an installed library.
+     */
     public static function library_string(string $machinename, bool $requireenabled = true): string {
         $library = self::library($machinename, $requireenabled);
         return $library->machinename . ' ' . $library->majorversion . '.' . $library->minorversion;
     }
 
-    /** Determine whether a library can be used for authoring. */
+    /**
+     * Determine whether a library can be used for authoring.
+     */
     public static function has_library(string $machinename, bool $requireenabled = true): bool {
         try {
             self::library($machinename, $requireenabled);
@@ -87,7 +93,9 @@ class runtime {
         }
     }
 
-    /** Build a valid H5P export file with Moodle's H5P editor. */
+    /**
+     * Build a valid H5P export file with Moodle's H5P editor.
+     */
     public static function create_h5p_file(int    $contextid, string $component, string $filearea, int $itemid,
                                            string $filename, string $machinename, array $params, string $title, ?int $userid = null): stored_file {
         global $USER;
@@ -146,7 +154,9 @@ class runtime {
         throw new moodle_exception('h5pexportmissing', 'geniaicourseactivity_h5pflashcards');
     }
 
-    /** Create a native mod_h5pactivity from content-type params. */
+    /**
+     * Create a native mod_h5pactivity from content-type params.
+     */
     public static function create_activity(stdClass $course, int $sectionnum, string $name, string $intro,
                                            string   $machinename, array $params): array {
         global $CFG, $USER;
@@ -199,7 +209,9 @@ class runtime {
         ];
     }
 
-    /** Create the standard nested H5P library object used by container content types. */
+    /**
+     * Create the standard nested H5P library object used by container content types.
+     */
     public static function content_object(string  $machinename, array $params, string $title,
                                           ?string $librarystring = null): array {
         $library = self::library($machinename, false);
@@ -215,7 +227,9 @@ class runtime {
         ];
     }
 
-    /** Return the exact child library version accepted by a parent library semantics. */
+    /**
+     * Return the exact child library version accepted by a parent library semantics.
+     */
     public static function parent_library_option(string $parentmachinename, string $childmachinename): ?string {
         $parent = self::library($parentmachinename, true);
         $semantics = json_decode((string)($parent->semantics ?? ''), true);
@@ -225,7 +239,9 @@ class runtime {
         return self::find_library_option($semantics, $childmachinename);
     }
 
-    /** Shared source prompt formatting for H5P subplugins. */
+    /**
+     * Shared source prompt formatting for H5P subplugins.
+     */
     public static function source_prompt(stdClass $project, stdClass $source): string {
         $text = trim((string)$source->extractedtext);
         return "Global teacher prompt:\n" . trim((string)$project->prompt) .
@@ -236,13 +252,17 @@ class runtime {
             "\n\nExtracted source content:\n" . ($text !== '' ? $text : '[No text was extracted from this source.]');
     }
 
-    /** Basic semantic HTML paragraph from plain text. */
+    /**
+     * Basic semantic HTML paragraph from plain text.
+     */
     public static function paragraph(string $text): string {
         $text = trim(strip_tags($text));
         return $text === '' ? '' : '<p>' . s($text) . '</p>';
     }
 
-    /** Generate a RFC 4122-like UUID for H5P subContentId values. */
+    /**
+     * Generate a RFC 4122-like UUID for H5P subContentId values.
+     */
     public static function uuid(): string {
         $data = random_bytes(16);
         $data[6] = chr((ord($data[6]) & 0x0f) | 0x40);
@@ -250,7 +270,9 @@ class runtime {
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 
-    /** Recursively find one exact child library option in H5P semantics. */
+    /**
+     * Recursively find one exact child library option in H5P semantics.
+     */
     private static function find_library_option(array $nodes, string $childmachinename): ?string {
         foreach ($nodes as $node) {
             if (!is_array($node)) {

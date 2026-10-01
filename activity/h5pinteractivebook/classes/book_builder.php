@@ -30,9 +30,13 @@ use moodle_exception;
 use moodle_url;
 use stdClass;
 
-/** Interactive Book composition logic owned by this subplugin. */
+/**
+     * Interactive Book composition logic owned by this subplugin.
+     */
 class book_builder {
-    /** Convert a reusable H5P definition into one H5P.Column block. */
+    /**
+     * Convert a reusable H5P definition into one H5P.Column block.
+     */
     public static function block(stdClass $course, stdClass $source, array $definition,
                                  bool     &$usediframe = false): array {
         $machinename = (string)($definition['machinename'] ?? '');
@@ -59,7 +63,9 @@ class book_builder {
         return self::iframe_block($course, $source, $definition);
     }
 
-    /** Build an AdvancedText block for one book page. */
+    /**
+     * Build an AdvancedText block for one book page.
+     */
     public static function text_block(string $html, string $title = 'Text'): array {
         if (!h5p_runtime::has_library('H5P.AdvancedText', false)) {
             throw new moodle_exception('h5plibrarymissing', 'geniaicourseactivity_h5pinteractivebook', '', 'H5P.AdvancedText');
@@ -84,7 +90,9 @@ class book_builder {
         ];
     }
 
-    /** Build one H5P.Column chapter object. */
+    /**
+     * Build one H5P.Column chapter object.
+     */
     public static function column(array $blocks, string $title): array {
         if (!$blocks) {
             $blocks[] = self::text_block('<p></p>', $title);
@@ -106,7 +114,9 @@ class book_builder {
         );
     }
 
-    /** Return the exact library version accepted directly by H5P.Column. */
+    /**
+     * Return the exact library version accepted directly by H5P.Column.
+     */
     private static function column_library_option(string $machinename): ?string {
         $columnversion = h5p_runtime::parent_library_option('H5P.InteractiveBook', 'H5P.Column');
         if ($columnversion === null) {
@@ -115,7 +125,9 @@ class book_builder {
         return h5p_runtime::library_option($columnversion, $machinename);
     }
 
-    /** Create a persistent standalone H5P child and wrap it in H5P.IFrameEmbed. */
+    /**
+     * Create a persistent standalone H5P child and wrap it in H5P.IFrameEmbed.
+     */
     private static function iframe_block(stdClass $course, stdClass $source, array $definition): array {
         global $USER;
 

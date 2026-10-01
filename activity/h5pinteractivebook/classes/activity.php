@@ -34,7 +34,9 @@ use moodle_exception;
 use stdClass;
 use Throwable;
 
-/** H5P Interactive Book creator and H5P child orchestrator. */
+/**
+     * H5P Interactive Book creator and H5P child orchestrator.
+     */
 class activity implements activity_interface, selection_consumer_interface {
     /**
      * Get name.
@@ -51,7 +53,9 @@ class activity implements activity_interface, selection_consumer_interface {
     }
 
 
-    /** Add explicit child selections to this plugin's own saved analysis. */
+    /**
+     * Add explicit child selections to this plugin's own saved analysis.
+     */
     public static function prepare_selection(array $analysis, array $selectedplugins, array $allanalysis): array {
         $children = array_values(array_intersect($selectedplugins, self::child_plugins()));
         $analysis['_selectedplugins'] = $children;
@@ -59,7 +63,9 @@ class activity implements activity_interface, selection_consumer_interface {
         return $analysis;
     }
 
-    /** Child H5P selections are created inside the book, not again as standalone activities. */
+    /**
+     * Child H5P selections are created inside the book, not again as standalone activities.
+     */
     public static function consumed_plugins(array $selectedplugins, array $allanalysis): array {
         return array_values(array_intersect($selectedplugins, self::child_plugins()));
     }
@@ -263,7 +269,9 @@ PROMPT;
         return $created;
     }
 
-    /** Discover every sibling activity subplugin capable of exposing reusable H5P content. */
+    /**
+     * Discover every sibling activity subplugin capable of exposing reusable H5P content.
+     */
     private static function child_plugins(): array {
         $children = [];
         foreach (plugin_manager::get_plugins() as $name => $class) {
@@ -279,7 +287,9 @@ PROMPT;
         return $children;
     }
 
-    /** Resolve explicit book children or automatically use matching H5P sibling analyses. */
+    /**
+     * Resolve explicit book children or automatically use matching H5P sibling analyses.
+     */
     private static function resolve_children(array $bookanalysis, array $allanalysis): array {
         $explicit = !empty($bookanalysis['_selectionexplicit']);
         $selected = $bookanalysis['_selectedplugins'] ?? [];
