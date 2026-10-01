@@ -39,9 +39,7 @@ use stored_file_creation_exception;
  * @package local_geniaicourse
  */
 class source_manager {
-    /**
-     * BASE ALLOWED EXTENSIONS.
-     */
+    /** @var string[] */
     private const BASE_ALLOWED_EXTENSIONS = [
         'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx',
         'txt', 'md', 'csv', 'html', 'htm',

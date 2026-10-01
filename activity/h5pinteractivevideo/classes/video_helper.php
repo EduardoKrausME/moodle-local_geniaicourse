@@ -30,9 +30,10 @@ use moodle_url;
 use stdClass;
 
 /**
-     * Interactive Video source handling owned by this subplugin.
-     */
+ * Interactive Video source handling owned by this subplugin.
+ */
 class video_helper {
+    /** @var string[] */
     public const VIDEO_EXTENSIONS = ['mp4', 'webm', 'ogv', 'm4v'];
 
     /**

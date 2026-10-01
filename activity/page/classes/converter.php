@@ -32,6 +32,7 @@ use stored_file;
  * @package geniaicourseactivity_page
  */
 class converter {
+    /** @var string[] */
     private const PDF_INPUTS = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'ods', 'odp'];
 
     /**
