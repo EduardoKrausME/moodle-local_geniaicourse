@@ -22,6 +22,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $string['description'] = 'Cria um H5P Vídeo Interativo nativo do Moodle a partir de um vídeo enviado ou URL de vídeo compatível informada explicitamente.';
 $string['h5pcontentcreatefailed'] = 'O Moodle não conseguiu montar o conteúdo H5P. {$a}';
 $string['h5pexportmissing'] = 'O editor H5P não gerou o pacote de exportação da atividade.';

@@ -24,6 +24,8 @@
 
 namespace local_geniaicourse;
 
+use stdClass;
+
 /**
  * Helpers for adding native Moodle activities.
  *
@@ -33,19 +35,19 @@ class module_helper {
     /**
      * Base.
      *
-     * @param \stdClass $course Parameter value.
+     * @param stdClass $course Parameter value.
      * @param int $sectionnum Parameter value.
      * @param string $modulename Parameter value.
      * @param string $name Parameter value.
      * @param string $intro Parameter value.
-     * @return \stdClass
+     * @return stdClass
      */
-    public static function base(\stdClass $course, int $sectionnum, string $modulename,
-            string $name, string $intro = ''): \stdClass {
+    public static function base(stdClass $course, int $sectionnum, string $modulename,
+                                string   $name, string $intro = ''): stdClass {
         global $DB;
         $module = $DB->get_record('modules', ['name' => $modulename], '*', MUST_EXIST);
 
-        $info = new \stdClass();
+        $info = new stdClass();
         $info->course = $course->id;
         $info->module = $module->id;
         $info->modulename = $modulename;

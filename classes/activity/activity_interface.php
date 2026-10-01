@@ -24,6 +24,8 @@
 
 namespace local_geniaicourse\activity;
 
+use stdClass;
+
 /**
  * Contract implemented by activity subplugins.
  *
@@ -50,20 +52,20 @@ interface activity_interface {
      * Expected keys: match, confidence, title, summary, reason.
      * Additional keys are owned by the subplugin and passed back to create().
      *
-     * @param \stdClass $project
-     * @param \stdClass $source
+     * @param stdClass $project
+     * @param stdClass $source
      * @return array
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array;
+    public static function analyse(stdClass $project, stdClass $source): array;
 
     /**
      * Create the Moodle activity.
      *
-     * @param \stdClass $course
+     * @param stdClass $course
      * @param int $sectionnum
-     * @param \stdClass $source
+     * @param stdClass $source
      * @param array $analysis
      * @return array Must contain cmid, name, url; may contain warning.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array;
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array;
 }

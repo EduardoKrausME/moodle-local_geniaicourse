@@ -28,6 +28,8 @@ use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\activity\composable_content_interface;
 use local_geniaicourse\ai;
 use geniaicourseactivity_h5pflashcards\runtime as h5p_runtime;
+use moodle_exception;
+use stdClass;
 
 /** H5P Flashcards creator. */
 class activity implements activity_interface, composable_content_interface {
@@ -55,7 +57,7 @@ class activity implements activity_interface, composable_content_interface {
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         if (!h5p_runtime::has_library('H5P.Flashcards', true)) {
             return [
                 'match' => false,
@@ -99,13 +101,13 @@ PROMPT;
     /**
      * Build composable content.
      */
-    public static function build_composable_content(\stdClass $course, \stdClass $source, array $analysis): array {
+    public static function build_composable_content(stdClass $course, stdClass $source, array $analysis): array {
         $cards = self::normalize_cards($analysis['cards'] ?? []);
         if (count($cards) < 2) {
-            throw new \moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pflashcards', '', self::get_name());
+            throw new moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pflashcards', '', self::get_name());
         }
-        $name = trim((string) ($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
-        $description = trim((string) ($analysis['description'] ?? '')) ?: trim((string) ($analysis['summary'] ?? ''));
+        $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
+        $description = trim((string)($analysis['description'] ?? '')) ?: trim((string)($analysis['summary'] ?? ''));
         if ($description === '') {
             $description = 'Review the cards and enter the correct answer.';
         }
@@ -125,7 +127,7 @@ PROMPT;
         return [
             'machinename' => 'H5P.Flashcards',
             'title' => $name,
-            'intro' => h5p_runtime::paragraph((string) ($analysis['summary'] ?? '')),
+            'intro' => h5p_runtime::paragraph((string)($analysis['summary'] ?? '')),
             'params' => [
                 'description' => $description,
                 'cards' => $h5pcards,
@@ -157,7 +159,7 @@ PROMPT;
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
         $content = self::build_composable_content($course, $source, $analysis);
         return h5p_runtime::create_activity(
             $course,
@@ -181,9 +183,9 @@ PROMPT;
             if (!is_array($card)) {
                 continue;
             }
-            $question = trim(strip_tags((string) ($card['question'] ?? '')));
-            $answer = trim(strip_tags((string) ($card['answer'] ?? '')));
-            $tip = trim(strip_tags((string) ($card['tip'] ?? '')));
+            $question = trim(strip_tags((string)($card['question'] ?? '')));
+            $answer = trim(strip_tags((string)($card['answer'] ?? '')));
+            $tip = trim(strip_tags((string)($card['tip'] ?? '')));
             if ($question === '' || $answer === '') {
                 continue;
             }

@@ -26,6 +26,7 @@ namespace local_geniaicourse;
 
 use core_text;
 use stored_file;
+use Throwable;
 use ZipArchive;
 
 /**
@@ -35,8 +36,8 @@ use ZipArchive;
  */
 class extractor {
     /**
- * Extract.
- *
+     * Extract.
+     *
      * @param stored_file $file
      * @param string $extension
      * @return array{text:string,metadata:array}
@@ -104,12 +105,12 @@ class extractor {
                     $text = '';
                     $metadata['warnings'][] = get_string('noextractorwarning', 'local_geniaicourse');
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $text = '';
             $metadata['warnings'][] = get_string('extractionerror', 'local_geniaicourse', $e->getMessage());
         }
 
-        $configuredmax = (int) get_config('local_geniaicourse', 'maxextractchars');
+        $configuredmax = (int)get_config('local_geniaicourse', 'maxextractchars');
         $max = $configuredmax > 0 ? max(1000, $configuredmax) : 40000;
         if (core_text::strlen($text) > $max) {
             $text = core_text::substr($text, 0, $max);
@@ -196,7 +197,7 @@ class extractor {
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $name = $zip->getNameIndex($i);
             if (preg_match('#^ppt/slides/slide([0-9]+)\.xml$#', $name, $m)) {
-                $slides[(int) $m[1]] = $name;
+                $slides[(int)$m[1]] = $name;
             }
         }
         ksort($slides);
@@ -207,7 +208,7 @@ class extractor {
                 continue;
             }
             preg_match_all('#<a:t[^>]*>(.*?)</a:t>#s', $xml, $matches);
-            $texts = array_map(static function($value) {
+            $texts = array_map(static function ($value) {
                 return html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_XML1, 'UTF-8');
             }, $matches[1] ?? []);
             $out[] = "Slide {$number}:\n" . implode("\n", array_filter(array_map('trim', $texts)));
@@ -250,7 +251,7 @@ class extractor {
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $name = $zip->getNameIndex($i);
             if (preg_match('#^xl/worksheets/sheet([0-9]+)\.xml$#', $name, $m)) {
-                $sheets[(int) $m[1]] = $name;
+                $sheets[(int)$m[1]] = $name;
             }
         }
         ksort($sheets);
@@ -277,8 +278,8 @@ class extractor {
                         $value = html_entity_decode($m[1], ENT_QUOTES | ENT_XML1, 'UTF-8');
                     } else if (preg_match('#<v[^>]*>(.*?)</v>#s', $body, $m)) {
                         $value = html_entity_decode($m[1], ENT_QUOTES | ENT_XML1, 'UTF-8');
-                        if ($type === 's' && isset($shared[(int) $value])) {
-                            $value = $shared[(int) $value];
+                        if ($type === 's' && isset($shared[(int)$value])) {
+                            $value = $shared[(int)$value];
                         }
                     }
                     if ($value !== '') {
@@ -303,7 +304,7 @@ class extractor {
      */
     private static function extract_pdf(stored_file $file): array {
         $path = self::temp_path($file);
-        $tool = trim((string) get_config('local_geniaicourse', 'pdftotextpath'));
+        $tool = trim((string)get_config('local_geniaicourse', 'pdftotextpath'));
         if ($tool && self::can_execute($tool)) {
             $cmd = escapeshellarg($tool) . ' -layout -enc UTF-8 ' . escapeshellarg($path) . ' - 2>&1';
             $output = [];
@@ -428,7 +429,7 @@ class extractor {
         if (!function_exists('exec') || !is_executable($path)) {
             return false;
         }
-        $disabled = array_map('trim', explode(',', (string) ini_get('disable_functions')));
+        $disabled = array_map('trim', explode(',', (string)ini_get('disable_functions')));
         return !in_array('exec', $disabled, true);
     }
 }

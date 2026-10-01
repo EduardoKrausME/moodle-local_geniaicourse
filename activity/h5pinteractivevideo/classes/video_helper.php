@@ -27,14 +27,15 @@ namespace geniaicourseactivity_h5pinteractivevideo;
 use context_course;
 use local_geniaicourse\source_manager;
 use moodle_url;
+use stdClass;
 
 /** Interactive Video source handling owned by this subplugin. */
 class video_helper {
     public const VIDEO_EXTENSIONS = ['mp4', 'webm', 'ogv', 'm4v'];
 
     /** Resolve an uploaded or explicit external video source. */
-    public static function source(\stdClass $course, \stdClass $source, array $analysis): ?array {
-        $url = trim((string) ($analysis['video_url'] ?? ''));
+    public static function source(stdClass $course, stdClass $source, array $analysis): ?array {
+        $url = trim((string)($analysis['video_url'] ?? ''));
         if ($url !== '') {
             $external = self::external_video($url);
             if ($external !== null) {
@@ -42,7 +43,7 @@ class video_helper {
             }
         }
 
-        $extension = strtolower((string) $source->extension);
+        $extension = strtolower((string)$source->extension);
         if ($source->sourcetype === 'file' && in_array($extension, self::VIDEO_EXTENSIONS, true)) {
             return self::copy_source_video($course, $source);
         }
@@ -57,17 +58,17 @@ class video_helper {
             return null;
         }
         $parts = parse_url($url);
-        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+        $scheme = strtolower((string)($parts['scheme'] ?? ''));
         if (!in_array($scheme, ['http', 'https'], true)) {
             return null;
         }
-        $host = strtolower((string) ($parts['host'] ?? ''));
+        $host = strtolower((string)($parts['host'] ?? ''));
         if ($host === 'youtu.be' || str_ends_with($host, '.youtube.com') || $host === 'youtube.com' ||
-                str_ends_with($host, '.youtube-nocookie.com') || $host === 'youtube-nocookie.com') {
+            str_ends_with($host, '.youtube-nocookie.com') || $host === 'youtube-nocookie.com') {
             return ['path' => $url, 'mime' => 'video/YouTube'];
         }
 
-        $extension = strtolower(pathinfo((string) ($parts['path'] ?? ''), PATHINFO_EXTENSION));
+        $extension = strtolower(pathinfo((string)($parts['path'] ?? ''), PATHINFO_EXTENSION));
         if (!in_array($extension, self::VIDEO_EXTENSIONS, true)) {
             return null;
         }
@@ -77,7 +78,7 @@ class video_helper {
     /**
      * Copy source video.
      */
-    private static function copy_source_video(\stdClass $course, \stdClass $source): ?array {
+    private static function copy_source_video(stdClass $course, stdClass $source): ?array {
         global $USER;
 
         $sourcefile = source_manager::get_stored_file($source);
@@ -110,7 +111,7 @@ class video_helper {
         );
         return [
             'path' => $url->out(false),
-            'mime' => self::video_mime(strtolower((string) $source->extension)),
+            'mime' => self::video_mime(strtolower((string)$source->extension)),
         ];
     }
 

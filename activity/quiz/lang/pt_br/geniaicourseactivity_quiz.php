@@ -22,6 +22,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $string['description'] = 'Cria um Questionário nativo do Moodle e questões nativas no banco de questões a partir da fonte.';
 $string['noquestionsgenerated'] = 'Nenhuma questão válida e compatível foi gerada para esta fonte.';
 $string['pluginname'] = 'Questionário';

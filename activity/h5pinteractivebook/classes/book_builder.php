@@ -28,15 +28,16 @@ use context_course;
 use geniaicourseactivity_h5pinteractivebook\runtime as h5p_runtime;
 use moodle_exception;
 use moodle_url;
+use stdClass;
 
 /** Interactive Book composition logic owned by this subplugin. */
 class book_builder {
     /** Convert a reusable H5P definition into one H5P.Column block. */
-    public static function block(\stdClass $course, \stdClass $source, array $definition,
-            bool &$usediframe = false): array {
-        $machinename = (string) ($definition['machinename'] ?? '');
+    public static function block(stdClass $course, stdClass $source, array $definition,
+                                 bool     &$usediframe = false): array {
+        $machinename = (string)($definition['machinename'] ?? '');
         $params = $definition['params'] ?? [];
-        $title = (string) ($definition['title'] ?? $machinename);
+        $title = (string)($definition['title'] ?? $machinename);
         if ($machinename === '' || !is_array($params)) {
             throw new moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pinteractivebook', '', $title);
         }
@@ -50,7 +51,7 @@ class book_builder {
         }
 
         if (!h5p_runtime::has_library('H5P.IFrameEmbed', false) ||
-                self::column_library_option('H5P.IFrameEmbed') === null) {
+            self::column_library_option('H5P.IFrameEmbed') === null) {
             throw new moodle_exception('h5pbookembedunsupported', 'geniaicourseactivity_h5pinteractivebook', '', $title);
         }
 
@@ -115,12 +116,12 @@ class book_builder {
     }
 
     /** Create a persistent standalone H5P child and wrap it in H5P.IFrameEmbed. */
-    private static function iframe_block(\stdClass $course, \stdClass $source, array $definition): array {
+    private static function iframe_block(stdClass $course, stdClass $source, array $definition): array {
         global $USER;
 
-        $machinename = (string) $definition['machinename'];
-        $params = (array) $definition['params'];
-        $title = clean_param((string) ($definition['title'] ?? $machinename), PARAM_TEXT) ?: $machinename;
+        $machinename = (string)$definition['machinename'];
+        $params = (array)$definition['params'];
+        $title = clean_param((string)($definition['title'] ?? $machinename), PARAM_TEXT) ?: $machinename;
         $coursecontext = context_course::instance($course->id);
         $itemid = file_get_unused_draft_itemid();
         $slug = clean_param(strtolower(preg_replace('/[^a-z0-9]+/i', '-', $machinename)), PARAM_FILE);

@@ -27,7 +27,9 @@ namespace geniaicourseactivity_quiz;
 use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\ai;
 use local_geniaicourse\module_helper;
+use moodle_exception;
 use moodle_url;
+use stdClass;
 
 /**
  * Native Quiz creator.
@@ -52,7 +54,7 @@ class activity implements activity_interface {
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         $system = <<<'PROMPT'
 You are the analyzer for a native Moodle Quiz activity subplugin.
 Decide whether the supplied source should become a Quiz that learners will attempt and receive grading/feedback from.
@@ -93,10 +95,10 @@ For truefalse use boolean field "correct". For shortanswer provide accepted_answ
 Return between 1 and 20 questions when match=true.
 PROMPT;
         $result = ai::json($system, self::source_prompt($project, $source));
-        $result['questions'] = question_builder::normalize((array) ($result['questions'] ?? []));
+        $result['questions'] = question_builder::normalize((array)($result['questions'] ?? []));
         if (!empty($result['match']) && !$result['questions']) {
             $result['match'] = false;
-            $result['reason'] = trim((string) ($result['reason'] ?? '')) . ' No valid supported questions were produced.';
+            $result['reason'] = trim((string)($result['reason'] ?? '')) . ' No valid supported questions were produced.';
         }
         return $result;
     }
@@ -104,24 +106,24 @@ PROMPT;
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/course/modlib.php');
         require_once($CFG->dirroot . '/mod/quiz/lib.php');
         require_once($CFG->dirroot . '/mod/quiz/locallib.php');
 
-        $questions = question_builder::normalize((array) ($analysis['questions'] ?? []));
+        $questions = question_builder::normalize((array)($analysis['questions'] ?? []));
         if (!$questions) {
-            throw new \moodle_exception('noquestionsgenerated', 'geniaicourseactivity_quiz');
+            throw new moodle_exception('noquestionsgenerated', 'geniaicourseactivity_quiz');
         }
 
-        $name = trim((string) ($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
+        $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
         if ($name === '') {
             $name = get_string('pluginname', 'geniaicourseactivity_quiz');
         }
-        $intro = trim((string) ($analysis['intro_html'] ?? ''));
+        $intro = trim((string)($analysis['intro_html'] ?? ''));
         if ($intro === '') {
-            $intro = '<p>' . s(trim((string) ($analysis['summary'] ?? ''))) . '</p>';
+            $intro = '<p>' . s(trim((string)($analysis['summary'] ?? ''))) . '</p>';
         }
 
         // Create native question-bank records first. The Quiz will reference these questions by slot.
@@ -168,12 +170,12 @@ PROMPT;
         }
 
         $created = add_moduleinfo($moduleinfo, $course, null);
-        $cmid = (int) $created->coursemodule;
+        $cmid = (int)$created->coursemodule;
         $quiz = $DB->get_record('quiz', ['id' => $created->instance], '*', MUST_EXIST);
         $quiz->cmid = $cmid;
 
         foreach ($import['ids'] as $questionid) {
-            quiz_add_quiz_question((int) $questionid, $quiz, 0);
+            quiz_add_quiz_question((int)$questionid, $quiz, 0);
         }
 
         return [
@@ -187,13 +189,13 @@ PROMPT;
     /**
      * Source prompt.
      */
-    private static function source_prompt(\stdClass $project, \stdClass $source): string {
-        $text = trim((string) $source->extractedtext);
-        return "Global teacher prompt:\n" . trim((string) $project->prompt) .
+    private static function source_prompt(stdClass $project, stdClass $source): string {
+        $text = trim((string)$source->extractedtext);
+        return "Global teacher prompt:\n" . trim((string)$project->prompt) .
             "\n\nSource filename: {$source->filename}" .
             "\nMIME type: {$source->mimetype}" .
             "\nExtension: {$source->extension}" .
-            "\nTeacher instruction for this source: " . trim((string) $source->instruction) .
+            "\nTeacher instruction for this source: " . trim((string)$source->instruction) .
             "\n\nExtracted source content:\n" . ($text !== '' ? $text : '[No text was extracted from this source.]');
     }
 }

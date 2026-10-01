@@ -72,7 +72,7 @@ class source_manager {
      */
     public static function create_text(int $projectid, string $text): stdClass {
         global $DB;
-        $record = (object) [
+        $record = (object)[
             'projectid' => $projectid,
             'sourcetype' => 'text',
             'filename' => 'prompt.txt',
@@ -114,8 +114,8 @@ class source_manager {
             throw new moodle_exception('uploaderror', 'local_geniaicourse', '', $filename);
         }
 
-        $mimetype = (string) mimeinfo('type', $filename);
-        $record = (object) [
+        $mimetype = (string)mimeinfo('type', $filename);
+        $record = (object)[
             'projectid' => $projectid,
             'sourcetype' => 'file',
             'filename' => $filename,
@@ -164,7 +164,7 @@ class source_manager {
             return null;
         }
         if ($userid === null) {
-            $userid = (int) $DB->get_field(
+            $userid = (int)$DB->get_field(
                 'local_geniaicourse_project',
                 'userid',
                 ['id' => $source->projectid],

@@ -1,3 +1,27 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_geniaicourse/result
+
+    Example context (json):
+    {
+        Aqui tem que criar o context em inglês
+    }
+}}
 <div class="geniaicourse-shell">
     <div class="geniaicourse-hero">
         <h2>{{#str}}createdtitle, local_geniaicourse{{/str}}</h2>
@@ -8,11 +32,13 @@
             <div class="alert alert-success">
                 <strong>{{#str}}created, local_geniaicourse{{/str}}:</strong>
                 {{#url}}<a href="{{{url}}}">{{name}}</a>{{/url}}{{^url}}{{name}}{{/url}}
-                {{#haswarning}}<div class="mt-2 text-dark">{{warning}}</div>{{/haswarning}}
+                {{#haswarning}}
+                    <div class="mt-2 text-dark">{{warning}}</div>{{/haswarning}}
             </div>
         {{/success}}
         {{^success}}
-            <div class="alert alert-danger"><strong>{{#str}}failed, local_geniaicourse{{/str}}:</strong> {{name}} — {{error}}</div>
+            <div class="alert alert-danger"><strong>{{#str}}failed, local_geniaicourse{{/str}}:</strong> {{name}}
+                — {{error}}</div>
         {{/success}}
     {{/results}}
 

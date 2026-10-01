@@ -28,6 +28,7 @@ use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\ai;
 use local_geniaicourse\module_helper;
 use moodle_url;
+use stdClass;
 
 /**
  * Native Assignment creator.
@@ -52,7 +53,7 @@ class activity implements activity_interface {
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         $system = <<<'PROMPT'
 You are the analyzer for a native Moodle Assignment activity subplugin.
 Decide whether the source should become an Assignment in which learners submit work to the teacher.
@@ -80,35 +81,35 @@ maxfiles must be 1-20. wordlimit is 0 when no explicit reasonable limit can be d
 Do not invent facts not present in the source.
 PROMPT;
         $result = ai::json($system, self::source_prompt($project, $source));
-        $mode = strtolower(trim((string) ($result['submission_mode'] ?? 'file')));
+        $mode = strtolower(trim((string)($result['submission_mode'] ?? 'file')));
         $result['submission_mode'] = in_array($mode, ['online', 'file', 'both'], true) ? $mode : 'file';
-        $result['maxfiles'] = max(1, min(20, (int) ($result['maxfiles'] ?? 1)));
-        $result['wordlimit'] = max(0, min(100000, (int) ($result['wordlimit'] ?? 0)));
+        $result['maxfiles'] = max(1, min(20, (int)($result['maxfiles'] ?? 1)));
+        $result['wordlimit'] = max(0, min(100000, (int)($result['wordlimit'] ?? 0)));
         return $result;
     }
 
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
         global $CFG;
         require_once($CFG->dirroot . '/course/modlib.php');
         require_once($CFG->dirroot . '/mod/assign/lib.php');
 
-        $name = trim((string) ($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
+        $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
         if ($name === '') {
             $name = get_string('pluginname', 'geniaicourseactivity_assignment');
         }
-        $intro = trim((string) ($analysis['intro_html'] ?? ''));
+        $intro = trim((string)($analysis['intro_html'] ?? ''));
         if ($intro === '') {
-            $intro = '<p>' . s(trim((string) ($analysis['summary'] ?? $source->extractedtext))) . '</p>';
+            $intro = '<p>' . s(trim((string)($analysis['summary'] ?? $source->extractedtext))) . '</p>';
         }
-        $mode = strtolower(trim((string) ($analysis['submission_mode'] ?? 'file')));
+        $mode = strtolower(trim((string)($analysis['submission_mode'] ?? 'file')));
         if (!in_array($mode, ['online', 'file', 'both'], true)) {
             $mode = 'file';
         }
-        $maxfiles = max(1, min(20, (int) ($analysis['maxfiles'] ?? 1)));
-        $wordlimit = max(0, min(100000, (int) ($analysis['wordlimit'] ?? 0)));
+        $maxfiles = max(1, min(20, (int)($analysis['maxfiles'] ?? 1)));
+        $wordlimit = max(0, min(100000, (int)($analysis['wordlimit'] ?? 0)));
 
         $moduleinfo = module_helper::base($course, $sectionnum, 'assign', $name, $intro);
         $moduleinfo->alwaysshowdescription = 1;
@@ -147,7 +148,7 @@ PROMPT;
         $moduleinfo->assignfeedback_file_enabled = 0;
 
         $created = add_moduleinfo($moduleinfo, $course, null);
-        $cmid = (int) $created->coursemodule;
+        $cmid = (int)$created->coursemodule;
 
         return [
             'cmid' => $cmid,
@@ -160,13 +161,13 @@ PROMPT;
     /**
      * Source prompt.
      */
-    private static function source_prompt(\stdClass $project, \stdClass $source): string {
-        $text = trim((string) $source->extractedtext);
-        return "Global teacher prompt:\n" . trim((string) $project->prompt) .
+    private static function source_prompt(stdClass $project, stdClass $source): string {
+        $text = trim((string)$source->extractedtext);
+        return "Global teacher prompt:\n" . trim((string)$project->prompt) .
             "\n\nSource filename: {$source->filename}" .
             "\nMIME type: {$source->mimetype}" .
             "\nExtension: {$source->extension}" .
-            "\nTeacher instruction for this source: " . trim((string) $source->instruction) .
+            "\nTeacher instruction for this source: " . trim((string)$source->instruction) .
             "\n\nExtracted source content:\n" . ($text !== '' ? $text : '[No text was extracted from this source.]');
     }
 }

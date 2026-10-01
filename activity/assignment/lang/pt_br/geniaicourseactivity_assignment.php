@@ -22,5 +22,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $string['description'] = 'Cria uma Tarefa nativa do Moodle com enunciado e métodos de envio adequados.';
 $string['pluginname'] = 'Tarefa';

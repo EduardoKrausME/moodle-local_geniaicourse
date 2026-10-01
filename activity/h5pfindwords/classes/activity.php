@@ -24,10 +24,13 @@
 
 namespace geniaicourseactivity_h5pfindwords;
 
+use core_text;
 use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\activity\composable_content_interface;
 use local_geniaicourse\ai;
 use geniaicourseactivity_h5pfindwords\runtime as h5p_runtime;
+use moodle_exception;
+use stdClass;
 
 /** H5P Find the Words creator. */
 class activity implements activity_interface, composable_content_interface {
@@ -55,7 +58,7 @@ class activity implements activity_interface, composable_content_interface {
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         if (!h5p_runtime::has_library('H5P.FindTheWords', true)) {
             return [
                 'match' => false,
@@ -95,21 +98,21 @@ PROMPT;
     /**
      * Build composable content.
      */
-    public static function build_composable_content(\stdClass $course, \stdClass $source, array $analysis): array {
+    public static function build_composable_content(stdClass $course, stdClass $source, array $analysis): array {
         $words = self::normalize_words($analysis['words'] ?? []);
         if (count($words) < 3) {
-            throw new \moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pfindwords', '', self::get_name());
+            throw new moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pfindwords', '', self::get_name());
         }
-        $name = trim((string) ($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
-        $description = trim((string) ($analysis['task_description'] ?? ''));
+        $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
+        $description = trim((string)($analysis['task_description'] ?? ''));
         if ($description === '') {
-            $description = trim((string) ($analysis['summary'] ?? '')) ?: 'Find the words in the grid.';
+            $description = trim((string)($analysis['summary'] ?? '')) ?: 'Find the words in the grid.';
         }
 
         return [
             'machinename' => 'H5P.FindTheWords',
             'title' => $name,
-            'intro' => h5p_runtime::paragraph((string) ($analysis['summary'] ?? '')),
+            'intro' => h5p_runtime::paragraph((string)($analysis['summary'] ?? '')),
             'params' => [
                 'taskDescription' => $description,
                 'wordList' => implode(',', $words),
@@ -146,7 +149,7 @@ PROMPT;
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
         $content = self::build_composable_content($course, $source, $analysis);
         return h5p_runtime::create_activity(
             $course,
@@ -167,13 +170,13 @@ PROMPT;
         }
         $out = [];
         foreach ($words as $word) {
-            $word = trim(strip_tags((string) $word));
+            $word = trim(strip_tags((string)$word));
             $word = preg_replace('/[,;\r\n]+/u', ' ', $word);
             $word = preg_replace('/\s+/u', ' ', $word);
-            if ($word === '' || \core_text::strlen($word) > 40) {
+            if ($word === '' || core_text::strlen($word) > 40) {
                 continue;
             }
-            $key = \core_text::strtolower($word);
+            $key = core_text::strtolower($word);
             $out[$key] = $word;
             if (count($out) >= 20) {
                 break;

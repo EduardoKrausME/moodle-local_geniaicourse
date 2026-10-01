@@ -24,6 +24,7 @@
 
 namespace local_geniaicourse\task;
 
+use core\task\scheduled_task;
 use local_geniaicourse\project_manager;
 
 /**
@@ -31,7 +32,7 @@ use local_geniaicourse\project_manager;
  *
  * @package local_geniaicourse
  */
-class cleanup extends \core\task\scheduled_task {
+class cleanup extends scheduled_task {
     /**
      * Get name.
      *

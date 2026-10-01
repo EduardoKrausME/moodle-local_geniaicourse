@@ -25,9 +25,13 @@
 namespace geniaicourseactivity_quiz;
 
 use context_course;
+use core_question\category_manager;
 use core_text;
 use moodle_exception;
 use moodle_url;
+use qformat_gift;
+use stdClass;
+use Throwable;
 
 /**
  * Creates native Moodle question bank questions using Moodle's GIFT importer.
@@ -50,7 +54,7 @@ class question_builder {
             if (!is_array($question)) {
                 continue;
             }
-            $type = strtolower(trim((string) ($question['type'] ?? 'multichoice')));
+            $type = strtolower(trim((string)($question['type'] ?? 'multichoice')));
             $aliases = [
                 'multiplechoice' => 'multichoice',
                 'multiple_choice' => 'multichoice',
@@ -70,11 +74,11 @@ class question_builder {
                 $type = 'multichoice';
             }
 
-            $text = trim((string) ($question['question'] ?? $question['text'] ?? ''));
+            $text = trim((string)($question['question'] ?? $question['text'] ?? ''));
             if ($text === '') {
                 continue;
             }
-            $name = trim((string) ($question['name'] ?? ''));
+            $name = trim((string)($question['name'] ?? ''));
             if ($name === '') {
                 $name = get_string('questiondefaultname', 'geniaicourseactivity_quiz', $index + 1);
             }
@@ -83,8 +87,8 @@ class question_builder {
                 'type' => $type,
                 'name' => clean_param(core_text::substr(strip_tags($name), 0, 200), PARAM_TEXT),
                 'question' => clean_text($text, FORMAT_HTML),
-                'generalfeedback' => clean_text((string) ($question['generalfeedback'] ?? ''), FORMAT_HTML),
-                'defaultmark' => max(0.01, min(100, (float) ($question['defaultmark'] ?? 1))),
+                'generalfeedback' => clean_text((string)($question['generalfeedback'] ?? ''), FORMAT_HTML),
+                'defaultmark' => max(0.01, min(100, (float)($question['defaultmark'] ?? 1))),
             ];
 
             if ($type === 'multichoice') {
@@ -101,16 +105,16 @@ class question_builder {
                     }
                     $correct = $parsed;
                 }
-                $normalized['correct'] = (bool) $correct;
-                $normalized['feedbacktrue'] = clean_text((string) ($question['feedbacktrue'] ?? ''), FORMAT_HTML);
-                $normalized['feedbackfalse'] = clean_text((string) ($question['feedbackfalse'] ?? ''), FORMAT_HTML);
+                $normalized['correct'] = (bool)$correct;
+                $normalized['feedbacktrue'] = clean_text((string)($question['feedbacktrue'] ?? ''), FORMAT_HTML);
+                $normalized['feedbackfalse'] = clean_text((string)($question['feedbackfalse'] ?? ''), FORMAT_HTML);
             } else if ($type === 'shortanswer') {
                 $accepted = $question['accepted_answers'] ?? $question['acceptedanswers'] ?? $question['answers'] ?? [];
                 if (is_string($accepted)) {
                     $accepted = [$accepted];
                 }
                 $answers = [];
-                foreach ((array) $accepted as $answer) {
+                foreach ((array)$accepted as $answer) {
                     if (is_array($answer)) {
                         $isanswercorrect = $answer['correct'] ?? true;
                         if (!$isanswercorrect) {
@@ -118,7 +122,7 @@ class question_builder {
                         }
                         $answer = $answer['text'] ?? $answer['answer'] ?? '';
                     }
-                    $answer = trim(strip_tags((string) $answer));
+                    $answer = trim(strip_tags((string)$answer));
                     if ($answer !== '') {
                         $answers[] = $answer;
                     }
@@ -129,7 +133,7 @@ class question_builder {
                 }
             } else if ($type === 'essay') {
                 $normalized['graderinfo'] = clean_text(
-                    (string) ($question['graderinfo'] ?? $question['rubric'] ?? ''),
+                    (string)($question['graderinfo'] ?? $question['rubric'] ?? ''),
                     FORMAT_HTML
                 );
             }
@@ -142,11 +146,11 @@ class question_builder {
     /**
      * Create a category below the course-context top category.
      *
-     * @param \stdClass $course
+     * @param stdClass $course
      * @param string $name
-     * @return \stdClass
+     * @return stdClass
      */
-    public static function create_category(\stdClass $course, string $name): \stdClass {
+    public static function create_category(stdClass $course, string $name): stdClass {
         global $CFG, $DB;
         require_once($CFG->libdir . '/questionlib.php');
 
@@ -154,7 +158,7 @@ class question_builder {
         require_capability('moodle/question:add', $context);
 
         $top = question_get_top_category($context->id, true);
-        $manager = new \core_question\category_manager();
+        $manager = new category_manager();
         $categoryname = clean_param(core_text::substr($name, 0, 255), PARAM_TEXT);
         if ($categoryname === '') {
             $categoryname = get_string('questioncategorydefault', 'geniaicourseactivity_quiz');
@@ -173,12 +177,12 @@ class question_builder {
     /**
      * Import questions into Moodle using the native GIFT importer.
      *
-     * @param \stdClass $course
-     * @param \stdClass $category
+     * @param stdClass $course
+     * @param stdClass $category
      * @param array $questions
      * @return array{ids: int[], output: string}
      */
-    public static function import(\stdClass $course, \stdClass $category, array $questions): array {
+    public static function import(stdClass $course, stdClass $category, array $questions): array {
         global $CFG;
         require_once($CFG->libdir . '/questionlib.php');
         require_once($CFG->dirroot . '/question/format.php');
@@ -199,7 +203,7 @@ class question_builder {
             throw new moodle_exception('cannotwritefile', 'error');
         }
 
-        $format = new \qformat_gift();
+        $format = new qformat_gift();
         $format->setCategory($category);
         $format->setCourse($course);
         $format->setContexts([$context]);
@@ -215,10 +219,10 @@ class question_builder {
         try {
             ob_start();
             $ok = $format->importprocess();
-            $output = trim((string) ob_get_clean());
-        } catch (\Throwable $e) {
+            $output = trim((string)ob_get_clean());
+        } catch (Throwable $e) {
             if (ob_get_level()) {
-                $output = trim((string) ob_get_clean());
+                $output = trim((string)ob_get_clean());
             }
             @unlink($pathname);
             throw $e;
@@ -255,16 +259,16 @@ class question_builder {
         $input = $question['answers'] ?? $question['options'] ?? [];
         $answers = [];
         $correctfound = false;
-        $correctindex = isset($question['correctindex']) ? (int) $question['correctindex'] : null;
-        $correctanswer = isset($question['correctanswer']) ? trim((string) $question['correctanswer']) : null;
+        $correctindex = isset($question['correctindex']) ? (int)$question['correctindex'] : null;
+        $correctanswer = isset($question['correctanswer']) ? trim((string)$question['correctanswer']) : null;
 
-        foreach (array_slice((array) $input, 0, 12) as $index => $answer) {
+        foreach (array_slice((array)$input, 0, 12) as $index => $answer) {
             if (is_array($answer)) {
-                $text = trim((string) ($answer['text'] ?? $answer['answer'] ?? $answer['label'] ?? ''));
+                $text = trim((string)($answer['text'] ?? $answer['answer'] ?? $answer['label'] ?? ''));
                 $correct = $answer['correct'] ?? false;
-                $feedback = (string) ($answer['feedback'] ?? '');
+                $feedback = (string)($answer['feedback'] ?? '');
             } else {
-                $text = trim((string) $answer);
+                $text = trim((string)$answer);
                 $correct = false;
                 $feedback = '';
             }
@@ -277,7 +281,7 @@ class question_builder {
             if ($correctanswer !== null && trim(strip_tags($text)) === trim(strip_tags($correctanswer))) {
                 $correct = true;
             }
-            $correct = (bool) $correct && !$correctfound;
+            $correct = (bool)$correct && !$correctfound;
             if ($correct) {
                 $correctfound = true;
             }

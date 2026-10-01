@@ -22,6 +22,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $string['description'] = 'Cria uma Lição nativa do Moodle com uma sequência ordenada de páginas de conteúdo.';
 $string['lessonpagedefault'] = 'Página da lição {$a}';
 $string['nolessonpages'] = 'Nenhuma página válida de lição foi gerada para esta fonte.';

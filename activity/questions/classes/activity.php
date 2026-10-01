@@ -26,6 +26,8 @@ namespace geniaicourseactivity_questions;
 
 use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\ai;
+use moodle_exception;
+use stdClass;
 
 /**
  * Question bank generator.
@@ -50,7 +52,7 @@ class activity implements activity_interface {
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         $system = <<<'PROMPT'
 You are the analyzer for a Moodle Question Bank subplugin.
 Decide whether the source should become reusable native Moodle question-bank questions
@@ -92,10 +94,10 @@ For essay, answers may be omitted.
 Return at most 20 questions.
 PROMPT;
         $result = ai::json($system, self::source_prompt($project, $source));
-        $result['questions'] = question_builder::normalize((array) ($result['questions'] ?? []));
+        $result['questions'] = question_builder::normalize((array)($result['questions'] ?? []));
         if (!empty($result['match']) && !$result['questions']) {
             $result['match'] = false;
-            $result['reason'] = trim((string) ($result['reason'] ?? '')) . ' No valid supported questions were produced.';
+            $result['reason'] = trim((string)($result['reason'] ?? '')) . ' No valid supported questions were produced.';
         }
         return $result;
     }
@@ -103,14 +105,14 @@ PROMPT;
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
         unset($sectionnum);
-        $questions = question_builder::normalize((array) ($analysis['questions'] ?? []));
+        $questions = question_builder::normalize((array)($analysis['questions'] ?? []));
         if (!$questions) {
-            throw new \moodle_exception('noquestionsgenerated', 'geniaicourseactivity_questions');
+            throw new moodle_exception('noquestionsgenerated', 'geniaicourseactivity_questions');
         }
 
-        $categoryname = trim((string) ($analysis['title'] ?? ''));
+        $categoryname = trim((string)($analysis['title'] ?? ''));
         if ($categoryname === '') {
             $categoryname = pathinfo($source->filename, PATHINFO_FILENAME);
         }
@@ -124,11 +126,11 @@ PROMPT;
 
         return [
             'cmid' => 0,
-            'name' => get_string('questionbankcreatedname', 'geniaicourseactivity_questions', (object) [
+            'name' => get_string('questionbankcreatedname', 'geniaicourseactivity_questions', (object)[
                 'name' => $category->name,
                 'count' => $count,
             ]),
-            'url' => question_builder::bank_url((int) $course->id)->out(false),
+            'url' => question_builder::bank_url((int)$course->id)->out(false),
             'warning' => '',
         ];
     }
@@ -136,13 +138,13 @@ PROMPT;
     /**
      * Source prompt.
      */
-    private static function source_prompt(\stdClass $project, \stdClass $source): string {
-        $text = trim((string) $source->extractedtext);
-        return "Global teacher prompt:\n" . trim((string) $project->prompt) .
+    private static function source_prompt(stdClass $project, stdClass $source): string {
+        $text = trim((string)$source->extractedtext);
+        return "Global teacher prompt:\n" . trim((string)$project->prompt) .
             "\n\nSource filename: {$source->filename}" .
             "\nMIME type: {$source->mimetype}" .
             "\nExtension: {$source->extension}" .
-            "\nTeacher instruction for this source: " . trim((string) $source->instruction) .
+            "\nTeacher instruction for this source: " . trim((string)$source->instruction) .
             "\n\nExtracted source content:\n" . ($text !== '' ? $text : '[No text was extracted from this source.]');
     }
 }

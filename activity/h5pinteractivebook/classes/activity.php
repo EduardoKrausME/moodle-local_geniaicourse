@@ -30,6 +30,9 @@ use local_geniaicourse\activity\selection_consumer_interface;
 use local_geniaicourse\ai;
 use geniaicourseactivity_h5pinteractivebook\runtime as h5p_runtime;
 use local_geniaicourse\plugin_manager;
+use moodle_exception;
+use stdClass;
+use Throwable;
 
 /** H5P Interactive Book creator and H5P child orchestrator. */
 class activity implements activity_interface, selection_consumer_interface {
@@ -64,7 +67,7 @@ class activity implements activity_interface, selection_consumer_interface {
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         foreach (['H5P.InteractiveBook', 'H5P.Column', 'H5P.AdvancedText'] as $library) {
             if (!h5p_runtime::has_library($library, true)) {
                 return [
@@ -107,7 +110,7 @@ Keep each chapter concise and useful. Do not invent unsupported facts.
 PROMPT;
         $result = ai::json($system, h5p_runtime::source_prompt($project, $source));
         $result['chapters'] = self::normalize_chapters($result['chapters'] ?? []);
-        if (!$result['chapters'] && trim((string) $source->extractedtext) === '') {
+        if (!$result['chapters'] && trim((string)$source->extractedtext) === '') {
             $result['match'] = false;
         }
         return $result;
@@ -116,10 +119,10 @@ PROMPT;
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
-        $name = trim((string) ($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
-        $summary = trim((string) ($analysis['summary'] ?? ''));
-        $cover = trim((string) ($analysis['cover_description'] ?? ''));
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
+        $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
+        $summary = trim((string)($analysis['summary'] ?? ''));
+        $cover = trim((string)($analysis['cover_description'] ?? ''));
         $textchapters = self::normalize_chapters($analysis['chapters'] ?? []);
 
         $chapters = [];
@@ -129,7 +132,7 @@ PROMPT;
             ], $chapter['title']);
         }
 
-        $allanalysis = json_decode((string) $source->analysisjson, true) ?: [];
+        $allanalysis = json_decode((string)$source->analysisjson, true) ?: [];
         $selectedchildren = self::resolve_children($analysis, $allanalysis);
         $plugins = plugin_manager::get_plugins();
         $iframechildren = [];
@@ -150,22 +153,22 @@ PROMPT;
             try {
                 $definition = $class::build_composable_content($course, $source, $childanalysis);
                 $blocks = [];
-                $childintro = trim((string) ($definition['intro'] ?? ''));
+                $childintro = trim((string)($definition['intro'] ?? ''));
                 if ($childintro !== '') {
-                    $blocks[] = book_builder::text_block($childintro, (string) $definition['title']);
+                    $blocks[] = book_builder::text_block($childintro, (string)$definition['title']);
                 }
                 $usediframe = false;
                 $blocks[] = book_builder::block($course, $source, $definition, $usediframe);
                 if ($usediframe) {
-                    $iframechildren[] = (string) ($childanalysis['activityname'] ?? $definition['title']);
+                    $iframechildren[] = (string)($childanalysis['activityname'] ?? $definition['title']);
                 }
-                $chapters[] = book_builder::column($blocks, (string) $definition['title']);
-            } catch (\Throwable $e) {
+                $chapters[] = book_builder::column($blocks, (string)$definition['title']);
+            } catch (Throwable $e) {
                 // A child must not make the whole book unusable. Add a readable page explaining the skipped child.
-                $label = (string) ($childanalysis['activityname'] ?? $pluginname);
+                $label = (string)($childanalysis['activityname'] ?? $pluginname);
                 $chapters[] = book_builder::column([
                     book_builder::text_block(
-                        '<p>' . s(get_string('h5pbookchildfailed', 'geniaicourseactivity_h5pinteractivebook', (object) [
+                        '<p>' . s(get_string('h5pbookchildfailed', 'geniaicourseactivity_h5pinteractivebook', (object)[
                             'name' => $label,
                             'error' => $e->getMessage(),
                         ])) . '</p>',
@@ -176,9 +179,9 @@ PROMPT;
         }
 
         if (!$chapters) {
-            $fallback = $summary !== '' ? $summary : trim((string) $source->extractedtext);
+            $fallback = $summary !== '' ? $summary : trim((string)$source->extractedtext);
             if ($fallback === '') {
-                throw new \moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pinteractivebook', '', self::get_name());
+                throw new moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pinteractivebook', '', self::get_name());
             }
             $chapters[] = book_builder::column([
                 book_builder::text_block(h5p_runtime::paragraph($fallback), $name),
@@ -290,7 +293,7 @@ PROMPT;
             if (!is_array($candidate) || empty($candidate['match']) || !empty($candidate['error'])) {
                 continue;
             }
-            $candidates[$pluginname] = (int) ($candidate['confidence'] ?? 0);
+            $candidates[$pluginname] = (int)($candidate['confidence'] ?? 0);
         }
         arsort($candidates);
         return array_keys($candidates);
@@ -308,8 +311,8 @@ PROMPT;
             if (!is_array($chapter)) {
                 continue;
             }
-            $title = trim(strip_tags((string) ($chapter['title'] ?? '')));
-            $content = trim(strip_tags((string) ($chapter['content'] ?? '')));
+            $title = trim(strip_tags((string)($chapter['title'] ?? '')));
+            $content = trim(strip_tags((string)($chapter['content'] ?? '')));
             if ($content === '') {
                 continue;
             }

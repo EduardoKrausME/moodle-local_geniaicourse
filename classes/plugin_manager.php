@@ -30,6 +30,9 @@ use local_geniaicourse\activity\selection_consumer_interface;
 use local_geniaicourse\activity\source_extension_interface;
 use local_geniaicourse\activity\source_processor_interface;
 use moodle_exception;
+use stdClass;
+use stored_file;
+use Throwable;
 
 /**
  * Discovers and invokes installed activity subplugins.
@@ -55,8 +58,8 @@ class plugin_manager {
     }
 
     /**
-* Get source extensions.
-*
+     * Get source extensions.
+     *
      * @return array
      */
     public static function get_source_extensions(): array {
@@ -78,11 +81,11 @@ class plugin_manager {
     /**
      * Process source.
      *
-     * @param \stored_file $file Parameter value.
+     * @param stored_file $file Parameter value.
      * @param string $extension Parameter value.
      * @return ?array
      */
-    public static function process_source(\stored_file $file, string $extension): ?array {
+    public static function process_source(stored_file $file, string $extension): ?array {
         foreach (self::get_plugins() as $class) {
             if (!is_subclass_of($class, source_processor_interface::class) ||
                 !$class::supports_source_extension($extension)) {
@@ -99,17 +102,17 @@ class plugin_manager {
     /**
      * Analyse source.
      *
-     * @param \stdClass $project Parameter value.
-     * @param \stdClass $source Parameter value.
+     * @param stdClass $project Parameter value.
+     * @param stdClass $source Parameter value.
      * @return array
      */
-    public static function analyse_source(\stdClass $project, \stdClass $source): array {
+    public static function analyse_source(stdClass $project, stdClass $source): array {
         $result = [];
         foreach (self::get_plugins() as $name => $class) {
             try {
                 $analysis = $class::analyse($project, $source);
                 $result[$name] = self::normalize($class, $analysis);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $result[$name] = [
                     'match' => false,
                     'confidence' => 0,
@@ -166,14 +169,14 @@ class plugin_manager {
      * Create.
      *
      * @param string $pluginname Parameter value.
-     * @param \stdClass $course Parameter value.
+     * @param stdClass $course Parameter value.
      * @param int $sectionnum Parameter value.
-     * @param \stdClass $source Parameter value.
+     * @param stdClass $source Parameter value.
      * @param array $analysis Parameter value.
      * @return array
      */
-    public static function create(string    $pluginname, \stdClass $course, int $sectionnum,
-                                  \stdClass $source, array $analysis): array {
+    public static function create(string    $pluginname, stdClass $course, int $sectionnum,
+                                  stdClass $source, array $analysis): array {
         $plugins = self::get_plugins();
         if (!isset($plugins[$pluginname])) {
             throw new moodle_exception('invalidplugin', 'error', '', $pluginname);

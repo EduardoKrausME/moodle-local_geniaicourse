@@ -22,6 +22,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $string['description'] = 'Cria um H5P de palavras cruzadas nativo do Moodle com termos e pistas baseados na fonte.';
 $string['h5pcontentcreatefailed'] = 'O Moodle não conseguiu montar o conteúdo H5P. {$a}';
 $string['h5pexportmissing'] = 'O editor H5P não gerou o pacote de exportação da atividade.';

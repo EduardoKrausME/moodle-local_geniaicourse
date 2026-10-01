@@ -28,6 +28,7 @@ use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\ai;
 use local_geniaicourse\module_helper;
 use moodle_url;
+use stdClass;
 
 /**
  * Forum activity creator.
@@ -52,7 +53,7 @@ class activity implements activity_interface {
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         $system = <<<'PROMPT'
 You are the analyzer for a Moodle Forum activity subplugin.
 Decide whether the supplied source should reasonably become a native Moodle Forum.
@@ -76,12 +77,12 @@ Use match=false if Forum is not appropriate. confidence is 0-100.
 Do not invent facts not present in the source.
 PROMPT;
 
-        $text = trim((string) $source->extractedtext);
-        $user = "Global teacher prompt:\n" . trim((string) $project->prompt) .
+        $text = trim((string)$source->extractedtext);
+        $user = "Global teacher prompt:\n" . trim((string)$project->prompt) .
             "\n\nSource filename: {$source->filename}" .
             "\nMIME type: {$source->mimetype}" .
             "\nExtension: {$source->extension}" .
-            "\nTeacher instruction for this source: " . trim((string) $source->instruction) .
+            "\nTeacher instruction for this source: " . trim((string)$source->instruction) .
             "\n\nExtracted source content:\n" . ($text !== '' ? $text : '[No text was extracted from this source.]');
 
         return ai::json($system, $user);
@@ -90,18 +91,18 @@ PROMPT;
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
         global $CFG;
         require_once($CFG->dirroot . '/course/modlib.php');
         require_once($CFG->dirroot . '/mod/forum/lib.php');
 
-        $name = trim((string) ($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
+        $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
         if ($name === '') {
             $name = get_string('pluginname', 'geniaicourseactivity_forum');
         }
-        $intro = trim((string) ($analysis['intro_html'] ?? ''));
+        $intro = trim((string)($analysis['intro_html'] ?? ''));
         if ($intro === '') {
-            $intro = '<p>' . s(trim((string) ($analysis['summary'] ?? $source->extractedtext))) . '</p>';
+            $intro = '<p>' . s(trim((string)($analysis['summary'] ?? $source->extractedtext))) . '</p>';
         }
 
         $moduleinfo = module_helper::base($course, $sectionnum, 'forum', $name, $intro);
@@ -127,7 +128,7 @@ PROMPT;
         $moduleinfo->rssarticles = 0;
 
         $created = add_moduleinfo($moduleinfo, $course, null);
-        $cmid = (int) $created->coursemodule;
+        $cmid = (int)$created->coursemodule;
 
         return [
             'cmid' => $cmid,

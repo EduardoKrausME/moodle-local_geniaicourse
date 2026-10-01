@@ -22,5 +22,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $string['description'] = 'Cria um Fórum nativo do Moodle quando a fonte é principalmente uma proposta de discussão, reflexão ou debate.';
 $string['pluginname'] = 'Fórum';

@@ -28,6 +28,8 @@ use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\activity\composable_content_interface;
 use local_geniaicourse\ai;
 use geniaicourseactivity_h5pdragdrop\runtime as h5p_runtime;
+use moodle_exception;
+use stdClass;
 
 /** H5P Drag and Drop creator. */
 class activity implements activity_interface, composable_content_interface {
@@ -55,7 +57,7 @@ class activity implements activity_interface, composable_content_interface {
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         if (!h5p_runtime::has_library('H5P.DragQuestion', true)) {
             return [
                 'match' => false,
@@ -97,13 +99,13 @@ PROMPT;
     /**
      * Build composable content.
      */
-    public static function build_composable_content(\stdClass $course, \stdClass $source, array $analysis): array {
+    public static function build_composable_content(stdClass $course, stdClass $source, array $analysis): array {
         $pairs = self::normalize_pairs($analysis['pairs'] ?? []);
         if (count($pairs) < 2) {
-            throw new \moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pdragdrop', '', self::get_name());
+            throw new moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pdragdrop', '', self::get_name());
         }
-        $name = trim((string) ($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
-        $instruction = trim((string) ($analysis['instruction'] ?? '')) ?: 'Drag each item to the correct destination.';
+        $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
+        $instruction = trim((string)($analysis['instruction'] ?? '')) ?: 'Drag each item to the correct destination.';
         $textlibrary = h5p_runtime::library_string('H5P.AdvancedText', false);
 
         $count = count($pairs);
@@ -131,7 +133,7 @@ PROMPT;
                 'y' => $y,
                 'width' => 40,
                 'height' => max(9, 72 / max(1, $count)),
-                'correctElements' => [(string) $index],
+                'correctElements' => [(string)$index],
                 'showLabel' => true,
                 'label' => h5p_runtime::paragraph($pair['target']),
                 'backgroundOpacity' => 65,
@@ -199,7 +201,7 @@ PROMPT;
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
         $content = self::build_composable_content($course, $source, $analysis);
         return h5p_runtime::create_activity(
             $course,
@@ -223,9 +225,9 @@ PROMPT;
             if (!is_array($pair)) {
                 continue;
             }
-            $item = trim(strip_tags((string) ($pair['item'] ?? '')));
-            $target = trim(strip_tags((string) ($pair['target'] ?? '')));
-            $tip = trim(strip_tags((string) ($pair['tip'] ?? '')));
+            $item = trim(strip_tags((string)($pair['item'] ?? '')));
+            $target = trim(strip_tags((string)($pair['target'] ?? '')));
+            $tip = trim(strip_tags((string)($pair['tip'] ?? '')));
             if ($item === '' || $target === '') {
                 continue;
             }

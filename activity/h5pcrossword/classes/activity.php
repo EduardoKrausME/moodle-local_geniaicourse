@@ -24,10 +24,13 @@
 
 namespace geniaicourseactivity_h5pcrossword;
 
+use core_text;
 use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\activity\composable_content_interface;
 use local_geniaicourse\ai;
 use geniaicourseactivity_h5pcrossword\runtime as h5p_runtime;
+use moodle_exception;
+use stdClass;
 
 /** H5P Crossword creator. */
 class activity implements activity_interface, composable_content_interface {
@@ -55,7 +58,7 @@ class activity implements activity_interface, composable_content_interface {
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         if (!h5p_runtime::has_library('H5P.Crossword', true)) {
             return [
                 'match' => false,
@@ -99,13 +102,13 @@ PROMPT;
     /**
      * Build composable content.
      */
-    public static function build_composable_content(\stdClass $course, \stdClass $source, array $analysis): array {
+    public static function build_composable_content(stdClass $course, stdClass $source, array $analysis): array {
         $words = self::normalize_words($analysis['words'] ?? []);
         if (count($words) < 3) {
-            throw new \moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pcrossword', '', self::get_name());
+            throw new moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pcrossword', '', self::get_name());
         }
-        $name = trim((string) ($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
-        $task = trim((string) ($analysis['task_description'] ?? '')) ?: 'Complete the crossword using the clues.';
+        $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
+        $task = trim((string)($analysis['task_description'] ?? '')) ?: 'Complete the crossword using the clues.';
 
         $h5pwords = [];
         foreach ($words as $word) {
@@ -122,7 +125,7 @@ PROMPT;
         return [
             'machinename' => 'H5P.Crossword',
             'title' => $name,
-            'intro' => h5p_runtime::paragraph((string) ($analysis['summary'] ?? '')),
+            'intro' => h5p_runtime::paragraph((string)($analysis['summary'] ?? '')),
             'params' => [
                 'taskDescription' => $task,
                 'words' => $h5pwords,
@@ -182,7 +185,7 @@ PROMPT;
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
         $content = self::build_composable_content($course, $source, $analysis);
         return h5p_runtime::create_activity(
             $course,
@@ -206,14 +209,14 @@ PROMPT;
             if (!is_array($word)) {
                 continue;
             }
-            $answer = trim(strip_tags((string) ($word['answer'] ?? '')));
+            $answer = trim(strip_tags((string)($word['answer'] ?? '')));
             $answer = preg_replace('/[^\p{L}\p{N}\- ]+/u', '', $answer);
             $answer = preg_replace('/\s+/u', ' ', $answer);
-            $clue = trim(strip_tags((string) ($word['clue'] ?? '')));
-            if ($answer === '' || $clue === '' || \core_text::strlen($answer) > 40) {
+            $clue = trim(strip_tags((string)($word['clue'] ?? '')));
+            if ($answer === '' || $clue === '' || core_text::strlen($answer) > 40) {
                 continue;
             }
-            $key = \core_text::strtolower($answer);
+            $key = core_text::strtolower($answer);
             $out[$key] = ['answer' => $answer, 'clue' => $clue];
             if (count($out) >= 15) {
                 break;

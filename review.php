@@ -53,14 +53,14 @@ foreach ($modinfo->get_section_info_all() as $sectionnum => $sectioninfo) {
 
 $sourcedata = [];
 foreach (project_manager::get_sources($project->id) as $source) {
-    $analyses = json_decode((string) $source->analysisjson, true) ?: [];
+    $analyses = json_decode((string)$source->analysisjson, true) ?: [];
     $bestname = '';
     $bestconfidence = -1;
     foreach ($analyses as $pluginname => $analysis) {
         if (!empty($analysis['match']) && empty($analysis['error']) &&
-                (int) ($analysis['confidence'] ?? 0) > $bestconfidence) {
+            (int)($analysis['confidence'] ?? 0) > $bestconfidence) {
             $bestname = $pluginname;
-            $bestconfidence = (int) ($analysis['confidence'] ?? 0);
+            $bestconfidence = (int)($analysis['confidence'] ?? 0);
         }
     }
 
@@ -72,7 +72,7 @@ foreach (project_manager::get_sources($project->id) as $source) {
             'activityname' => $analysis['activityname'] ?? $pluginname,
             'description' => $analysis['description'] ?? '',
             'match' => !empty($analysis['match']),
-            'confidence' => (int) ($analysis['confidence'] ?? 0),
+            'confidence' => (int)($analysis['confidence'] ?? 0),
             'reason' => $analysis['reason'] ?? '',
             'title' => $analysis['title'] ?? '',
             'summary' => $analysis['summary'] ?? '',
@@ -81,12 +81,12 @@ foreach (project_manager::get_sources($project->id) as $source) {
         ];
     }
 
-    $metadata = json_decode((string) $source->metadatajson, true) ?: [];
+    $metadata = json_decode((string)$source->metadatajson, true) ?: [];
     $warnings = [];
     foreach (($metadata['warnings'] ?? []) as $warning) {
         $warnings[] = ['text' => $warning];
     }
-    $preview = trim((string) $source->extractedtext);
+    $preview = trim((string)$source->extractedtext);
     if (core_text::strlen($preview) > 1200) {
         $preview = core_text::substr($preview, 0, 1200) . '…';
     }

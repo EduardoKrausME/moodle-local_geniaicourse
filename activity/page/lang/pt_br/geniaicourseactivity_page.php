@@ -22,6 +22,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $string['description'] = 'Cria uma Página nativa do Moodle a partir de material explicativo, textual ou visual.';
 $string['libreofficeconversionfailed'] = 'O LibreOffice não conseguiu converter o arquivo para PDF. {$a}';
 $string['libreofficepath'] = 'Executável do LibreOffice';

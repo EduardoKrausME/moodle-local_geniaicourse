@@ -22,6 +22,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $string['description'] = 'Creates native Moodle question bank questions without creating a Quiz activity.';
 $string['noquestionsgenerated'] = 'No valid supported questions were generated for this source.';
 $string['pluginname'] = 'Question bank';

@@ -32,7 +32,9 @@ use core_h5p\helper;
 use mod_h5pactivity\local\manager;
 use moodle_exception;
 use moodle_url;
+use stdClass;
 use stored_file;
+use Throwable;
 
 /**
  * Generic adapter for Moodle's H5P runtime.
@@ -44,7 +46,7 @@ use stored_file;
  */
 class runtime {
     /** Resolve the newest installed version of one H5P library. */
-    public static function library(string $machinename, bool $requireenabled = true): \stdClass {
+    public static function library(string $machinename, bool $requireenabled = true): stdClass {
         global $DB;
 
         $where = 'machinename = :machinename';
@@ -80,14 +82,14 @@ class runtime {
         try {
             self::library($machinename, $requireenabled);
             return true;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }
 
     /** Build a valid H5P export file with Moodle's H5P editor. */
-    public static function create_h5p_file(int $contextid, string $component, string $filearea, int $itemid,
-            string $filename, string $machinename, array $params, string $title, ?int $userid = null): stored_file {
+    public static function create_h5p_file(int    $contextid, string $component, string $filearea, int $itemid,
+                                           string $filename, string $machinename, array $params, string $title, ?int $userid = null): stored_file {
         global $USER;
 
         $userid = $userid ?? $USER->id;
@@ -113,7 +115,7 @@ class runtime {
             $userid
         );
 
-        $content = new \stdClass();
+        $content = new stdClass();
         $content->h5plibrary = $librarystring;
         $content->h5pparams = json_encode([
             'params' => $params,
@@ -125,7 +127,7 @@ class runtime {
 
         try {
             $editor->save_content($content);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new moodle_exception('h5pcontentcreatefailed', 'geniaicourseactivity_h5pfindwords', '', $e->getMessage());
         }
 
@@ -145,8 +147,8 @@ class runtime {
     }
 
     /** Create a native mod_h5pactivity from content-type params. */
-    public static function create_activity(\stdClass $course, int $sectionnum, string $name, string $intro,
-            string $machinename, array $params): array {
+    public static function create_activity(stdClass $course, int $sectionnum, string $name, string $intro,
+                                           string   $machinename, array $params): array {
         global $CFG, $USER;
 
         require_once($CFG->dirroot . '/course/modlib.php');
@@ -187,7 +189,7 @@ class runtime {
         $moduleinfo->displayoptions = helper::get_display_options($core, $displayconfig);
 
         $created = add_moduleinfo($moduleinfo, $course, null);
-        $cmid = (int) $created->coursemodule;
+        $cmid = (int)$created->coursemodule;
 
         return [
             'cmid' => $cmid,
@@ -198,17 +200,17 @@ class runtime {
     }
 
     /** Create the standard nested H5P library object used by container content types. */
-    public static function content_object(string $machinename, array $params, string $title,
-            ?string $librarystring = null): array {
+    public static function content_object(string  $machinename, array $params, string $title,
+                                          ?string $librarystring = null): array {
         $library = self::library($machinename, false);
         return [
             'library' => $librarystring ?? self::library_string($machinename, false),
             'params' => $params,
             'subContentId' => self::uuid(),
             'metadata' => [
-                'contentType' => (string) ($library->title ?? $machinename),
+                'contentType' => (string)($library->title ?? $machinename),
                 'license' => 'U',
-                'title' => clean_param($title, PARAM_TEXT) ?: (string) ($library->title ?? $machinename),
+                'title' => clean_param($title, PARAM_TEXT) ?: (string)($library->title ?? $machinename),
             ],
         ];
     }
@@ -216,7 +218,7 @@ class runtime {
     /** Return the exact child library version accepted by a parent library semantics. */
     public static function parent_library_option(string $parentmachinename, string $childmachinename): ?string {
         $parent = self::library($parentmachinename, true);
-        $semantics = json_decode((string) ($parent->semantics ?? ''), true);
+        $semantics = json_decode((string)($parent->semantics ?? ''), true);
         if (!is_array($semantics)) {
             return null;
         }
@@ -224,13 +226,13 @@ class runtime {
     }
 
     /** Shared source prompt formatting for H5P subplugins. */
-    public static function source_prompt(\stdClass $project, \stdClass $source): string {
-        $text = trim((string) $source->extractedtext);
-        return "Global teacher prompt:\n" . trim((string) $project->prompt) .
+    public static function source_prompt(stdClass $project, stdClass $source): string {
+        $text = trim((string)$source->extractedtext);
+        return "Global teacher prompt:\n" . trim((string)$project->prompt) .
             "\n\nSource filename: {$source->filename}" .
             "\nMIME type: {$source->mimetype}" .
             "\nExtension: {$source->extension}" .
-            "\nTeacher instruction for this source: " . trim((string) $source->instruction) .
+            "\nTeacher instruction for this source: " . trim((string)$source->instruction) .
             "\n\nExtracted source content:\n" . ($text !== '' ? $text : '[No text was extracted from this source.]');
     }
 

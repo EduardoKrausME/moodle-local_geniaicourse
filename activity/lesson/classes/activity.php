@@ -26,10 +26,15 @@ namespace geniaicourseactivity_lesson;
 
 use context_module;
 use core_text;
+use lesson;
+use lesson_page;
+use lesson_page_type_manager;
 use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\ai;
 use local_geniaicourse\module_helper;
+use moodle_exception;
 use moodle_url;
+use stdClass;
 
 /**
  * Native Lesson creator.
@@ -54,7 +59,7 @@ class activity implements activity_interface {
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         $system = <<<'PROMPT'
 You are the analyzer for a native Moodle Lesson activity subplugin.
 Decide whether the source should become a Moodle Lesson: a sequenced, learner-navigated set of instructional pages.
@@ -84,10 +89,10 @@ When match=true create 1-20 coherent pages in source order. Keep the source mean
 The last button_label may be Finish/Conclude. Do not include scripts/styles/html/body tags.
 PROMPT;
         $result = ai::json($system, self::source_prompt($project, $source));
-        $result['pages'] = self::normalize_pages((array) ($result['pages'] ?? []));
+        $result['pages'] = self::normalize_pages((array)($result['pages'] ?? []));
         if (!empty($result['match']) && !$result['pages']) {
             $result['match'] = false;
-            $result['reason'] = trim((string) ($result['reason'] ?? '')) . ' No valid lesson pages were produced.';
+            $result['reason'] = trim((string)($result['reason'] ?? '')) . ' No valid lesson pages were produced.';
         }
         return $result;
     }
@@ -95,35 +100,35 @@ PROMPT;
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
         global $CFG, $DB, $PAGE;
         require_once($CFG->dirroot . '/course/modlib.php');
         require_once($CFG->dirroot . '/mod/lesson/lib.php');
         require_once($CFG->dirroot . '/mod/lesson/locallib.php');
 
-        $pages = self::normalize_pages((array) ($analysis['pages'] ?? []));
+        $pages = self::normalize_pages((array)($analysis['pages'] ?? []));
         if (!$pages) {
-            throw new \moodle_exception('nolessonpages', 'geniaicourseactivity_lesson');
+            throw new moodle_exception('nolessonpages', 'geniaicourseactivity_lesson');
         }
 
-        $name = trim((string) ($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
+        $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
         if ($name === '') {
             $name = get_string('pluginname', 'geniaicourseactivity_lesson');
         }
-        $intro = trim((string) ($analysis['intro_html'] ?? ''));
+        $intro = trim((string)($analysis['intro_html'] ?? ''));
         if ($intro === '') {
-            $intro = '<p>' . s(trim((string) ($analysis['summary'] ?? ''))) . '</p>';
+            $intro = '<p>' . s(trim((string)($analysis['summary'] ?? ''))) . '</p>';
         }
 
         $lessonconfig = get_config('mod_lesson');
         $moduleinfo = module_helper::base($course, $sectionnum, 'lesson', $name, $intro);
-        $moduleinfo->progressbar = (int) ($lessonconfig->progressbar ?? 1);
-        $moduleinfo->ongoing = (int) ($lessonconfig->ongoing ?? 0);
-        $moduleinfo->displayleft = (int) ($lessonconfig->displayleftmenu ?? 0);
-        $moduleinfo->displayleftif = (int) ($lessonconfig->displayleftif ?? 0);
-        $moduleinfo->slideshow = (int) ($lessonconfig->slideshow ?? 0);
-        $moduleinfo->maxanswers = max(2, (int) ($lessonconfig->maxanswers ?? 4));
-        $moduleinfo->feedback = (int) ($lessonconfig->defaultfeedback ?? 1);
+        $moduleinfo->progressbar = (int)($lessonconfig->progressbar ?? 1);
+        $moduleinfo->ongoing = (int)($lessonconfig->ongoing ?? 0);
+        $moduleinfo->displayleft = (int)($lessonconfig->displayleftmenu ?? 0);
+        $moduleinfo->displayleftif = (int)($lessonconfig->displayleftif ?? 0);
+        $moduleinfo->slideshow = (int)($lessonconfig->slideshow ?? 0);
+        $moduleinfo->maxanswers = max(2, (int)($lessonconfig->maxanswers ?? 4));
+        $moduleinfo->feedback = (int)($lessonconfig->defaultfeedback ?? 1);
         $moduleinfo->activitylink = 0;
         $moduleinfo->available = 0;
         $moduleinfo->deadline = 0;
@@ -133,15 +138,15 @@ PROMPT;
         $moduleinfo->timespent = 0;
         $moduleinfo->completed = 0;
         $moduleinfo->gradebetterthan = 0;
-        $moduleinfo->modattempts = (int) ($lessonconfig->modattempts ?? 0);
-        $moduleinfo->review = (int) ($lessonconfig->displayreview ?? 0);
-        $moduleinfo->maxattempts = (int) ($lessonconfig->maximumnumberofattempts ?? 5);
-        $moduleinfo->nextpagedefault = (int) ($lessonconfig->defaultnextpage ?? 0);
-        $moduleinfo->maxpages = (int) ($lessonconfig->numberofpagestoshow ?? 0);
+        $moduleinfo->modattempts = (int)($lessonconfig->modattempts ?? 0);
+        $moduleinfo->review = (int)($lessonconfig->displayreview ?? 0);
+        $moduleinfo->maxattempts = (int)($lessonconfig->maximumnumberofattempts ?? 5);
+        $moduleinfo->nextpagedefault = (int)($lessonconfig->defaultnextpage ?? 0);
+        $moduleinfo->maxpages = (int)($lessonconfig->numberofpagestoshow ?? 0);
         $moduleinfo->practice = 1;
-        $moduleinfo->custom = (int) ($lessonconfig->customscoring ?? 0);
-        $moduleinfo->retake = (int) ($lessonconfig->retakesallowed ?? 1);
-        $moduleinfo->usemaxgrade = (int) ($lessonconfig->handlingofretakes ?? 0);
+        $moduleinfo->custom = (int)($lessonconfig->customscoring ?? 0);
+        $moduleinfo->retake = (int)($lessonconfig->retakesallowed ?? 1);
+        $moduleinfo->usemaxgrade = (int)($lessonconfig->handlingofretakes ?? 0);
         $moduleinfo->minquestions = 0;
         $moduleinfo->grade = 0;
         $moduleinfo->timelimit = 0;
@@ -157,14 +162,14 @@ PROMPT;
         $moduleinfo->completiontimespent = 0;
 
         $created = add_moduleinfo($moduleinfo, $course, null);
-        $cmid = (int) $created->coursemodule;
+        $cmid = (int)$created->coursemodule;
         $lessonrecord = $DB->get_record('lesson', ['id' => $created->instance], '*', MUST_EXIST);
-        $lesson = new \lesson($lessonrecord);
-        $manager = \lesson_page_type_manager::get($lesson); // Loads all native page types and constants.
+        $lesson = new lesson($lessonrecord);
+        $manager = lesson_page_type_manager::get($lesson); // Loads all native page types and constants.
         unset($manager);
 
         if (!defined('LESSON_PAGE_BRANCHTABLE')) {
-            throw new \moodle_exception('invalidpageid', 'lesson');
+            throw new moodle_exception('invalidpageid', 'lesson');
         }
 
         $context = context_module::instance($cmid);
@@ -175,7 +180,7 @@ PROMPT;
         $previouspageid = 0;
         $lastindex = count($pages) - 1;
         foreach ($pages as $index => $pagedata) {
-            $properties = new \stdClass();
+            $properties = new stdClass();
             $properties->pageid = $previouspageid;
             $properties->qtype = LESSON_PAGE_BRANCHTABLE;
             $properties->title = $pagedata['title'];
@@ -193,9 +198,9 @@ PROMPT;
             ];
             $properties->score = [0 => 0];
 
-            $page = \lesson_page::create($properties, $lesson, $context, (int) $course->maxbytes);
+            $page = lesson_page::create($properties, $lesson, $context, (int)$course->maxbytes);
             $pageproperties = $page->properties();
-            $previouspageid = (int) $pageproperties->id;
+            $previouspageid = (int)$pageproperties->id;
         }
 
         return [
@@ -213,15 +218,15 @@ PROMPT;
             if (!is_array($page)) {
                 continue;
             }
-            $content = trim((string) ($page['content_html'] ?? $page['content'] ?? ''));
+            $content = trim((string)($page['content_html'] ?? $page['content'] ?? ''));
             if ($content === '') {
                 continue;
             }
-            $title = trim((string) ($page['title'] ?? ''));
+            $title = trim((string)($page['title'] ?? ''));
             if ($title === '') {
                 $title = get_string('lessonpagedefault', 'geniaicourseactivity_lesson', $index + 1);
             }
-            $button = trim((string) ($page['button_label'] ?? ''));
+            $button = trim((string)($page['button_label'] ?? ''));
             if ($button === '') {
                 $button = get_string('continue');
             }
@@ -237,13 +242,13 @@ PROMPT;
     /**
      * Source prompt.
      */
-    private static function source_prompt(\stdClass $project, \stdClass $source): string {
-        $text = trim((string) $source->extractedtext);
-        return "Global teacher prompt:\n" . trim((string) $project->prompt) .
+    private static function source_prompt(stdClass $project, stdClass $source): string {
+        $text = trim((string)$source->extractedtext);
+        return "Global teacher prompt:\n" . trim((string)$project->prompt) .
             "\n\nSource filename: {$source->filename}" .
             "\nMIME type: {$source->mimetype}" .
             "\nExtension: {$source->extension}" .
-            "\nTeacher instruction for this source: " . trim((string) $source->instruction) .
+            "\nTeacher instruction for this source: " . trim((string)$source->instruction) .
             "\n\nExtracted source content:\n" . ($text !== '' ? $text : '[No text was extracted from this source.]');
     }
 }

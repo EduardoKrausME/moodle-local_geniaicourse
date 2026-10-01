@@ -31,7 +31,7 @@
  */
 function local_geniaicourse_extend_navigation_course($navigation, $course, $context) {
     if (!has_capability('local/geniaicourse:use', $context) ||
-            !has_capability('moodle/course:manageactivities', $context)) {
+        !has_capability('moodle/course:manageactivities', $context)) {
         return;
     }
 

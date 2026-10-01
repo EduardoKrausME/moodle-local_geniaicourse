@@ -42,7 +42,7 @@ function geniaicourseactivity_h5pinteractivebook_pluginfile(
     if (!$args) {
         return false;
     }
-    $itemid = (int) array_shift($args);
+    $itemid = (int)array_shift($args);
     if ($itemid <= 0 || !$args) {
         return false;
     }

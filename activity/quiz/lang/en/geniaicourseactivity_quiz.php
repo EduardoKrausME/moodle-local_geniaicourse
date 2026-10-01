@@ -22,6 +22,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $string['description'] = 'Creates a native Moodle Quiz and native question-bank questions from the source.';
 $string['noquestionsgenerated'] = 'No valid supported questions were generated for this source.';
 $string['pluginname'] = 'Quiz';

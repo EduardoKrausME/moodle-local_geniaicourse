@@ -30,6 +30,7 @@ use context_user;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\contextlist;
+use core_privacy\local\request\core_user_data_provider;
 use core_privacy\local\request\writer;
 use local_geniaicourse\project_manager;
 
@@ -39,8 +40,8 @@ use local_geniaicourse\project_manager;
  * @package local_geniaicourse
  */
 class provider implements
-        \core_privacy\local\metadata\provider,
-        \core_privacy\local\request\core_user_data_provider {
+    \core_privacy\local\metadata\provider,
+    core_user_data_provider {
 
     /**
      * Get metadata.
@@ -124,16 +125,16 @@ class provider implements
             ], 'timecreated ASC');
             foreach ($projects as $project) {
                 $sources = project_manager::get_sources($project->id);
-                $data = (object) [
+                $data = (object)[
                     'prompt' => $project->prompt,
                     'status' => $project->status,
                     'timecreated' => $project->timecreated,
-                    'sources' => array_values(array_map(static function($source) {
+                    'sources' => array_values(array_map(static function ($source) {
                         return [
                             'filename' => $source->filename,
                             'instruction' => $source->instruction,
                             'extractedtext' => $source->extractedtext,
-                            'analysis' => json_decode((string) $source->analysisjson, true),
+                            'analysis' => json_decode((string)$source->analysisjson, true),
                         ];
                     }, $sources)),
                 ];

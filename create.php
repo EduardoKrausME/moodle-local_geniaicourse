@@ -25,6 +25,7 @@
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 
+use core\output\notification;
 use local_geniaicourse\plugin_manager;
 use local_geniaicourse\project_manager;
 
@@ -46,7 +47,7 @@ if (in_array($project->status, ['creating', 'created'], true)) {
         new moodle_url('/course/view.php', ['id' => $course->id]),
         get_string('projectalreadycreated', 'local_geniaicourse'),
         null,
-        \core\output\notification::NOTIFY_WARNING
+        notification::NOTIFY_WARNING
     );
 }
 
@@ -54,10 +55,10 @@ if (in_array($project->status, ['creating', 'created'], true)) {
 // optional_param_array() intentionally cleans only one array level.
 $selectedbysource = [];
 foreach ($choiceflags as $key => $enabled) {
-    if (!$enabled || !preg_match('/^([0-9]+)_([a-z0-9_]+)$/', (string) $key, $matches)) {
+    if (!$enabled || !preg_match('/^([0-9]+)_([a-z0-9_]+)$/', (string)$key, $matches)) {
         continue;
     }
-    $sourceid = (int) $matches[1];
+    $sourceid = (int)$matches[1];
     $selectedbysource[$sourceid][] = $matches[2];
 }
 
@@ -67,17 +68,17 @@ project_manager::set_status($project->id, 'creating');
 $validsections = get_fast_modinfo($course)->get_section_info_all();
 $results = [];
 foreach (project_manager::get_sources($project->id) as $source) {
-    $selectedplugins = array_values(array_unique($selectedbysource[(int) $source->id] ?? []));
+    $selectedplugins = array_values(array_unique($selectedbysource[(int)$source->id] ?? []));
     if (!$selectedplugins) {
         continue;
     }
 
-    $sectionnum = (int) ($sections[$source->id] ?? 0);
+    $sectionnum = (int)($sections[$source->id] ?? 0);
     if (!array_key_exists($sectionnum, $validsections)) {
         $sectionnum = 0;
     }
 
-    $analysisall = json_decode((string) $source->analysisjson, true) ?: [];
+    $analysisall = json_decode((string)$source->analysisjson, true) ?: [];
 
     $prepared = plugin_manager::prepare_selected($selectedplugins, $analysisall);
     $analysisall = $prepared['analyses'];
@@ -106,7 +107,7 @@ foreach (project_manager::get_sources($project->id) as $source) {
                 'warning' => $created['warning'] ?? '',
                 'haswarning' => !empty($created['warning']),
             ];
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $results[] = [
                 'success' => false,
                 'name' => ($analysis['activityname'] ?? $pluginname) . ' — ' . $source->filename,

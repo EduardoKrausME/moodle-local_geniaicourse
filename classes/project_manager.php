@@ -25,6 +25,7 @@
 namespace local_geniaicourse;
 
 use context_user;
+use stdClass;
 
 /**
  * Project persistence helpers.
@@ -38,12 +39,12 @@ class project_manager {
      * @param int $courseid Parameter value.
      * @param int $userid Parameter value.
      * @param string $prompt Parameter value.
-     * @return \stdClass
+     * @return stdClass
      */
-    public static function create(int $courseid, int $userid, string $prompt): \stdClass {
+    public static function create(int $courseid, int $userid, string $prompt): stdClass {
         global $DB;
         $now = time();
-        $record = (object) [
+        $record = (object)[
             'courseid' => $courseid,
             'userid' => $userid,
             'prompt' => $prompt,
@@ -61,9 +62,9 @@ class project_manager {
      *
      * @param int $projectid Parameter value.
      * @param int $userid Parameter value.
-     * @return \stdClass
+     * @return stdClass
      */
-    public static function get_owned(int $projectid, int $userid): \stdClass {
+    public static function get_owned(int $projectid, int $userid): stdClass {
         global $DB;
         return $DB->get_record('local_geniaicourse_project', [
             'id' => $projectid,
@@ -91,7 +92,7 @@ class project_manager {
      */
     public static function set_status(int $projectid, string $status): void {
         global $DB;
-        $DB->update_record('local_geniaicourse_project', (object) [
+        $DB->update_record('local_geniaicourse_project', (object)[
             'id' => $projectid,
             'status' => $status,
             'timemodified' => time(),
@@ -101,10 +102,10 @@ class project_manager {
     /**
      * Delete project.
      *
-     * @param \stdClass $project Parameter value.
+     * @param stdClass $project Parameter value.
      * @return void
      */
-    public static function delete_project(\stdClass $project): void {
+    public static function delete_project(stdClass $project): void {
         global $DB;
         $sources = self::get_sources($project->id);
         $fs = get_file_storage();

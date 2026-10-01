@@ -1,3 +1,27 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_geniaicourse/index
+
+    Example context (json):
+    {
+        Aqui tem que criar o context em inglês
+    }
+}}
 <div class="geniaicourse-shell">
     <div class="geniaicourse-hero">
         <h2>{{#str}}title, local_geniaicourse{{/str}}</h2>
@@ -8,14 +32,16 @@
         <div class="alert alert-warning">{{#str}}noapikey, local_geniaicourse{{/str}}</div>
     {{/noapikey}}
 
-    <form action="{{config.wwwroot}}/local/geniaicourse/analyze.php" method="post" enctype="multipart/form-data" id="geniaicourse-form">
+    <form action="{{config.wwwroot}}/local/geniaicourse/analyze.php" method="post" enctype="multipart/form-data"
+          id="geniaicourse-form">
         <input type="hidden" name="sesskey" value="{{sesskey}}">
         <input type="hidden" name="courseid" value="{{courseid}}">
 
         <div class="geniaicourse-composer">
-            <label for="geniaicourse-prompt" class="form-label"><strong>{{#str}}prompt, local_geniaicourse{{/str}}</strong></label>
+            <label for="geniaicourse-prompt" class="form-label"><strong>{{#str}}
+                prompt, local_geniaicourse{{/str}}</strong></label>
             <textarea id="geniaicourse-prompt" name="prompt" class="form-control" rows="9"
-                placeholder="{{#str}}prompt_help, local_geniaicourse{{/str}}"></textarea>
+                      placeholder="{{#str}}prompt_help, local_geniaicourse{{/str}}"></textarea>
 
             <div class="geniaicourse-uploadbar">
                 <div>
@@ -23,11 +49,13 @@
                         {{#str}}files, local_geniaicourse{{/str}}
                     </label>
                     <input id="geniaicourse-files" type="file" name="files[]" multiple hidden
-                        data-instructionplaceholder="{{#str}}fileinstructionplaceholder, local_geniaicourse{{/str}}"
-                        accept="{{fileaccept}}">
+                           data-instructionplaceholder="{{#str}}fileinstructionplaceholder, local_geniaicourse{{/str}}"
+                           accept="{{fileaccept}}">
                     <small class="text-muted ml-2">{{maxupload}}</small>
                 </div>
-                <button type="submit" class="btn btn-primary" id="geniaicourse-submit" data-analyzing="{{#str}}analyzing, local_geniaicourse{{/str}}" {{#noapikey}}disabled{{/noapikey}}>
+                <button type="submit" class="btn btn-primary" id="geniaicourse-submit"
+                        data-analyzing="{{#str}}analyzing, local_geniaicourse{{/str}}"
+                        {{#noapikey}}disabled{{/noapikey}}>
                     {{#str}}analyze, local_geniaicourse{{/str}}
                 </button>
             </div>

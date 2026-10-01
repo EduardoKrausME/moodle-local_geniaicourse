@@ -24,6 +24,7 @@
 
 require_once(__DIR__ . '/../../config.php');
 
+use core\output\notification;
 use local_geniaicourse\ai;
 use local_geniaicourse\plugin_manager;
 use local_geniaicourse\project_manager;
@@ -75,7 +76,7 @@ if (!empty($_FILES['files']['name']) && is_array($_FILES['files']['name'])) {
 
 if (trim($prompt) === '' && !$uploads) {
     redirect(new moodle_url('/local/geniaicourse/index.php', ['courseid' => $courseid]),
-        get_string('nosources', 'local_geniaicourse'), null, \core\output\notification::NOTIFY_ERROR);
+        get_string('nosources', 'local_geniaicourse'), null, notification::NOTIFY_ERROR);
 }
 
 $project = project_manager::create($courseid, $USER->id, $prompt);
@@ -93,7 +94,7 @@ try {
         source_manager::save_analysis($source, $analysis);
     }
     project_manager::set_status($project->id, 'analysed');
-} catch (\Throwable $e) {
+} catch (Throwable $e) {
     project_manager::delete_project($project);
     throw $e;
 }

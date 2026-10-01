@@ -38,7 +38,7 @@ class converter {
      * Instruction requests pdf.
      */
     public static function instruction_requests_pdf(string $instruction): bool {
-        return (bool) preg_match('/\bpdf\b/i', $instruction);
+        return (bool)preg_match('/\bpdf\b/i', $instruction);
     }
 
     /**
@@ -54,7 +54,7 @@ class converter {
      * @return array{path:?string,filename:string,warning:string}
      */
     public static function to_pdf(stored_file $file): array {
-        $tool = trim((string) get_config('geniaicourseactivity_page', 'libreofficepath'));
+        $tool = trim((string)get_config('geniaicourseactivity_page', 'libreofficepath'));
         $fallbackname = pathinfo($file->get_filename(), PATHINFO_FILENAME) . '.pdf';
         if (!$tool || !self::can_execute($tool)) {
             return [
@@ -93,7 +93,7 @@ class converter {
         if (!function_exists('exec') || !is_executable($path)) {
             return false;
         }
-        $disabled = array_map('trim', explode(',', (string) ini_get('disable_functions')));
+        $disabled = array_map('trim', explode(',', (string)ini_get('disable_functions')));
         return !in_array('exec', $disabled, true);
     }
 }

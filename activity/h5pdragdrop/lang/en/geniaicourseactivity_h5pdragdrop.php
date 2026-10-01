@@ -22,6 +22,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 $string['description'] = 'Creates a native Moodle H5P Drag and Drop matching activity.';
 $string['h5pcontentcreatefailed'] = 'Moodle could not build the H5P content. {$a}';
 $string['h5pexportmissing'] = 'The H5P editor did not generate an export package for the activity.';

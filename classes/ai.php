@@ -42,7 +42,7 @@ class ai {
      * @return bool
      */
     public static function is_configured(): bool {
-        return class_exists(chatgpt::class) && trim((string) get_config('local_geniai', 'apikey')) !== '';
+        return class_exists(chatgpt::class) && trim((string)get_config('local_geniai', 'apikey')) !== '';
     }
 
     /**
@@ -69,7 +69,7 @@ class ai {
             throw new moodle_exception('analysiserror', 'local_geniaicourse', '', $response['error']['message']);
         }
 
-        $text = trim((string) ($response['choices'][0]['message']['content'] ?? ''));
+        $text = trim((string)($response['choices'][0]['message']['content'] ?? ''));
         if ($text === '') {
             throw new moodle_exception(
                 'analysiserror',

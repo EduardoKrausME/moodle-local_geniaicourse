@@ -24,10 +24,13 @@
 
 namespace geniaicourseactivity_h5pinteractivevideo;
 
+use core_text;
 use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\activity\composable_content_interface;
 use local_geniaicourse\activity\source_extension_interface;
 use local_geniaicourse\activity\source_processor_interface;
+use moodle_exception;
+use stdClass;
 use stored_file;
 use local_geniaicourse\ai;
 use geniaicourseactivity_h5pinteractivevideo\runtime as h5p_runtime;
@@ -89,7 +92,7 @@ class activity implements activity_interface, composable_content_interface, sour
     /**
      * Analyse.
      */
-    public static function analyse(\stdClass $project, \stdClass $source): array {
+    public static function analyse(stdClass $project, stdClass $source): array {
         if (!h5p_runtime::has_library('H5P.InteractiveVideo', true)) {
             return [
                 'match' => false,
@@ -130,15 +133,15 @@ Return ONLY valid JSON with exactly this shape:
 confidence is 0-100. interactions may contain 0 to 8 items; bookmarks 0 to 12. time is seconds from the beginning of the video.
 PROMPT;
         $result = ai::json($system, h5p_runtime::source_prompt($project, $source));
-        $result['video_url'] = trim((string) ($result['video_url'] ?? ''));
+        $result['video_url'] = trim((string)($result['video_url'] ?? ''));
         $result['interactions'] = self::normalize_interactions($result['interactions'] ?? []);
         $result['bookmarks'] = self::normalize_bookmarks($result['bookmarks'] ?? []);
 
         $isvideo = $source->sourcetype === 'file' && in_array(
-            strtolower((string) $source->extension),
-            video_helper::VIDEO_EXTENSIONS,
-            true
-        );
+                strtolower((string)$source->extension),
+                video_helper::VIDEO_EXTENSIONS,
+                true
+            );
         if (!$isvideo && $result['video_url'] === '') {
             $result['match'] = false;
         }
@@ -148,14 +151,14 @@ PROMPT;
     /**
      * Build composable content.
      */
-    public static function build_composable_content(\stdClass $course, \stdClass $source, array $analysis): array {
+    public static function build_composable_content(stdClass $course, stdClass $source, array $analysis): array {
         $video = video_helper::source($course, $source, $analysis);
         if ($video === null) {
-            throw new \moodle_exception('h5pvideomissing', 'geniaicourseactivity_h5pinteractivevideo');
+            throw new moodle_exception('h5pvideomissing', 'geniaicourseactivity_h5pinteractivevideo');
         }
 
-        $name = trim((string) ($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
-        $shortdescription = trim(strip_tags((string) ($analysis['short_description'] ?? '')));
+        $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
+        $shortdescription = trim(strip_tags((string)($analysis['short_description'] ?? '')));
         $interactions = self::normalize_interactions($analysis['interactions'] ?? []);
         $bookmarks = self::normalize_bookmarks($analysis['bookmarks'] ?? []);
         $textlibrary = h5p_runtime::library_string('H5P.Text', false);
@@ -199,7 +202,7 @@ PROMPT;
         return [
             'machinename' => 'H5P.InteractiveVideo',
             'title' => $name,
-            'intro' => h5p_runtime::paragraph((string) ($analysis['summary'] ?? '')),
+            'intro' => h5p_runtime::paragraph((string)($analysis['summary'] ?? '')),
             'params' => [
                 'interactiveVideo' => [
                     'video' => [
@@ -214,7 +217,7 @@ PROMPT;
                             'hideStartTitle' => false,
                             'shortStartDescription' => $shortdescription,
                         ],
-                        'textTracks' => (object) [],
+                        'textTracks' => (object)[],
                     ],
                     'assets' => [
                         'interactions' => $h5pinteractions,
@@ -239,7 +242,7 @@ PROMPT;
     /**
      * Create.
      */
-    public static function create(\stdClass $course, int $sectionnum, \stdClass $source, array $analysis): array {
+    public static function create(stdClass $course, int $sectionnum, stdClass $source, array $analysis): array {
         $content = self::build_composable_content($course, $source, $analysis);
         return h5p_runtime::create_activity(
             $course,
@@ -263,14 +266,14 @@ PROMPT;
             if (!is_array($interaction)) {
                 continue;
             }
-            $time = max(0, (float) ($interaction['time'] ?? 0));
-            $label = trim(strip_tags((string) ($interaction['label'] ?? '')));
-            $text = trim(strip_tags((string) ($interaction['text'] ?? '')));
+            $time = max(0, (float)($interaction['time'] ?? 0));
+            $label = trim(strip_tags((string)($interaction['label'] ?? '')));
+            $text = trim(strip_tags((string)($interaction['text'] ?? '')));
             if ($text === '') {
                 continue;
             }
             if ($label === '') {
-                $label = \core_text::substr($text, 0, 60);
+                $label = core_text::substr($text, 0, 60);
             }
             $out[] = [
                 'time' => $time,
@@ -298,8 +301,8 @@ PROMPT;
             if (!is_array($bookmark)) {
                 continue;
             }
-            $time = max(0, (float) ($bookmark['time'] ?? 0));
-            $label = trim(strip_tags((string) ($bookmark['label'] ?? '')));
+            $time = max(0, (float)($bookmark['time'] ?? 0));
+            $label = trim(strip_tags((string)($bookmark['label'] ?? '')));
             if ($label === '') {
                 continue;
             }
