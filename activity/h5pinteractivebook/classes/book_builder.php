@@ -38,7 +38,7 @@ class book_builder {
      * Convert a reusable H5P definition into one H5P.Column block.
      */
     public static function block(stdClass $course, stdClass $source, array $definition,
-                                 bool     &$usediframe = false): array {
+                                 bool &$usediframe = false): array {
         $machinename = (string)($definition['machinename'] ?? '');
         $params = $definition['params'] ?? [];
         $title = (string)($definition['title'] ?? $machinename);
