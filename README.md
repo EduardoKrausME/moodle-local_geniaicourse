@@ -46,7 +46,7 @@ generated H5P content without treating unrelated future composable subplugins as
 8. Only then are native Moodle activities created with `add_moduleinfo()`.
 9. Temporary projects older than 30 days are removed by scheduled task.
 
-## Supported source formats
+## Source formats
 
 Good extraction:
 
