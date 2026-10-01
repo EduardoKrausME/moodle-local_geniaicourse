@@ -254,6 +254,12 @@ class question_builder {
         return new moodle_url('/question/edit.php', ['courseid' => $courseid]);
     }
 
+    /**
+     * Method normalize_multichoice_answers.
+     *
+     * @param array $question Parameter question.
+     * @return array Return value.
+     */
     private static function normalize_multichoice_answers(array $question): array {
         $input = $question['answers'] ?? $question['options'] ?? [];
         $answers = [];
