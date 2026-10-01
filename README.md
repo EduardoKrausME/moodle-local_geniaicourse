@@ -4,18 +4,6 @@ Local Moodle plugin that receives a teacher prompt plus uploaded source files, e
 installed activity subplugin to analyse each source, lets the teacher choose the final Moodle activity type, and then
 creates native Moodle activities.
 
-## Requirements
-
-- Moodle 4.5 or newer.
-- `local_geniai` version `2026071001` (3.0.2) or newer.
-- OpenAI API key configured in `local_geniai`.
-- Standard Moodle modules used by the bundled
-  subplugins: `mod_page`, `mod_forum`, `mod_quiz`, `mod_lesson`, `mod_assign` and `mod_h5pactivity`.
-
-The plugin does **not** contain a second OpenAI client. All AI requests go through:
-
-`\local_geniai\gpt\chatgpt::completions()`
-
 ## Included activity subplugins
 
 - `geniaicourseactivity_page`: analyses and creates native Moodle Page resources.
@@ -72,7 +60,7 @@ PDF:
 
 - Uses `pdftotext` when configured and executable.
 - Falls back to an internal best-effort parser for text-based PDFs.
-- Scanned/image-only PDFs need OCR outside this first version.
+- Scanned/image-only PDFs need OCR outside this the plugin.
 
 Legacy Office:
 
@@ -102,29 +90,6 @@ Default: `/usr/bin/soffice`.
 
 If LibreOffice is unavailable or conversion fails, the original file is attached to the Page and the teacher sees a
 warning in the creation result.
-
-## Install
-
-Place the folder at:
-
-`local/geniaicourse`
-
-The bundled subplugins remain inside:
-
-- `local/geniaicourse/activity/page`
-- `local/geniaicourse/activity/forum`
-- `local/geniaicourse/activity/quiz`
-- `local/geniaicourse/activity/questions`
-- `local/geniaicourse/activity/lesson`
-- `local/geniaicourse/activity/assignment`
-- `local/geniaicourse/activity/h5pinteractivevideo`
-- `local/geniaicourse/activity/h5pfindwords`
-- `local/geniaicourse/activity/h5pcrossword`
-- `local/geniaicourse/activity/h5pdragdrop`
-- `local/geniaicourse/activity/h5pflashcards`
-- `local/geniaicourse/activity/h5pinteractivebook`
-
-Then run the normal Moodle web upgrade process.
 
 ## Privacy / external processing
 
