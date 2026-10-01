@@ -175,7 +175,7 @@ class plugin_manager {
      * @param array $analysis Parameter value.
      * @return array
      */
-    public static function create(string    $pluginname, stdClass $course, int $sectionnum,
+    public static function create(string $pluginname, stdClass $course, int $sectionnum,
                                   stdClass $source, array $analysis): array {
         $plugins = self::get_plugins();
         if (!isset($plugins[$pluginname])) {

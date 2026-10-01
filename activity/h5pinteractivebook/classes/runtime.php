@@ -130,7 +130,7 @@ class runtime {
     /**
      * Build a valid H5P export file with Moodle's H5P editor.
      */
-    public static function create_h5p_file(int    $contextid, string $component, string $filearea, int $itemid,
+    public static function create_h5p_file(int $contextid, string $component, string $filearea, int $itemid,
                                            string $filename, string $machinename, array $params, string $title, ?int $userid = null): stored_file {
         global $USER;
 
@@ -192,7 +192,7 @@ class runtime {
      * Create a native mod_h5pactivity from content-type params.
      */
     public static function create_activity(stdClass $course, int $sectionnum, string $name, string $intro,
-                                           string   $machinename, array $params): array {
+                                           string $machinename, array $params): array {
         global $CFG, $USER;
 
         require_once($CFG->dirroot . '/course/modlib.php');
@@ -246,7 +246,7 @@ class runtime {
     /**
      * Create the standard nested H5P library object used by container content types.
      */
-    public static function content_object(string  $machinename, array $params, string $title,
+    public static function content_object(string $machinename, array $params, string $title,
                                           ?string $librarystring = null): array {
         $library = $librarystring !== null
             ? self::library_from_string($librarystring, false)

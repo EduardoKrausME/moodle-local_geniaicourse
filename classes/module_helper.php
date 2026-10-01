@@ -43,7 +43,7 @@ class module_helper {
      * @return stdClass
      */
     public static function base(stdClass $course, int $sectionnum, string $modulename,
-                                string   $name, string $intro = ''): stdClass {
+                                string $name, string $intro = ''): stdClass {
         global $DB;
         $module = $DB->get_record('modules', ['name' => $modulename], '*', MUST_EXIST);
 
