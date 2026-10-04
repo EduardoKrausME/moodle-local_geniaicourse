@@ -25,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'local_geniaicourse';
-$plugin->version = 2026092900;
-$plugin->release = '1.4.3';
+$plugin->version = 2026100300;
+$plugin->release = '1.4.4';
 $plugin->requires = 2024100700;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
