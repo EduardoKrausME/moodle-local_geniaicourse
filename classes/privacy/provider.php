@@ -61,12 +61,12 @@ class provider implements
             'analysisjson' => 'privacy:metadata:source:analysisjson',
         ], 'privacy:metadata:source');
         $collection->add_subsystem_link('core_files', [], 'privacy:metadata:files');
-        $collection->add_external_location_link('openai', [
-            'prompt' => 'privacy:metadata:openai:prompt',
-            'filename' => 'privacy:metadata:openai:filename',
-            'instruction' => 'privacy:metadata:openai:instruction',
-            'sourcecontent' => 'privacy:metadata:openai:sourcecontent',
-        ], 'privacy:metadata:openai');
+        $collection->add_external_location_link('ai_provider', [
+            'prompt' => 'privacy:metadata:aibridge:prompt',
+            'filename' => 'privacy:metadata:aibridge:filename',
+            'instruction' => 'privacy:metadata:aibridge:instruction',
+            'sourcecontent' => 'privacy:metadata:aibridge:sourcecontent',
+        ], 'privacy:metadata:aibridge');
         return $collection;
     }
 
