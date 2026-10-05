@@ -46,6 +46,16 @@ generated H5P content without treating unrelated future composable subplugins as
 8. Only then are native Moodle activities created with `add_moduleinfo()`.
 9. Temporary projects older than 30 days are removed by scheduled task.
 
+## AI integration
+
+All AI calls are routed through `local_ai_bridge`. The Course Builder does not know which provider, credential or model
+is being used and does not call OpenAI, Gemini, Claude or Ollama directly. Activity subplugins call the local
+`local_geniaicourse\\ai` facade, which delegates generation to `local_ai_bridge\\api::generate()`.
+
+The AI Bridge purpose idnumber used by this plugin is `geniaicourse`. Each tenant that uses the Course Builder needs an
+enabled `geniaicourse` purpose with at least one route for the user's logical role, or a tenant-wide fallback route.
+Provider selection, fallback, credentials, credits and usage accounting remain entirely in AI Bridge.
+
 ## Source formats
 
 Good extraction:
@@ -69,7 +79,7 @@ Legacy Office:
 Images:
 
 - PNG/JPG/GIF/WebP are stored and can be embedded by the Page subplugin.
-- `local_geniai`'s current `chatgpt::completions()` API is text-only, so image pixels are not sent to OpenAI.
+- The Course Builder sends text messages through `local_ai_bridge`; image pixels are not sent by this plugin.
   Classification uses filename, MIME type and the teacher's instruction.
 
 Videos:
@@ -94,9 +104,9 @@ warning in the creation result.
 ## Privacy / external processing
 
 The plugin stores project metadata, extracted text and temporary source uploads until cleanup. During analysis it sends
-the global prompt, source filename/type, per-file instruction and extracted source text through `local_geniai` to the
-configured OpenAI service. The Privacy API declares this external processing and exports/deletes both project data and
-temporary uploaded files.
+the global prompt, source filename/type, per-file instruction and extracted source text through `local_ai_bridge` to the
+provider selected by the tenant route. The Course Builder is provider-agnostic; the Privacy API declares this external
+processing and exports/deletes both project data and temporary uploaded files.
 
 ## Multiple activity selection
 
