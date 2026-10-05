@@ -41,10 +41,6 @@ require_capability('local/geniaicourse:use', $context);
 require_capability('moodle/course:manageactivities', $context);
 require_sesskey();
 
-if (!ai::is_configured()) {
-    throw new moodle_exception('noapikey', 'local_geniaicourse');
-}
-
 // Multiple sources are intentionally analysed by every installed activity subplugin.
 // Give the synchronous request enough room for those API calls and document extraction.
 core_php_time_limit::raise();
