@@ -28,6 +28,7 @@ use local_ai_bridge\api;
 use moodle_exception;
 
 /**
+ * phpcs:disable moodle.Strings.ForbiddenStrings.Found
  * AI facade used by the course builder and its activity subplugins.
  *
  * Provider selection, credentials, routing, credits and usage accounting are
