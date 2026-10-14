@@ -107,7 +107,9 @@ PROMPT;
             throw new moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pdragdrop', '', self::get_name());
         }
         $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
-        $instruction = trim((string)($analysis['instruction'] ?? '')) ?: get_string('h5p_defaultinstruction', 'geniaicourseactivity_h5pdragdrop');
+        $instruction = trim((string)($analysis['instruction'] ?? '')) ?: get_string(
+            'h5p_defaultinstruction', 'geniaicourseactivity_h5pdragdrop'
+        );
         $textlibrary = h5p_runtime::library_string('H5P.AdvancedText', false);
 
         $count = count($pairs);
@@ -182,7 +184,10 @@ PROMPT;
                     'showTitle' => true,
                     'dragHandleVisibility' => true,
                 ],
-                'localize' => ['fullscreen' => get_string('h5p_fullscreen', 'geniaicourseactivity_h5pdragdrop'), 'exitFullscreen' => get_string('h5p_exitFullscreen', 'geniaicourseactivity_h5pdragdrop')],
+                'localize' => [
+                    'fullscreen' => get_string('h5p_fullscreen', 'geniaicourseactivity_h5pdragdrop'),
+                    'exitFullscreen' => get_string('h5p_exitFullscreen', 'geniaicourseactivity_h5pdragdrop'),
+                ],
                 'grabbablePrefix' => get_string('h5p_grabbablePrefix', 'geniaicourseactivity_h5pdragdrop'),
                 'grabbableSuffix' => get_string('h5p_grabbableSuffix', 'geniaicourseactivity_h5pdragdrop'),
                 'dropzonePrefix' => get_string('h5p_dropzonePrefix', 'geniaicourseactivity_h5pdragdrop'),
