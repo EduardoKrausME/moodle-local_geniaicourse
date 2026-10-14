@@ -68,7 +68,8 @@ foreach (plugin_manager::get_plugins() as $pluginname => $class) {
             $availableplugins[$pluginname] = true;
             break;
         } catch (moodle_exception $e) {
-            // The activity is unavailable or cannot be added in this section.
+            // Try a different section before hiding this activity from the review.
+            continue;
         }
     }
 }

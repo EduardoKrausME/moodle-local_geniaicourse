@@ -227,7 +227,8 @@ PROMPT;
             'fullscreen' => get_string('h5p_fullscreen', 'geniaicourseactivity_h5pinteractivebook'),
             'exitFullscreen' => get_string('h5p_exitFullscreen', 'geniaicourseactivity_h5pinteractivebook'),
             'bookProgressSubtext' => get_string('h5p_bookProgressSubtext', 'geniaicourseactivity_h5pinteractivebook'),
-            'interactionsProgressSubtext' => get_string('h5p_interactionsProgressSubtext', 'geniaicourseactivity_h5pinteractivebook'),
+            'interactionsProgressSubtext' =>
+                get_string('h5p_interactionsProgressSubtext', 'geniaicourseactivity_h5pinteractivebook'),
             'submitReport' => get_string('h5p_submitReport', 'geniaicourseactivity_h5pinteractivebook'),
             'restartLabel' => get_string('h5p_restartLabel', 'geniaicourseactivity_h5pinteractivebook'),
             'summaryHeader' => get_string('h5p_summaryHeader', 'geniaicourseactivity_h5pinteractivebook'),
@@ -238,9 +239,11 @@ PROMPT;
             'noInteractions' => get_string('h5p_noInteractions', 'geniaicourseactivity_h5pinteractivebook'),
             'score' => get_string('h5p_score', 'geniaicourseactivity_h5pinteractivebook'),
             'summaryAndSubmit' => get_string('h5p_summaryAndSubmit', 'geniaicourseactivity_h5pinteractivebook'),
-            'noChapterInteractionBoldText' => get_string('h5p_noChapterInteractionBoldText', 'geniaicourseactivity_h5pinteractivebook'),
+            'noChapterInteractionBoldText' =>
+                get_string('h5p_noChapterInteractionBoldText', 'geniaicourseactivity_h5pinteractivebook'),
             'noChapterInteractionText' => get_string('h5p_noChapterInteractionText', 'geniaicourseactivity_h5pinteractivebook'),
-            'yourAnswersAreSubmittedForReview' => get_string('h5p_yourAnswersAreSubmittedForReview', 'geniaicourseactivity_h5pinteractivebook'),
+            'yourAnswersAreSubmittedForReview' =>
+                get_string('h5p_yourAnswersAreSubmittedForReview', 'geniaicourseactivity_h5pinteractivebook'),
             'bookProgress' => get_string('h5p_bookProgress', 'geniaicourseactivity_h5pinteractivebook'),
             'interactionsProgress' => get_string('h5p_interactionsProgress', 'geniaicourseactivity_h5pinteractivebook'),
             'totalScoreLabel' => get_string('h5p_totalScoreLabel', 'geniaicourseactivity_h5pinteractivebook'),

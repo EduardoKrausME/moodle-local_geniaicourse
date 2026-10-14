@@ -83,6 +83,11 @@ class plugin_manager {
         };
     }
 
+    /**
+     * Collect extensions supported by installed source processors.
+     *
+     * @return string[]
+     */
     public static function get_source_extensions(): array {
         $extensions = [];
         foreach (self::get_plugins() as $class) {

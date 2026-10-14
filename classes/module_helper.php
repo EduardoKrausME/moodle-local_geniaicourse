@@ -56,6 +56,16 @@ class module_helper {
         can_add_moduleinfo($course, $modulename, $sectionnum);
     }
 
+    /**
+     * Construct base configuration for a native Moodle module.
+     *
+     * @param stdClass $course
+     * @param int $sectionnum
+     * @param string $modulename
+     * @param string $name
+     * @param string $intro
+     * @return stdClass
+     */
     public static function base(stdClass $course, int $sectionnum, string $modulename,
                                 string $name, string $intro = ''): stdClass {
         global $DB;

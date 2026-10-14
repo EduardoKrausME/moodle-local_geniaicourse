@@ -151,8 +151,10 @@ PROMPT;
                     'submitAnswer' => get_string('h5pl10n_submitAnswer', 'geniaicourseactivity_h5pcrossword'),
                     'tryAgain' => get_string('h5pl10n_tryAgain', 'geniaicourseactivity_h5pcrossword'),
                     'showSolution' => get_string('h5pl10n_showSolution', 'geniaicourseactivity_h5pcrossword'),
-                    'couldNotGenerateCrossword' => get_string('h5pl10n_couldNotGenerateCrossword', 'geniaicourseactivity_h5pcrossword'),
-                    'couldNotGenerateCrosswordTooFewWords' => get_string('h5pl10n_couldNotGenerateCrosswordTooFewWords', 'geniaicourseactivity_h5pcrossword'),
+                    'couldNotGenerateCrossword' =>
+                        get_string('h5pl10n_couldNotGenerateCrossword', 'geniaicourseactivity_h5pcrossword'),
+                    'couldNotGenerateCrosswordTooFewWords' =>
+                        get_string('h5pl10n_couldNotGenerateCrosswordTooFewWords', 'geniaicourseactivity_h5pcrossword'),
                     'probematicWords' => get_string('h5pl10n_probematicWords', 'geniaicourseactivity_h5pcrossword'),
                     'problematicWords' => get_string('h5pl10n_problematicWords', 'geniaicourseactivity_h5pcrossword'),
                     'extraClue' => get_string('h5pl10n_extraClue', 'geniaicourseactivity_h5pcrossword'),
