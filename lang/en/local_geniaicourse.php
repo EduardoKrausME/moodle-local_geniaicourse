@@ -42,6 +42,7 @@ $string['fileinstructionplaceholder'] = 'Example: Use only this screenshot on th
 $string['files'] = 'Files';
 $string['files_help'] = 'Supported file formats depend on the installed activity subplugins.';
 $string['geniaicourse:use'] = 'Use the GeniAI Course Builder';
+$string['h5pembedfailed'] = 'Could not embed media inside the generated H5P package.';
 $string['imagewarning'] = 'Image pixels are not sent to AI Bridge by this plugin. The activity analyzers use the filename, MIME type and teacher instruction.';
 $string['invalidplugin'] = 'Unknown GeniAI activity type: {$a}';
 $string['maxuploadexceeded'] = 'File {$a->filename} exceeds the maximum allowed upload size of {$a->limit}.';

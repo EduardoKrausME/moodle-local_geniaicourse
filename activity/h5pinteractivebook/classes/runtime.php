@@ -201,7 +201,8 @@ class runtime {
      * Create a native mod_h5pactivity from content-type params.
      */
     public static function create_activity(stdClass $course, int $sectionnum, string $name, string $intro,
-                                           string $machinename, array $params): array {
+                                           string $machinename, array $params,
+                                           array $embeddedfiles = []): array {
         global $CFG, $USER;
 
         require_once($CFG->dirroot . '/course/modlib.php');
@@ -217,7 +218,7 @@ class runtime {
         $filename = clean_param(str_replace(['.', ' '], ['-', '-'], strtolower($machinename)) . '-' .
             $draftitemid . '.h5p', PARAM_FILE);
 
-        self::create_h5p_file(
+        $package = self::create_h5p_file(
             $usercontext->id,
             'user',
             'draft',
@@ -228,6 +229,7 @@ class runtime {
             $name,
             $USER->id
         );
+        \local_geniaicourse\h5p_package::embed_files($package, $embeddedfiles);
 
         $moduleinfo = module_helper::base($course, $sectionnum, 'h5pactivity', $name, $intro);
         $moduleinfo->packagefile = $draftitemid;

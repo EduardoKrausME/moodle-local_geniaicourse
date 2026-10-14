@@ -42,6 +42,7 @@ $string['fileinstructionplaceholder'] = 'Ex.: Use apenas este print na página i
 $string['files'] = 'Arquivos';
 $string['files_help'] = 'Os formatos de arquivo aceitos dependem dos subplugins de atividade instalados.';
 $string['geniaicourse:use'] = 'Usar o construtor de cursos GeniAI';
+$string['h5pembedfailed'] = 'Não foi possível incorporar a mídia ao pacote H5P gerado.';
 $string['imagewarning'] = 'Os pixels da imagem não são enviados ao AI Bridge por este plugin. Os analisadores usam o nome do arquivo, tipo MIME e a instrução do professor.';
 $string['invalidplugin'] = 'Tipo de atividade GeniAI desconhecido: {$a}';
 $string['maxuploadexceeded'] = 'O arquivo {$a->filename} excede o tamanho máximo permitido de {$a->limit}.';

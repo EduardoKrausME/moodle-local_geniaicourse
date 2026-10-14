@@ -52,11 +52,13 @@ class h5p_package {
 
         $zip = new ZipArchive();
         $tempfiles = [];
+        $zipopen = false;
         try {
             if ($zip->open($pathname) !== true) {
                 throw new moodle_exception('h5pembedfailed', 'local_geniaicourse');
             }
 
+            $zipopen = true;
             foreach ($assets as $asset) {
                 $path = (string)($asset['path'] ?? '');
                 $file = $asset['file'] ?? null;
@@ -73,7 +75,9 @@ class h5p_package {
                 }
             }
 
-            if (!$zip->close()) {
+            $closed = $zip->close();
+            $zipopen = false;
+            if (!$closed) {
                 throw new moodle_exception('h5pembedfailed', 'local_geniaicourse');
             }
 
@@ -91,7 +95,7 @@ class h5p_package {
             $package->delete();
             return $fs->create_file_from_pathname($record, $pathname);
         } finally {
-            if ($zip->status === ZipArchive::ER_OK) {
+            if ($zipopen) {
                 $zip->close();
             }
             foreach ($tempfiles as $tmpfile) {

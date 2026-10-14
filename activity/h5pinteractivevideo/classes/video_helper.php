@@ -87,8 +87,7 @@ class video_helper {
             return null;
         }
 
-        $filename = clean_param($sourcefile->get_filename(), PARAM_FILE);
-        $filename = 'geniaicourse-' . $source->id . '-' . $filename;
+        $filename = 'geniaicourse-' . $source->id . '.' . strtolower((string)$source->extension);
         return [
             'path' => 'videos/' . $filename,
             'mime' => self::video_mime(strtolower((string)$source->extension)),

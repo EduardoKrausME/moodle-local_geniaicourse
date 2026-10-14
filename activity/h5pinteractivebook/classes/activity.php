@@ -142,6 +142,7 @@ PROMPT;
         $selectedchildren = self::resolve_children($analysis, $allanalysis);
         $plugins = plugin_manager::get_plugins();
         $iframechildren = [];
+        $embeddedfiles = [];
 
         foreach ($selectedchildren as $pluginname) {
             if (!isset($plugins[$pluginname], $allanalysis[$pluginname]) || !is_array($allanalysis[$pluginname])) {
@@ -169,6 +170,7 @@ PROMPT;
                     $iframechildren[] = (string)($childanalysis['activityname'] ?? $definition['title']);
                 }
                 $chapters[] = book_builder::column($blocks, (string)$definition['title']);
+                $embeddedfiles = array_merge($embeddedfiles, $definition['embeddedfiles'] ?? []);
             } catch (Throwable $e) {
                 // A child must not make the whole book unusable. Add a readable page explaining the skipped child.
                 $label = (string)($childanalysis['activityname'] ?? $pluginname);
@@ -257,7 +259,8 @@ PROMPT;
             $name,
             h5p_runtime::paragraph($summary),
             'H5P.InteractiveBook',
-            $params
+            $params,
+            $embeddedfiles
         );
         if ($iframechildren) {
             $created['warning'] = get_string(
