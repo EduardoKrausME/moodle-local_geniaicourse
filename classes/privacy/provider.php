@@ -31,6 +31,9 @@ use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\core_user_data_provider;
+use core_privacy\local\request\core_userlist_provider;
+use core_privacy\local\request\approved_userlist;
+use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use local_geniaicourse\project_manager;
 
@@ -41,7 +44,8 @@ use local_geniaicourse\project_manager;
  */
 class provider implements
     \core_privacy\local\metadata\provider,
-    core_user_data_provider {
+    core_user_data_provider,
+    core_userlist_provider {
 
     /**
      * Get metadata.
@@ -90,6 +94,69 @@ class provider implements
             $contextlist->add_user_context($userid);
         }
         return $contextlist;
+    }
+
+    /**
+     * Find users who own course projects or uploaded sources in this context.
+     *
+     * @param userlist $userlist
+     * @return void
+     */
+    public static function get_users_in_context(userlist $userlist): void {
+        $context = $userlist->get_context();
+        if ($context instanceof context_course) {
+            $userlist->add_from_sql(
+                "SELECT DISTINCT p.userid
+                   FROM {local_geniaicourse_project} p
+                  WHERE p.courseid = :courseid",
+                ['courseid' => $context->instanceid],
+                'userid'
+            );
+        } else if ($context instanceof context_user) {
+            $userlist->add_from_sql(
+                "SELECT DISTINCT p.userid
+                   FROM {local_geniaicourse_project} p
+                  WHERE p.userid = :userid",
+                ['userid' => $context->instanceid],
+                'userid'
+            );
+        }
+    }
+
+    /**
+     * Delete only approved users' projects for a specific course or user context.
+     *
+     * @param approved_userlist $userlist
+     * @return void
+     */
+    public static function delete_data_for_users(approved_userlist $userlist): void {
+        global $DB;
+
+        $context = $userlist->get_context();
+        $userids = array_map('intval', $userlist->get_userids());
+        if (!$userids) {
+            return;
+        }
+
+        if ($context instanceof context_user) {
+            if (!in_array((int)$context->instanceid, $userids, true)) {
+                return;
+            }
+            $projects = $DB->get_records('local_geniaicourse_project', ['userid' => $context->instanceid]);
+        } else if ($context instanceof context_course) {
+            [$insql, $params] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, 'approved');
+            $params['courseid'] = $context->instanceid;
+            $projects = $DB->get_records_select(
+                'local_geniaicourse_project',
+                "courseid = :courseid AND userid $insql",
+                $params
+            );
+        } else {
+            return;
+        }
+        foreach ($projects as $project) {
+            project_manager::delete_project($project);
+        }
     }
 
     /**

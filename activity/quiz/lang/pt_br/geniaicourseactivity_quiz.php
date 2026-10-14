@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die;
 
 $string['description'] = 'Cria um Questionário nativo do Moodle e questões nativas no banco de questões a partir da fonte.';
 $string['noquestionsgenerated'] = 'Nenhuma questão válida e compatível foi gerada para esta fonte.';
+$string['questionbankmissing'] = 'Não foi possível localizar ou criar um banco de questões para este curso.';
 $string['pluginname'] = 'Questionário';
 $string['questioncategorydefault'] = 'Questões geradas';
 $string['questiondefaultname'] = 'Questão gerada {$a}';

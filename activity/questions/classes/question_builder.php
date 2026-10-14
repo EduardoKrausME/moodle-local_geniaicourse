@@ -25,6 +25,8 @@
 namespace geniaicourseactivity_questions;
 
 use context_course;
+use context_module;
+use core_question\local\bank\question_bank_helper;
 use core_question\category_manager;
 use core_text;
 use moodle_exception;
@@ -157,7 +159,19 @@ class question_builder {
         $context = context_course::instance($course->id);
         require_capability('moodle/question:add', $context);
 
+        // Moodle 5 stores question categories in question bank module contexts.
+        if ($CFG->branch >= 500) {
+            $bank = question_bank_helper::get_default_open_instance_system_type($course, true);
+            if (!$bank) {
+                throw new moodle_exception('questionbankmissing', 'geniaicourseactivity_questions');
+            }
+            $context = context_module::instance($bank->id);
+            require_capability('moodle/question:add', $context);
+        }
         $top = question_get_top_category($context->id, true);
+        if (!$top) {
+            throw new moodle_exception('questionbankmissing', 'geniaicourseactivity_questions');
+        }
         $manager = new category_manager();
         $categoryname = clean_param(core_text::substr($name, 0, 255), PARAM_TEXT);
         if ($categoryname === '') {
@@ -206,7 +220,7 @@ class question_builder {
         $format = new qformat_gift();
         $format->setCategory($category);
         $format->setCourse($course);
-        $format->setContexts([$context]);
+        $format->setContexts([\context::instance_by_id($category->contextid)]);
         $format->setFilename($pathname);
         $format->setRealfilename($filename);
         $format->setMatchgrades('nearest');

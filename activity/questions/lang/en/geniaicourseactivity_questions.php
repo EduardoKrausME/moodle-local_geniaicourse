@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die;
 
 $string['description'] = 'Creates native Moodle question bank questions without creating a Quiz activity.';
 $string['noquestionsgenerated'] = 'No valid supported questions were generated for this source.';
+$string['questionbankmissing'] = 'Could not find or create a question bank for this course.';
 $string['pluginname'] = 'Question bank';
 $string['questionbankcreatedname'] = '{$a->name} ({$a->count} questions)';
 $string['questioncategorydefault'] = 'Generated questions';
