@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';
+
 $string['description'] = 'Creates native Moodle question bank questions without creating a Quiz activity.';
 $string['noquestionsgenerated'] = 'No valid supported questions were generated for this source.';
 $string['questionbankmissing'] = 'Could not find or create a question bank for this course.';

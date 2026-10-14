@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['privacy:metadata'] = 'O gerador cria atividades nativas do Moodle e não mantém informações próprias dos usuários.';
+
 $string['description'] = 'Cria uma Página nativa do Moodle a partir de material explicativo, textual ou visual.';
 $string['libreofficeconversionfailed'] = 'O LibreOffice não conseguiu converter o arquivo para PDF. {$a}';
 $string['libreofficepath'] = 'Executável do LibreOffice';

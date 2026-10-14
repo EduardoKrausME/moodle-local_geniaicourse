@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';
+
 $string['description'] = 'Creates a native Moodle Lesson with an ordered sequence of content pages.';
 $string['lessonpagedefault'] = 'Lesson page {$a}';
 $string['nolessonpages'] = 'No valid lesson pages were generated for this source.';
