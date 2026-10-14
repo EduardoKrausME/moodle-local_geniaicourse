@@ -24,5 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['privacy:metadata'] = 'O gerador cria atividades nativas do Moodle e não mantém informações próprias dos usuários.';
+
 $string['description'] = 'Cria uma Tarefa nativa do Moodle com enunciado e métodos de envio adequados.';
 $string['pluginname'] = 'Tarefa';
