@@ -111,7 +111,7 @@ PROMPT;
         $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
         $description = trim((string)($analysis['description'] ?? '')) ?: trim((string)($analysis['summary'] ?? ''));
         if ($description === '') {
-            $description = 'Review the cards and enter the correct answer.';
+            $description = get_string('h5p_defaultinstruction', 'geniaicourseactivity_h5pflashcards');
         }
 
         $h5pcards = [];
@@ -133,26 +133,26 @@ PROMPT;
             'params' => [
                 'description' => $description,
                 'cards' => $h5pcards,
-                'progressText' => 'Card @card of @total',
-                'next' => 'Next',
-                'previous' => 'Previous',
-                'checkAnswerText' => 'Check',
+                'progressText' => get_string('h5p_progressText', 'geniaicourseactivity_h5pflashcards'),
+                'next' => get_string('h5p_next', 'geniaicourseactivity_h5pflashcards'),
+                'previous' => get_string('h5p_previous', 'geniaicourseactivity_h5pflashcards'),
+                'checkAnswerText' => get_string('h5p_checkAnswerText', 'geniaicourseactivity_h5pflashcards'),
                 'showSolutionsRequiresInput' => true,
-                'defaultAnswerText' => 'Your answer',
-                'correctAnswerText' => 'Correct',
-                'incorrectAnswerText' => 'Incorrect',
-                'showSolutionText' => 'Correct answer(s)',
-                'results' => 'Results',
-                'cardsHeader' => 'Cards',
-                'scoreHeader' => 'Score',
-                'ofCorrect' => '@score of @total correct',
-                'showResults' => 'Show results',
-                'answerShortText' => 'A:',
-                'retry' => 'Retry',
+                'defaultAnswerText' => get_string('h5p_defaultAnswerText', 'geniaicourseactivity_h5pflashcards'),
+                'correctAnswerText' => get_string('h5p_correctAnswerText', 'geniaicourseactivity_h5pflashcards'),
+                'incorrectAnswerText' => get_string('h5p_incorrectAnswerText', 'geniaicourseactivity_h5pflashcards'),
+                'showSolutionText' => get_string('h5p_showSolutionText', 'geniaicourseactivity_h5pflashcards'),
+                'results' => get_string('h5p_results', 'geniaicourseactivity_h5pflashcards'),
+                'cardsHeader' => get_string('h5p_cardsHeader', 'geniaicourseactivity_h5pflashcards'),
+                'scoreHeader' => get_string('h5p_scoreHeader', 'geniaicourseactivity_h5pflashcards'),
+                'ofCorrect' => get_string('h5p_ofCorrect', 'geniaicourseactivity_h5pflashcards'),
+                'showResults' => get_string('h5p_showResults', 'geniaicourseactivity_h5pflashcards'),
+                'answerShortText' => get_string('h5p_answerShortText', 'geniaicourseactivity_h5pflashcards'),
+                'retry' => get_string('h5p_retry', 'geniaicourseactivity_h5pflashcards'),
                 'caseSensitive' => false,
-                'cardAnnouncement' => 'Incorrect answer. Correct answer was @answer',
-                'correctAnswerAnnouncement' => '@answer is correct.',
-                'pageAnnouncement' => 'Page @current of @total',
+                'cardAnnouncement' => get_string('h5p_cardAnnouncement', 'geniaicourseactivity_h5pflashcards'),
+                'correctAnswerAnnouncement' => get_string('h5p_correctAnswerAnnouncement', 'geniaicourseactivity_h5pflashcards'),
+                'pageAnnouncement' => get_string('h5p_pageAnnouncement', 'geniaicourseactivity_h5pflashcards'),
                 'randomCards' => false,
             ],
         ];

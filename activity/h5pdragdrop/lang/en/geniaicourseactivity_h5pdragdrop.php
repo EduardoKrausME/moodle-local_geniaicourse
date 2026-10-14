@@ -24,6 +24,28 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['h5p_scoreShow'] = 'Check';
+$string['h5p_submit'] = 'Submit';
+$string['h5p_tryAgain'] = 'Retry';
+$string['h5p_scoreExplanation'] = 'Correct answers give points. Incorrect answers may reduce the score.';
+$string['h5p_fullscreen'] = 'Fullscreen';
+$string['h5p_exitFullscreen'] = 'Exit fullscreen';
+$string['h5p_grabbablePrefix'] = 'Grabbable {num} of {total}.';
+$string['h5p_grabbableSuffix'] = 'Placed in dropzone {num}.';
+$string['h5p_dropzonePrefix'] = 'Dropzone {num} of {total}.';
+$string['h5p_noDropzone'] = 'No dropzone.';
+$string['h5p_tipLabel'] = 'Show tip.';
+$string['h5p_tipAvailable'] = 'Tip available';
+$string['h5p_correctAnswer'] = 'Correct answer';
+$string['h5p_wrongAnswer'] = 'Wrong answer';
+$string['h5p_feedbackHeader'] = 'Feedback';
+$string['h5p_scoreBarLabel'] = 'You got :num out of :total points';
+$string['h5p_scoreExplanationButtonLabel'] = 'Show score explanation';
+$string['h5p_a11yCheck'] = 'Check the answers. The responses will be marked as correct, incorrect, or unanswered.';
+$string['h5p_a11yRetry'] = 'Retry the task. Reset all responses and start the task over again.';
+$string['h5p_defaultinstruction'] = 'Drag each item to the correct destination.';
+
+
 $string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';
 
 $string['description'] = 'Creates a native Moodle H5P Drag and Drop matching activity.';

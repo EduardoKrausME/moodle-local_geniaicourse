@@ -107,7 +107,7 @@ PROMPT;
             throw new moodle_exception('h5pinvalidcontent', 'geniaicourseactivity_h5pdragdrop', '', self::get_name());
         }
         $name = trim((string)($analysis['title'] ?? '')) ?: pathinfo($source->filename, PATHINFO_FILENAME);
-        $instruction = trim((string)($analysis['instruction'] ?? '')) ?: 'Drag each item to the correct destination.';
+        $instruction = trim((string)($analysis['instruction'] ?? '')) ?: get_string('h5p_defaultinstruction', 'geniaicourseactivity_h5pdragdrop');
         $textlibrary = h5p_runtime::library_string('H5P.AdvancedText', false);
 
         $count = count($pairs);
@@ -153,10 +153,10 @@ PROMPT;
             'title' => $name,
             'intro' => '<p>' . s($instruction) . '</p>',
             'params' => [
-                'scoreShow' => 'Check',
-                'submit' => 'Submit',
-                'tryAgain' => 'Retry',
-                'scoreExplanation' => 'Correct answers give points. Incorrect answers may reduce the score.',
+                'scoreShow' => get_string('h5p_scoreShow', 'geniaicourseactivity_h5pdragdrop'),
+                'submit' => get_string('h5p_submit', 'geniaicourseactivity_h5pdragdrop'),
+                'tryAgain' => get_string('h5p_tryAgain', 'geniaicourseactivity_h5pdragdrop'),
+                'scoreExplanation' => get_string('h5p_scoreExplanation', 'geniaicourseactivity_h5pdragdrop'),
                 'question' => [
                     'settings' => [
                         'size' => ['width' => 620, 'height' => $canvasheight],
@@ -182,20 +182,20 @@ PROMPT;
                     'showTitle' => true,
                     'dragHandleVisibility' => true,
                 ],
-                'localize' => ['fullscreen' => 'Fullscreen', 'exitFullscreen' => 'Exit fullscreen'],
-                'grabbablePrefix' => 'Grabbable {num} of {total}.',
-                'grabbableSuffix' => 'Placed in dropzone {num}.',
-                'dropzonePrefix' => 'Dropzone {num} of {total}.',
-                'noDropzone' => 'No dropzone.',
-                'tipLabel' => 'Show tip.',
-                'tipAvailable' => 'Tip available',
-                'correctAnswer' => 'Correct answer',
-                'wrongAnswer' => 'Wrong answer',
-                'feedbackHeader' => 'Feedback',
-                'scoreBarLabel' => 'You got :num out of :total points',
-                'scoreExplanationButtonLabel' => 'Show score explanation',
-                'a11yCheck' => 'Check the answers. The responses will be marked as correct, incorrect, or unanswered.',
-                'a11yRetry' => 'Retry the task. Reset all responses and start the task over again.',
+                'localize' => ['fullscreen' => get_string('h5p_fullscreen', 'geniaicourseactivity_h5pdragdrop'), 'exitFullscreen' => get_string('h5p_exitFullscreen', 'geniaicourseactivity_h5pdragdrop')],
+                'grabbablePrefix' => get_string('h5p_grabbablePrefix', 'geniaicourseactivity_h5pdragdrop'),
+                'grabbableSuffix' => get_string('h5p_grabbableSuffix', 'geniaicourseactivity_h5pdragdrop'),
+                'dropzonePrefix' => get_string('h5p_dropzonePrefix', 'geniaicourseactivity_h5pdragdrop'),
+                'noDropzone' => get_string('h5p_noDropzone', 'geniaicourseactivity_h5pdragdrop'),
+                'tipLabel' => get_string('h5p_tipLabel', 'geniaicourseactivity_h5pdragdrop'),
+                'tipAvailable' => get_string('h5p_tipAvailable', 'geniaicourseactivity_h5pdragdrop'),
+                'correctAnswer' => get_string('h5p_correctAnswer', 'geniaicourseactivity_h5pdragdrop'),
+                'wrongAnswer' => get_string('h5p_wrongAnswer', 'geniaicourseactivity_h5pdragdrop'),
+                'feedbackHeader' => get_string('h5p_feedbackHeader', 'geniaicourseactivity_h5pdragdrop'),
+                'scoreBarLabel' => get_string('h5p_scoreBarLabel', 'geniaicourseactivity_h5pdragdrop'),
+                'scoreExplanationButtonLabel' => get_string('h5p_scoreExplanationButtonLabel', 'geniaicourseactivity_h5pdragdrop'),
+                'a11yCheck' => get_string('h5p_a11yCheck', 'geniaicourseactivity_h5pdragdrop'),
+                'a11yRetry' => get_string('h5p_a11yRetry', 'geniaicourseactivity_h5pdragdrop'),
             ],
         ];
     }
