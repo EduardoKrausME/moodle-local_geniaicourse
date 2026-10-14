@@ -24,7 +24,6 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-use local_geniaicourse\ai;
 use local_geniaicourse\source_manager;
 
 $courseid = required_param('courseid', PARAM_INT);
@@ -44,7 +43,6 @@ $PAGE->requires->js_call_amd('local_geniaicourse/upload', 'init');
 $data = [
     'courseid' => $course->id,
     'sesskey' => sesskey(),
-    'noapikey' => !ai::is_configured(),
     'maxupload' => display_size(get_max_upload_file_size($CFG->maxbytes, $course->maxbytes ?? 0)),
     'fileaccept' => implode(',', array_map(static fn($ext) => '.' . $ext, source_manager::allowed_extensions())),
 ];

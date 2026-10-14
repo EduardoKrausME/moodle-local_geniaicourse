@@ -64,7 +64,10 @@ if (!empty($_FILES['files']['name']) && is_array($_FILES['files']['name'])) {
         }
         $maxbytes = get_max_upload_file_size($CFG->maxbytes, $course->maxbytes ?? 0);
         if ($maxbytes > 0 && $upload['size'] > $maxbytes) {
-            throw new moodle_exception('maxbytes', 'error');
+            throw new moodle_exception('maxuploadexceeded', 'local_geniaicourse', '', (object)[
+                'filename' => clean_param($name, PARAM_FILE),
+                'limit' => display_size($maxbytes),
+            ]);
         }
         $uploads[] = ['upload' => $upload, 'instruction' => $instructions[$i] ?? ''];
     }

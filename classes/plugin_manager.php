@@ -179,7 +179,7 @@ class plugin_manager {
                                   stdClass $source, array $analysis): array {
         $plugins = self::get_plugins();
         if (!isset($plugins[$pluginname])) {
-            throw new moodle_exception('invalidplugin', 'error', '', $pluginname);
+            throw new moodle_exception('invalidplugin', 'local_geniaicourse', '', $pluginname);
         }
         return $plugins[$pluginname]::create($course, $sectionnum, $source, $analysis);
     }

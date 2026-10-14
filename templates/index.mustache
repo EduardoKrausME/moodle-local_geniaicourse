@@ -28,10 +28,6 @@
         <p>{{#str}}subtitle, local_geniaicourse{{/str}}</p>
     </div>
 
-    {{#noapikey}}
-        <div class="alert alert-warning">{{#str}}noapikey, local_geniaicourse{{/str}}</div>
-    {{/noapikey}}
-
     <form action="{{config.wwwroot}}/local/geniaicourse/analyze.php" method="post" enctype="multipart/form-data"
           id="geniaicourse-form">
         <input type="hidden" name="sesskey" value="{{sesskey}}">
@@ -55,7 +51,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary" id="geniaicourse-submit"
                         data-analyzing="{{#str}}analyzing, local_geniaicourse{{/str}}"
-                        {{#noapikey}}disabled{{/noapikey}}>
+                        >
                     {{#str}}analyze, local_geniaicourse{{/str}}
                 </button>
             </div>
