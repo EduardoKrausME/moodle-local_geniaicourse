@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['privacy:metadata:files'] = 'Teacher-generated media files are stored in the course context.';
+
 $string['description'] = 'Creates a native Moodle H5P Interactive Video from an uploaded video or explicit supported video URL.';
 $string['h5pcontentcreatefailed'] = 'Moodle could not build the H5P content. {$a}';
 $string['h5pexportmissing'] = 'The H5P editor did not generate an export package for the activity.';

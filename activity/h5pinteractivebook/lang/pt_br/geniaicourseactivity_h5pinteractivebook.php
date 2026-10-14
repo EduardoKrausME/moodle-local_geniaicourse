@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['privacy:metadata:files'] = 'Os arquivos de mídia gerados pelo professor são armazenados no contexto do curso.';
+
 $string['description'] = 'Cria um H5P Interactive Book e reaproveita os subplugins H5P selecionados como páginas do livro. Marque o livro junto com um ou vários tipos H5P para colocá-los dentro dele; marque somente o livro para usar automaticamente os tipos recomendados pela análise.';
 $string['h5pbookchildfailed'] = 'Não foi possível adicionar {$a->name} ao Interactive Book: {$a->error}';
 $string['h5pbookembedunsupported'] = 'O H5P Interactive Book não consegue incorporar {$a} com as bibliotecas H5P.Column instaladas neste Moodle.';

@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['privacy:metadata'] = 'O gerador cria atividades nativas do Moodle e não mantém informações próprias dos usuários.';
+
 $string['description'] = 'Cria uma atividade H5P nativa de flashcards para prática de recuperação e memorização.';
 $string['h5pcontentcreatefailed'] = 'O Moodle não conseguiu montar o conteúdo H5P. {$a}';
 $string['h5pexportmissing'] = 'O editor H5P não gerou o pacote de exportação da atividade.';

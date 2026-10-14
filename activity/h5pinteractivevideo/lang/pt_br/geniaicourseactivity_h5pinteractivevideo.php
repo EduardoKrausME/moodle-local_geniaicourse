@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['privacy:metadata:files'] = 'Os arquivos de mídia gerados pelo professor são armazenados no contexto do curso.';
+
 $string['description'] = 'Cria um H5P Vídeo Interativo nativo do Moodle a partir de um vídeo enviado ou URL de vídeo compatível informada explicitamente.';
 $string['h5pcontentcreatefailed'] = 'O Moodle não conseguiu montar o conteúdo H5P. {$a}';
 $string['h5pexportmissing'] = 'O editor H5P não gerou o pacote de exportação da atividade.';
