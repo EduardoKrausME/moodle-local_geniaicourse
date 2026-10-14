@@ -31,6 +31,8 @@ use core_privacy\local\metadata\collection;
  */
 class provider implements \core_privacy\local\metadata\provider {
     /**
+     * Declare files retained by this subplugin.
+     *
      * @param collection $collection
      * @return collection
      */

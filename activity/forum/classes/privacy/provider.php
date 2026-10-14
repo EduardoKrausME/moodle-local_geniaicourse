@@ -29,6 +29,8 @@ namespace geniaicourseactivity_forum\privacy;
  */
 class provider implements \core_privacy\local\metadata\null_provider {
     /**
+     * Explain why this subplugin does not hold its own user data.
+     *
      * @return string
      */
     public static function get_reason(): string {
