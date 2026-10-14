@@ -24,20 +24,17 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$string['h5pl10n_check'] = 'Check';
-$string['h5pl10n_tryAgain'] = 'Retry';
-$string['h5pl10n_showSolution'] = 'Show Solution';
-$string['h5pl10n_found'] = '@found of @totalWords found';
-$string['h5pl10n_timeSpent'] = 'Time Spent';
-$string['h5pl10n_score'] = 'You got @score of @total points';
-$string['h5pl10n_wordListHeader'] = 'Find the words';
-
-
-$string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';
-
 $string['description'] = 'Creates a native Moodle H5P word-search activity from key vocabulary in the source.';
 $string['h5pcontentcreatefailed'] = 'Moodle could not build the H5P content. {$a}';
 $string['h5pexportmissing'] = 'The H5P editor did not generate an export package for the activity.';
 $string['h5pinvalidcontent'] = 'The generated content is not sufficient to create {$a}.';
+$string['h5pl10n_check'] = 'Check';
+$string['h5pl10n_found'] = '@found of @totalWords found';
+$string['h5pl10n_score'] = 'You got @score of @total points';
+$string['h5pl10n_showSolution'] = 'Show Solution';
+$string['h5pl10n_timeSpent'] = 'Time Spent';
+$string['h5pl10n_tryAgain'] = 'Retry';
+$string['h5pl10n_wordListHeader'] = 'Find the words';
 $string['h5plibrarymissing'] = 'The required H5P library is not installed or enabled in Moodle: {$a}';
 $string['pluginname'] = 'H5P Find the Words';
+$string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';

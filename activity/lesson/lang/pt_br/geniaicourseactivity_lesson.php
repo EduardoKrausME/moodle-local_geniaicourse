@@ -24,9 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$string['privacy:metadata'] = 'O gerador cria atividades nativas do Moodle e não mantém informações próprias dos usuários.';
-
 $string['description'] = 'Cria uma Lição nativa do Moodle com uma sequência ordenada de páginas de conteúdo.';
 $string['lessonpagedefault'] = 'Página da lição {$a}';
 $string['nolessonpages'] = 'Nenhuma página válida de lição foi gerada para esta fonte.';
 $string['pluginname'] = 'Lição';
+$string['privacy:metadata'] = 'O gerador cria atividades nativas do Moodle e não mantém informações próprias dos usuários.';

@@ -24,7 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';
-
 $string['description'] = 'Creates a native Moodle Forum when the source is primarily a discussion, reflection or debate prompt.';
 $string['pluginname'] = 'Forum';
+$string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';

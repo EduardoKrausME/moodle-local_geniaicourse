@@ -24,7 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';
-
 $string['description'] = 'Creates a native Moodle Assignment with instructions and suitable submission methods.';
 $string['pluginname'] = 'Assignment';
+$string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';

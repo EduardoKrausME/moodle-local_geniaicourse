@@ -24,11 +24,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';
-
 $string['description'] = 'Creates a native Moodle Page from explanatory, textual or visual source material.';
 $string['libreofficeconversionfailed'] = 'LibreOffice could not convert the file to PDF. {$a}';
 $string['libreofficepath'] = 'LibreOffice executable';
 $string['libreofficepath_desc'] = 'Path to soffice/libreoffice. Used by the Page subplugin to convert Office/ODF files to PDF when requested.';
 $string['libreofficeunavailable'] = 'LibreOffice is not available; the original file was kept instead of converting it to PDF.';
 $string['pluginname'] = 'Page';
+$string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';
