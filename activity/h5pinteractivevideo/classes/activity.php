@@ -202,6 +202,9 @@ PROMPT;
         }
 
         return [
+            'embeddedfiles' => isset($video['file']) ? [
+                ['path' => $video['path'], 'file' => $video['file']],
+            ] : [],
             'machinename' => 'H5P.InteractiveVideo',
             'title' => $name,
             'intro' => h5p_runtime::paragraph((string)($analysis['summary'] ?? '')),
@@ -252,7 +255,8 @@ PROMPT;
             $content['title'],
             $content['intro'],
             $content['machinename'],
-            $content['params']
+            $content['params'],
+            $content['embeddedfiles']
         );
     }
 
