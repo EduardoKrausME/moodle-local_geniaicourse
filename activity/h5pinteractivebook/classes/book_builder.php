@@ -24,10 +24,8 @@
 
 namespace geniaicourseactivity_h5pinteractivebook;
 
-use context_course;
 use geniaicourseactivity_h5pinteractivebook\runtime as h5p_runtime;
 use moodle_exception;
-use moodle_url;
 use stdClass;
 
 /**
@@ -54,13 +52,9 @@ class book_builder {
             ];
         }
 
-        if (!h5p_runtime::has_library('H5P.IFrameEmbed', false) ||
-            self::column_library_option('H5P.IFrameEmbed') === null) {
-            throw new moodle_exception('h5pbookembedunsupported', 'geniaicourseactivity_h5pinteractivebook', '', $title);
-        }
-
-        $usediframe = true;
-        return self::iframe_block($course, $source, $definition);
+        // A course-context iframe URL would not survive backup/restore.
+        // The caller turns this unsupported child into an explanatory book page.
+        throw new moodle_exception('h5pbookembedunsupported', 'geniaicourseactivity_h5pinteractivebook', '', $title);
     }
 
     /**
@@ -125,56 +119,4 @@ class book_builder {
         return h5p_runtime::library_option($columnversion, $machinename);
     }
 
-    /**
-     * Create a persistent standalone H5P child and wrap it in H5P.IFrameEmbed.
-     */
-    private static function iframe_block(stdClass $course, stdClass $source, array $definition): array {
-        global $USER;
-
-        $machinename = (string)$definition['machinename'];
-        $params = (array)$definition['params'];
-        $title = clean_param((string)($definition['title'] ?? $machinename), PARAM_TEXT) ?: $machinename;
-        $coursecontext = context_course::instance($course->id);
-        $itemid = file_get_unused_draft_itemid();
-        $slug = clean_param(strtolower(preg_replace('/[^a-z0-9]+/i', '-', $machinename)), PARAM_FILE);
-        $filename = ($slug ?: 'h5p-child') . '-' . $source->id . '-' . $itemid . '.h5p';
-
-        $file = h5p_runtime::create_h5p_file(
-            $coursecontext->id,
-            'geniaicourseactivity_h5pinteractivebook',
-            'generated',
-            $itemid,
-            $filename,
-            $machinename,
-            $params,
-            $title,
-            $USER->id
-        );
-
-        $fileurl = moodle_url::make_pluginfile_url(
-            $coursecontext->id,
-            'geniaicourseactivity_h5pinteractivebook',
-            'generated',
-            $itemid,
-            '/',
-            $file->get_filename(),
-            false
-        );
-        $embedurl = new moodle_url('/h5p/embed.php', [
-            'url' => $fileurl->out_as_local_url(false),
-            'component' => 'geniaicourseactivity_h5pinteractivebook',
-        ]);
-        $iframeversion = self::column_library_option('H5P.IFrameEmbed');
-
-        return [
-            'content' => h5p_runtime::content_object('H5P.IFrameEmbed', [
-                'width' => '100%',
-                'minWidth' => '300px',
-                'height' => '650px',
-                'source' => $embedurl->out_as_local_url(false),
-                'resizeSupported' => true,
-            ], $title, $iframeversion),
-            'useSeparator' => 'auto',
-        ];
-    }
 }

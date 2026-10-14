@@ -24,9 +24,7 @@
 
 namespace geniaicourseactivity_h5pinteractivevideo;
 
-use context_course;
 use local_geniaicourse\source_manager;
-use moodle_url;
 use stdClass;
 
 /**
@@ -84,39 +82,16 @@ class video_helper {
      * Copy source video.
      */
     private static function copy_source_video(stdClass $course, stdClass $source): ?array {
-        global $USER;
-
         $sourcefile = source_manager::get_stored_file($source);
         if (!$sourcefile) {
             return null;
         }
 
-        $coursecontext = context_course::instance($course->id);
-        $fs = get_file_storage();
-        $fs->delete_area_files($coursecontext->id, 'geniaicourseactivity_h5pinteractivevideo', 'generated', $source->id);
-        $record = [
-            'contextid' => $coursecontext->id,
-            'component' => 'geniaicourseactivity_h5pinteractivevideo',
-            'filearea' => 'generated',
-            'itemid' => $source->id,
-            'filepath' => '/',
-            'filename' => clean_param($sourcefile->get_filename(), PARAM_FILE),
-            'mimetype' => $sourcefile->get_mimetype(),
-            'userid' => $USER->id,
-        ];
-        $file = $fs->create_file_from_storedfile($record, $sourcefile);
-        $url = moodle_url::make_pluginfile_url(
-            $coursecontext->id,
-            'geniaicourseactivity_h5pinteractivevideo',
-            'generated',
-            $source->id,
-            '/',
-            $file->get_filename(),
-            false
-        );
+        $filename = 'geniaicourse-' . $source->id . '.' . strtolower((string)$source->extension);
         return [
-            'path' => $url->out(false),
+            'path' => 'videos/' . $filename,
             'mime' => self::video_mime(strtolower((string)$source->extension)),
+            'file' => $sourcefile,
         ];
     }
 
