@@ -42,9 +42,24 @@ class module_helper {
      * @param string $intro Parameter value.
      * @return stdClass
      */
+    /**
+     * Confirm that Moodle allows this user to add this module in this section.
+     *
+     * @param stdClass $course
+     * @param int $sectionnum
+     * @param string $modulename
+     * @return void
+     */
+    public static function check_can_add(stdClass $course, int $sectionnum, string $modulename): void {
+        global $CFG;
+        require_once($CFG->dirroot . '/course/modlib.php');
+        can_add_moduleinfo($course, $modulename, $sectionnum);
+    }
+
     public static function base(stdClass $course, int $sectionnum, string $modulename,
                                 string $name, string $intro = ''): stdClass {
         global $DB;
+        self::check_can_add($course, $sectionnum, $modulename);
         $module = $DB->get_record('modules', ['name' => $modulename], '*', MUST_EXIST);
 
         $info = new stdClass();

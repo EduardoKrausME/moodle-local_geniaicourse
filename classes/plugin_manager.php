@@ -62,6 +62,27 @@ class plugin_manager {
      *
      * @return array
      */
+    /**
+     * Native Moodle module created by a built-in activity subplugin.
+     *
+     * The question-bank subplugin writes questions without creating a course module.
+     *
+     * @param string $pluginname
+     * @return ?string
+     */
+    public static function module_for_plugin(string $pluginname): ?string {
+        return match ($pluginname) {
+            'assignment' => 'assign',
+            'forum' => 'forum',
+            'lesson' => 'lesson',
+            'page' => 'page',
+            'quiz' => 'quiz',
+            'h5pcrossword', 'h5pdragdrop', 'h5pfindwords', 'h5pflashcards',
+            'h5pinteractivebook', 'h5pinteractivevideo' => 'h5pactivity',
+            default => null,
+        };
+    }
+
     public static function get_source_extensions(): array {
         $extensions = [];
         foreach (self::get_plugins() as $class) {
@@ -180,6 +201,10 @@ class plugin_manager {
         $plugins = self::get_plugins();
         if (!isset($plugins[$pluginname])) {
             throw new moodle_exception('invalidplugin', 'local_geniaicourse', '', $pluginname);
+        }
+        $modulename = self::module_for_plugin($pluginname);
+        if ($modulename !== null) {
+            module_helper::check_can_add($course, $sectionnum, $modulename);
         }
         return $plugins[$pluginname]::create($course, $sectionnum, $source, $analysis);
     }

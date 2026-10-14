@@ -25,6 +25,8 @@
 require_once(__DIR__ . '/../../config.php');
 
 use local_geniaicourse\project_manager;
+use local_geniaicourse\plugin_manager;
+use local_geniaicourse\module_helper;
 
 $projectid = required_param('projectid', PARAM_INT);
 require_login();
@@ -51,12 +53,35 @@ foreach ($modinfo->get_section_info_all() as $sectionnum => $sectioninfo) {
     ];
 }
 
+// Only offer module types which Moodle lets this teacher create.
+$availableplugins = [];
+foreach (plugin_manager::get_plugins() as $pluginname => $class) {
+    $modulename = plugin_manager::module_for_plugin($pluginname);
+    if ($modulename === null) {
+        $availableplugins[$pluginname] = has_capability('moodle/question:add', $context);
+        continue;
+    }
+    $availableplugins[$pluginname] = false;
+    foreach ($sections as $section) {
+        try {
+            module_helper::check_can_add($course, (int)$section['num'], $modulename);
+            $availableplugins[$pluginname] = true;
+            break;
+        } catch (moodle_exception $e) {
+            // The activity is unavailable or cannot be added in this section.
+        }
+    }
+}
+
 $sourcedata = [];
 foreach (project_manager::get_sources($project->id) as $source) {
     $analyses = json_decode((string)$source->analysisjson, true) ?: [];
     $bestname = '';
     $bestconfidence = -1;
     foreach ($analyses as $pluginname => $analysis) {
+        if (empty($availableplugins[$pluginname])) {
+            continue;
+        }
         if (!empty($analysis['match']) && empty($analysis['error']) &&
             (int)($analysis['confidence'] ?? 0) > $bestconfidence) {
             $bestname = $pluginname;
@@ -66,6 +91,9 @@ foreach (project_manager::get_sources($project->id) as $source) {
 
     $activities = [];
     foreach ($analyses as $pluginname => $analysis) {
+        if (empty($availableplugins[$pluginname])) {
+            continue;
+        }
         $activities[] = [
             'sourceid' => $source->id,
             'pluginname' => $pluginname,

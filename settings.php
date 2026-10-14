@@ -28,12 +28,11 @@ if ($hassiteconfig) {
     $settings = new admin_settingpage('local_geniaicourse', get_string('pluginname', 'local_geniaicourse'));
 
 
-    $settings->add(new admin_setting_configtext(
+    $settings->add(new admin_setting_configexecutable(
         'local_geniaicourse/pdftotextpath',
         get_string('pdftotextpath', 'local_geniaicourse'),
         get_string('pdftotextpath_desc', 'local_geniaicourse'),
-        '/usr/bin/pdftotext',
-        PARAM_RAW_TRIMMED
+        '/usr/bin/pdftotext'
     ));
 
     $settings->add(new admin_setting_configtext(
