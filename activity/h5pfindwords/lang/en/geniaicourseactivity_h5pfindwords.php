@@ -24,6 +24,15 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+$string['h5pl10n_check'] = 'Check';
+$string['h5pl10n_tryAgain'] = 'Retry';
+$string['h5pl10n_showSolution'] = 'Show Solution';
+$string['h5pl10n_found'] = '@found of @totalWords found';
+$string['h5pl10n_timeSpent'] = 'Time Spent';
+$string['h5pl10n_score'] = 'You got @score of @total points';
+$string['h5pl10n_wordListHeader'] = 'Find the words';
+
+
 $string['privacy:metadata'] = 'The generator creates native Moodle activities and does not keep its own user information.';
 
 $string['description'] = 'Creates a native Moodle H5P word-search activity from key vocabulary in the source.';
