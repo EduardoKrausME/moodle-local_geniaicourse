@@ -34,6 +34,8 @@ use stdClass;
  */
 final class access {
     /**
+     * Load a course and verify connected-user permissions.
+     *
      * @param int $courseid Course.
      * @param authenticated_identity $identity MCP user.
      * @return stdClass
@@ -47,6 +49,8 @@ final class access {
     }
 
     /**
+     * Load an owned project and verify course access.
+     *
      * @param int $projectid Project.
      * @param authenticated_identity $identity MCP user.
      * @return stdClass

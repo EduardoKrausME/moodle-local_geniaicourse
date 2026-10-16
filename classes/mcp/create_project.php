@@ -37,6 +37,8 @@ use moodle_exception;
  */
 final class create_project extends base_tool {
     /**
+     * Return the unique MCP tool identifier.
+     *
      * @return string
      */
     public function get_name(): string {
@@ -44,6 +46,8 @@ final class create_project extends base_tool {
     }
 
     /**
+     * Return the translated MCP tool title.
+     *
      * @return string
      */
     public function get_title(): string {
@@ -51,6 +55,8 @@ final class create_project extends base_tool {
     }
 
     /**
+     * Return the translated MCP tool description.
+     *
      * @return string
      */
     public function get_description(): string {
@@ -58,6 +64,8 @@ final class create_project extends base_tool {
     }
 
     /**
+     * Return the required Moodle course capability.
+     *
      * @return string
      */
     public function get_required_capability(): string {
@@ -65,6 +73,8 @@ final class create_project extends base_tool {
     }
 
     /**
+     * Declare the permitted arguments for this tool.
+     *
      * @return array
      */
     public function get_input_schema(): array {
@@ -75,6 +85,8 @@ final class create_project extends base_tool {
     }
 
     /**
+     * Resolve the requested Moodle course context.
+     *
      * @param array $arguments Tool arguments.
      * @return context
      */
@@ -84,6 +96,8 @@ final class create_project extends base_tool {
     }
 
     /**
+     * Validate and preview this operation without modifying Moodle.
+     *
      * @param array $arguments Tool arguments.
      * @param authenticated_identity $identity Authenticated user.
      * @return array
@@ -105,6 +119,8 @@ final class create_project extends base_tool {
     }
 
     /**
+     * Execute the confirmed operation with appropriate permissions.
+     *
      * @param array $arguments Tool arguments.
      * @param authenticated_identity $identity Authenticated user.
      * @return array

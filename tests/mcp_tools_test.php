@@ -46,17 +46,22 @@ use moodle_exception;
  */
 final class mcp_tools_test extends advanced_testcase {
     /**
+     * Create a course project with an attached text source for isolated testing.
+     *
      * @return array{object, object, object}
      */
     private function fixture(): array {
+        global $USER;
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
-        $project = project_manager::create((int)$course->id, (int)$this->getUser()->id, "Create a page");
+        $project = project_manager::create((int)$course->id, (int)$USER->id, "Create a page");
         $source = source_manager::create_text((int)$project->id, "Explain algorithms to beginners");
         return [$course, $project, $source];
     }
 
     /**
+     * Skip optional MCP calls on installations without the connector plugin.
+     *
      * @return void
      */
     private function require_mcp(): void {
@@ -93,10 +98,11 @@ final class mcp_tools_test extends advanced_testcase {
      * @return void
      */
     public function test_created_project_cannot_be_edited_again(): void {
+        global $USER;
         $this->resetAfterTest();
         [$course, $project, $source] = $this->fixture();
         project_manager::set_status((int)$project->id, "created");
-        $project = project_manager::get_owned((int)$project->id, (int)$this->getUser()->id);
+        $project = project_manager::get_owned((int)$project->id, (int)$USER->id);
         $this->expectException(moodle_exception::class);
         project_state::require_editable($project);
     }
@@ -107,12 +113,12 @@ final class mcp_tools_test extends advanced_testcase {
      * @return void
      */
     public function test_preview_and_read_have_no_side_effects(): void {
-        global $DB;
+        global $DB, $USER;
         $this->resetAfterTest();
         $this->require_mcp();
         [$course, $project, $source] = $this->fixture();
         $identity = new \local_mcp\security\authenticated_identity(
-            (int)$this->getUser()->id, "oauth", ["read", "write"]
+            (int)$USER->id, "oauth", ["read", "write"]
         );
         $count = $DB->count_records("local_geniaicourse_project");
         $modules = $DB->count_records("course_modules");
@@ -142,7 +148,7 @@ final class mcp_tools_test extends advanced_testcase {
      * @return void
      */
     public function test_publish_preview_is_side_effect_free(): void {
-        global $DB;
+        global $DB, $USER;
         $this->resetAfterTest();
         $this->require_mcp();
         [$course, $project, $source] = $this->fixture();
@@ -151,7 +157,7 @@ final class mcp_tools_test extends advanced_testcase {
                 "summary" => "Introduction", "content_html" => "<p>Introduction</p>"],
         ]);
         $identity = new \local_mcp\security\authenticated_identity(
-            (int)$this->getUser()->id, "oauth", ["read", "write"]
+            (int)$USER->id, "oauth", ["read", "write"]
         );
         $snapshot = (new get_project())->execute(["projectid" => (int)$project->id], $identity);
         $count = $DB->count_records("course_modules");

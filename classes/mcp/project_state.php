@@ -33,6 +33,8 @@ use stdClass;
  */
 final class project_state {
     /**
+     * Read the project and its sources as a concurrency-safe snapshot.
+     *
      * @param stdClass $project Project record.
      * @return array
      */
@@ -83,6 +85,8 @@ final class project_state {
     }
 
     /**
+     * Reject outdated snapshots before a confirmed write.
+     *
      * @param array $snapshot Current projection.
      * @param string $expectedhash Caller-provided state hash.
      * @return void
@@ -95,6 +99,8 @@ final class project_state {
     }
 
     /**
+     * Ensure the project has not already been published.
+     *
      * @param stdClass $project Project.
      * @return void
      */

@@ -33,6 +33,8 @@ use local_mcp\write\tool\base_tool;
  */
 abstract class write_project_base extends base_tool {
     /**
+     * Return the capability required by this tool.
+     *
      * @return string
      */
     public function get_required_capability(): string {
@@ -40,6 +42,8 @@ abstract class write_project_base extends base_tool {
     }
 
     /**
+     * Resolve the course context for permission checking.
+     *
      * @param array $arguments Arguments.
      * @return context
      */
