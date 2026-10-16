@@ -135,3 +135,65 @@ subplugin. H5P runtime adapters, generated H5P/video file serving, Page conversi
 Interactive Book composition live in their owning subplugins. Consumer behavior such as Interactive Book composing
 sibling selections is declared by the consumer subplugin through `selection_consumer_interface`; `create.php` does not
 know concrete subplugin names.
+
+
+## Optional MCP integration (ChatGPT)
+
+The plugin provides an optional `local_mcp` provider at
+`classes/mcp/provider.php`. When [local_mcp](https://github.com/EduardoKrausME/moodle-local_mcp)
+is installed and enabled, its discovery mechanism registers these tools automatically.
+Without `local_mcp`, Course Builder continues to work normally. No new tables,
+subplugin types, version bump or `lib.php` callback are required.
+
+| Tool | Scope | What it does |
+| --- | --- | --- |
+| `geniaicourse_list_generators` | READ | Lists installed generator subplugins and the teacher's ability to create their Moodle activity types. |
+| `geniaicourse_list_projects` | READ | Lists the connected user's project records in a selected course. |
+| `geniaicourse_get_project` | READ | Lists sources, analysis summaries and the `state_hash` for confirmed changes. |
+| `geniaicourse_get_analysis` | READ | Reads a single saved subplugin analysis plan in chunks for review. |
+| `geniaicourse_create_project` | WRITE | Creates a teacher-owned project with a required text prompt, without calling AI. |
+| `geniaicourse_upload_source` | WRITE | Uploads one Base64 file into that project using the existing storage and extraction services. |
+| `geniaicourse_analyse_source` | WRITE | Calls the existing subplugin analyzers for one selected source via AI Bridge. |
+| `geniaicourse_publish_activities` | WRITE (destructive) | Publishes explicitly selected native activities or question-bank items using the saved analysis, Moodle activity APIs and selected subplugins. |
+
+All tools check `local/geniaicourse:use` and
+`moodle/course:manageactivities` in the course context. Project access is
+restricted to the connected Moodle user who created the project, even when
+another teacher has permissions in the same course. Publishing validates the
+native `can_add_moduleinfo()` checks for each module; generators without a
+mapped module require `moodle/question:add`. MCP READ never changes data
+or calls AI.
+
+### Recommended MCP workflow
+
+1. Call `geniaicourse_list_generators` to see what is available.
+2. Create a project with `geniaicourse_create_project`. It stores your
+   prompt as a text source, just like the Moodle form.
+3. Optionally send an additional source with `geniaicourse_upload_source`,
+   supplying `filename`, `file_base64` and the latest `state_hash`.
+   File uploads are limited to 8 MiB of decoded data, must have an allowed
+   extension and may not be fetched from remote URLs.
+4. Get the current project state with `geniaicourse_get_project`, then call
+   `geniaicourse_analyse_source` on each relevant source. Analysis may consume
+   AI credits, so it requires a separate WRITE confirmation for each source.
+5. Review the saved plans with `geniaicourse_get_analysis`, then call
+   `geniaicourse_publish_activities` with explicit
+   `selections: [{sourceid, plugin, section}]`. You may select different
+   generators for the same source, but only one section per source. H5P
+   Interactive Book and other selection consumers still combine compatible
+   sibling generators through the native `prepare_selected()` contract.
+
+The MCP WRITE server supplies a preview and requires one-time confirmation
+before **every** write. For uploads, analyses and publishing, pass
+`expected_state_hash` from the most recent `geniaicourse_get_project`
+result; outdated requests are rejected. Publication is locked, and after
+execution the project is marked created to prevent duplicate activities on
+retries, even if some generators fail. The response reports successes,
+failures and generated activity URLs. A failed item is not silently
+retried; start a new project after reviewing the partial result.
+
+MCP reads return metadata and bounded saved analysis fragments rather than
+upload bytes. Existing `local_ai_bridge` routing, credit handling and the
+30-day cleanup task remain authoritative. Generated activities should still
+be reviewed pedagogically before learners use them. Refresh the ChatGPT
+connector after updating the Moodle plugin to discover the tools.
