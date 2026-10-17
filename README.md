@@ -140,7 +140,7 @@ know concrete subplugin names.
 ## Optional MCP integration (ChatGPT)
 
 The plugin provides an optional `local_mcp` provider at
-`classes/mcp/provider.php`. When [local_mcp](https://github.com/EduardoKrausME/moodle-local_mcp)
+`classes/mcp/provider.php`. When [local_mcp](https://eduardokrausme.github.io/moodle-local_mcp/)
 is installed and enabled, its discovery mechanism registers these tools automatically.
 Without `local_mcp`, Course Builder continues to work normally. No new tables,
 subplugin types, version bump or `lib.php` callback are required.
