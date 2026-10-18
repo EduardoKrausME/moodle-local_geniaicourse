@@ -34,6 +34,8 @@ require_capability('local/geniaicourse:use', $context);
 require_capability('moodle/course:manageactivities', $context);
 
 $PAGE->set_url(new moodle_url('/local/geniaicourse/index.php', ['courseid' => $course->id]));
+
+\local_geniaicourse\mcp_banner::dismiss_if_requested($PAGE->url);
 $PAGE->set_context($context);
 $PAGE->set_course($course);
 $PAGE->set_title(get_string('title', 'local_geniaicourse'));
@@ -48,5 +50,9 @@ $data = [
 ];
 
 echo $OUTPUT->header();
+if (\local_geniaicourse\mcp_banner::should_show()) {
+    echo \local_geniaicourse\mcp_banner::render($OUTPUT, $PAGE->url);
+}
+
 echo $OUTPUT->render_from_template('local_geniaicourse/index', $data);
 echo $OUTPUT->footer();
