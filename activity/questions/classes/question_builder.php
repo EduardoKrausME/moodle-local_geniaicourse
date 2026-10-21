@@ -28,7 +28,6 @@ use context_course;
 use context_module;
 use core_question\local\bank\question_bank_helper;
 use core_question\category_manager;
-use core_text;
 use moodle_exception;
 use moodle_url;
 use qformat_gift;
@@ -87,7 +86,7 @@ class question_builder {
 
             $normalized = [
                 'type' => $type,
-                'name' => clean_param(core_text::substr(strip_tags($name), 0, 200), PARAM_TEXT),
+                'name' => clean_param(substr(strip_tags($name), 0, 200), PARAM_TEXT),
                 'question' => clean_text($text, FORMAT_HTML),
                 'generalfeedback' => clean_text((string)($question['generalfeedback'] ?? ''), FORMAT_HTML),
                 'defaultmark' => max(0.01, min(100, (float)($question['defaultmark'] ?? 1))),
@@ -173,7 +172,7 @@ class question_builder {
             throw new moodle_exception('questionbankmissing', 'geniaicourseactivity_questions');
         }
         $manager = new category_manager();
-        $categoryname = clean_param(core_text::substr($name, 0, 255), PARAM_TEXT);
+        $categoryname = clean_param(substr($name, 0, 255), PARAM_TEXT);
         if ($categoryname === '') {
             $categoryname = get_string('questioncategorydefault', 'geniaicourseactivity_questions');
         }

@@ -65,7 +65,7 @@ final class project_state {
                 "filename" => (string)$source->filename,
                 "sourcetype" => (string)$source->sourcetype,
                 "instruction" => (string)$source->instruction,
-                "extracted_chars" => \core_text::strlen((string)$source->extractedtext),
+                "extracted_chars" => strlen((string)$source->extractedtext),
                 "analysed" => $source->analysisjson !== null,
                 "generators" => $summaries,
             ];

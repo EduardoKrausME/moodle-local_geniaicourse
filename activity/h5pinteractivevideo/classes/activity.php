@@ -24,7 +24,6 @@
 
 namespace geniaicourseactivity_h5pinteractivevideo;
 
-use core_text;
 use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\activity\composable_content_interface;
 use local_geniaicourse\activity\source_extension_interface;
@@ -279,7 +278,7 @@ PROMPT;
                 continue;
             }
             if ($label === '') {
-                $label = core_text::substr($text, 0, 60);
+                $label = substr($text, 0, 60);
             }
             $out[] = [
                 'time' => $time,

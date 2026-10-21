@@ -24,7 +24,6 @@
 
 namespace geniaicourseactivity_h5pcrossword;
 
-use core_text;
 use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\activity\composable_content_interface;
 use local_geniaicourse\ai;
@@ -216,10 +215,10 @@ PROMPT;
             $answer = preg_replace('/[^\p{L}\p{N}\- ]+/u', '', $answer);
             $answer = preg_replace('/\s+/u', ' ', $answer);
             $clue = trim(strip_tags((string)($word['clue'] ?? '')));
-            if ($answer === '' || $clue === '' || core_text::strlen($answer) > 40) {
+            if ($answer === '' || $clue === '' || strlen($answer) > 40) {
                 continue;
             }
-            $key = core_text::strtolower($answer);
+            $key = strtolower($answer);
             $out[$key] = ['answer' => $answer, 'clue' => $clue];
             if (count($out) >= 15) {
                 break;

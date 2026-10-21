@@ -25,7 +25,6 @@
 namespace geniaicourseactivity_lesson;
 
 use context_module;
-use core_text;
 use lesson;
 use lesson_page;
 use lesson_page_type_manager;
@@ -236,9 +235,9 @@ PROMPT;
                 $button = get_string('continue');
             }
             $result[] = [
-                'title' => clean_param(core_text::substr(strip_tags($title), 0, 255), PARAM_TEXT),
+                'title' => clean_param(substr(strip_tags($title), 0, 255), PARAM_TEXT),
                 'content_html' => clean_text($content, FORMAT_HTML),
-                'button_label' => clean_param(core_text::substr(strip_tags($button), 0, 100), PARAM_TEXT),
+                'button_label' => clean_param(substr(strip_tags($button), 0, 100), PARAM_TEXT),
             ];
         }
         return $result;

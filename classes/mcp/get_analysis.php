@@ -100,11 +100,11 @@ final class get_analysis extends read_project_base {
             "projectid" => (int)$project->id,
             "sourceid" => (int)$source->id,
             "plugin" => $name,
-            "json_chars" => \core_text::strlen($json),
+            "json_chars" => strlen($json),
             "offset" => $offset,
             "length" => $length,
-            "json_chunk" => \core_text::substr($json, $offset, $length),
-            "has_more" => $offset + $length < \core_text::strlen($json),
+            "json_chunk" => substr($json, $offset, $length),
+            "has_more" => $offset + $length < strlen($json),
         ];
     }
 }

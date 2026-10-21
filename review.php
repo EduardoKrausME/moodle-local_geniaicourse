@@ -116,8 +116,8 @@ foreach (project_manager::get_sources($project->id) as $source) {
         $warnings[] = ['text' => $warning];
     }
     $preview = trim((string)$source->extractedtext);
-    if (core_text::strlen($preview) > 1200) {
-        $preview = core_text::substr($preview, 0, 1200) . '…';
+    if (strlen($preview) > 1200) {
+        $preview = substr($preview, 0, 1200) . '…';
     }
 
     $sourcedata[] = [

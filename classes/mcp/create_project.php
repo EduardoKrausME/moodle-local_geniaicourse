@@ -105,13 +105,13 @@ final class create_project extends base_tool {
     public function preview(array $arguments, authenticated_identity $identity): array {
         access::course((int)$arguments["courseid"], $identity);
         $prompt = (string)$arguments["prompt"];
-        if (trim($prompt) === "" || \core_text::strlen($prompt) > 16000) {
+        if (trim($prompt) === "" || strlen($prompt) > 16000) {
             throw new moodle_exception("mcpinvalidprompt", "local_geniaicourse");
         }
         return [
             "operation" => $this->get_name(),
             "courseid" => (int)$arguments["courseid"],
-            "prompt_length" => \core_text::strlen($prompt),
+            "prompt_length" => strlen($prompt),
             "will_store_prompt" => true,
             "will_call_ai" => false,
             "course_content_changed" => false,

@@ -154,7 +154,7 @@ final class upload_source extends write_project_base {
             "projectid" => (int)$project->id,
             "sourceid" => (int)$source->id,
             "filename" => $filename,
-            "extracted_chars" => \core_text::strlen((string)$source->extractedtext),
+            "extracted_chars" => strlen((string)$source->extractedtext),
             "next_tool" => "geniaicourse_get_project",
         ];
     }

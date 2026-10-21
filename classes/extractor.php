@@ -24,7 +24,6 @@
 
 namespace local_geniaicourse;
 
-use core_text;
 use stored_file;
 use Throwable;
 use ZipArchive;
@@ -112,13 +111,13 @@ class extractor {
 
         $configuredmax = (int)get_config('local_geniaicourse', 'maxextractchars');
         $max = $configuredmax > 0 ? max(1000, $configuredmax) : 40000;
-        if (core_text::strlen($text) > $max) {
-            $text = core_text::substr($text, 0, $max);
+        if (strlen($text) > $max) {
+            $text = substr($text, 0, $max);
             $metadata['warnings'][] = get_string('truncatedwarning', 'local_geniaicourse', $max);
             $metadata['truncated'] = true;
         }
 
-        $metadata['extractedchars'] = core_text::strlen($text);
+        $metadata['extractedchars'] = strlen($text);
         return ['text' => $text, 'metadata' => $metadata];
     }
 

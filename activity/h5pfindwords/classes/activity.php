@@ -24,7 +24,6 @@
 
 namespace geniaicourseactivity_h5pfindwords;
 
-use core_text;
 use local_geniaicourse\activity\activity_interface;
 use local_geniaicourse\activity\composable_content_interface;
 use local_geniaicourse\ai;
@@ -175,10 +174,10 @@ PROMPT;
             $word = trim(strip_tags((string)$word));
             $word = preg_replace('/[,;\r\n]+/u', ' ', $word);
             $word = preg_replace('/\s+/u', ' ', $word);
-            if ($word === '' || core_text::strlen($word) > 40) {
+            if ($word === '' || strlen($word) > 40) {
                 continue;
             }
-            $key = core_text::strtolower($word);
+            $key = strtolower($word);
             $out[$key] = $word;
             if (count($out) >= 20) {
                 break;
