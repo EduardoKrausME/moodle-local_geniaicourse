@@ -24,11 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->component = 'geniaicourseactivity_quiz';
 $plugin->version = 2026092802;
+$plugin->release = '1.0.0';
+$plugin->component = 'geniaicourseactivity_quiz';
 $plugin->requires = 2024100700;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.0.0';
 $plugin->dependencies = [
     'local_geniaicourse' => 2026092802,
     'mod_quiz' => ANY_VERSION,
