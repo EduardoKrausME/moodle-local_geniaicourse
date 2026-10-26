@@ -136,7 +136,6 @@ Interactive Book composition live in their owning subplugins. Consumer behavior 
 sibling selections is declared by the consumer subplugin through `selection_consumer_interface`; `create.php` does not
 know concrete subplugin names.
 
-
 ## Optional MCP integration (ChatGPT)
 
 The plugin provides an optional `local_mcp` provider at
