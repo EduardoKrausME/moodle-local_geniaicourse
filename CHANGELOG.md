@@ -2,6 +2,14 @@
 
 This changelog documents only the two most recent **published** releases of `local_geniaicourse`, verified on October 24, 2026 (America/Sao_Paulo). Each entry reflects the changes between that release's Git tag and the preceding published tag. The `Mustache`, `Langs Order`, `Boilerplate Headers`, `-core_text` and `Order` commits after release `1.5.6` are excluded.
 
+## 1.5.7 - 2026-11-01
+
+- Replaced legacy `core_text` usage and normalized Moodle coding-standard headers in activity builders and MCP integration classes.
+- Reordered English and Brazilian Portuguese language strings and adjusted the MCP banner Mustache header.
+- Removed installation instructions from the README and refreshed historical release documentation.
+
+**Full comparison:** [1.5.6...1.5.7](https://github.com/EduardoKrausME/moodle-local_geniaicourse/compare/1.5.6...1.5.7)
+
 ## [1.5.6] - 2026-10-19
 
 ### Optional Moodle MCP integration
